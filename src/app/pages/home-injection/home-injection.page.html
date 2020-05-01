@@ -1,0 +1,255 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+
+    <ion-title><img class="logotio" src="assets/imgs/logotio.png"></ion-title>
+    <ion-buttons slot="end">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="form">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12" size-sm="12" size-md="6"  size-lg="6" size-xl="6">
+          <ion-list>
+            <ion-item class="ion-text-center ion-text-wrap" lines="none">
+              <ion-label>
+                <h1 *ngIf="!is_edit" class="title-label">
+                  {{ 'Inyección a domicilio' | translate }}
+                </h1>
+                <h1 *ngIf="is_edit" class="title-label">
+                  {{ 'Editar inyección a domicilio' | translate }}
+                </h1>
+  
+                <p class="ion-text-wrap">
+                  {{ 'Luego de validar' | translate }}
+                </p>
+              </ion-label>
+            </ion-item>  
+  
+            <ion-item class="ion-text-wrap">
+              <ion-label class="header-text" position="stacked">
+                {{ 'Adjuntar imagen de indicación medica' | translate }}:
+              </ion-label>
+            </ion-item>
+            
+            <div style="margin-left: 1rem;" class="ion-margin-left">
+              <small style="margin-left: 1rem;" class="color-red">
+              {{ '(Fecha, sello y firma obligatorio)' | translate }}
+            </small>
+            </div>
+
+            <ion-list>
+              <div class="ion-padding-top ion-padding-left ion-padding-right">
+                <ion-button size="small" expand="block" color="white" (click)="presentActionSheet ()">
+                  <ion-icon class="ion-padding-right" name="camera"></ion-icon>
+                  {{ 'Adjuntar' | translate }}
+                </ion-button>
+              </div>
+              <ion-item *ngFor="let imagen of imagenes">
+                <img class="image-preview" [src]="imagen" #myImage (click)="imageView (myImage)" imageViewer/>
+                <ion-button slot="end" fill="clear" color="red" (click)="deleteImage (imagen)">
+                  <ion-icon slot="icon-only" name="trash"></ion-icon>
+                </ion-button>
+              </ion-item>
+            </ion-list>
+            
+            <ion-item>
+              <ion-label start>{{ 'No cuento con orden medica' | translate }}</ion-label>
+              <ion-checkbox color="blue" slot="start" formControlName="has_orden"></ion-checkbox>
+            </ion-item>
+  
+            <ion-card *ngIf="form.controls?.has_orden.value">
+              <ion-item class="ion-text-wrap card-precio ion-text-center">
+                <ion-label>
+                  <p class="ion-text-wrap">{{ 'Si no cuenta con orden médica debe solicitar un médico a domicilio.' | translate }}</p>
+                </ion-label>
+              </ion-item>
+            </ion-card>
+
+            <div *ngIf="form.controls?.has_orden.value" class="ion-text-center">
+              <ion-button color="blue" size="small" class="ion-margin-top" (click)="goMedicoDomicilio ()">
+                {{ 'Solicitar medico a domicilio' | translate }}
+              </ion-button>
+            </div>
+
+            <ion-item>
+              <ion-label class="header-text" position="stacked">
+                {{ 'Numero de teléfono' | translate }}:
+              </ion-label>
+            </ion-item>
+
+            <ion-grid>
+              <ion-row>              
+                <ion-col size="4" class="ion-align-self-end">
+                  <ion-button size="small" expand="small" color="blue" (click)="select_code ()">
+                    <img [src]="getFlat ()">&nbsp;
+                    {{ pais_selected.dial_code }}
+                  </ion-button>
+                </ion-col>
+                <ion-col col-8>
+                  <ion-item>
+                    <ion-input type="tel" formControlName="phone_number" placeholder="+51 985 858 787"></ion-input>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+
+            <div style="margin-left: 1rem;" class="ion-margin-left" *ngIf="form.controls.phone_number.errors?.required">
+              <small class="color-red">
+              {{ '* Campo obligatorio' | translate }}
+              </small>
+            </div>
+
+            <ion-item>
+              <ion-label class="header-text" position="stacked">{{ 'Extras' | translate }}:</ion-label>
+            </ion-item>
+
+            <ion-item class="ion-text-wrap" lines="none">
+              <ion-label class="label-nm">{{ 'Requiero los insumos' | translate }}</ion-label>
+              <ion-checkbox color="blue" formControlName="need_supplies" (ionChange)="change2 (rmchecked)"></ion-checkbox>
+            </ion-item>
+
+            <ion-item lines="none" class="ion-text-wrap">
+              <ion-label class="label-nm">{{ 'Requiero la medicina' | translate }}</ion-label>
+              <ion-checkbox color="blue" formControlName="need_medicine" (ionChange)="change2 (rmchecked)"></ion-checkbox>
+            </ion-item>
+            
+            <ion-item lines="none" class="ion-text-wrap">
+              <ion-label class="label-nm">{{ 'Cuanto con todo lo necesario' | translate }}</ion-label>
+              <ion-checkbox color="blue" formControlName="has_all" (ionChange)="change (rmchecked)"></ion-checkbox>
+            </ion-item>
+
+            <ion-item>
+              <ion-label class="header-text" position="stacked">{{ 'Notas adicionales' | translate }}</ion-label>
+            </ion-item>
+            
+            <ion-item>
+              <ion-textarea row="3" formControlName="note" placeholder="..."></ion-textarea>
+            </ion-item>
+            
+            <ion-item lines="none">
+              <ion-label style="font-size: 13pt !important; font-weight: 500;">{{ 'Fecha' | translate }}:</ion-label>
+              <ion-datetime [min]="min_date" 
+                cancelText="Cancelar" doneText="Seleccionar"
+                monthNames="enero, febrero, marzo, abril, mayo, junio, julio, agosto, septiembre, octubre, noviembre, diciembre"
+                displayFormat="D MMMM YYYY" formControlName="date"></ion-datetime>
+            </ion-item>
+            
+            <div style="margin-left: 1rem;" class="ion-margin-left" *ngIf="form.controls.date.errors?.required">
+              <small class="color-red">
+              {{ '* Campo obligatorio' | translate }}
+            </small>
+            </div>
+
+            <ion-item lines="none">
+              <ion-label style="font-size: 13pt !important; font-weight: 500;">{{ 'Horario de servicio' | translate }}:</ion-label>
+              <ion-select class="card-md" expand="small" formControlName="hour">
+                <div *ngFor="let item of get_hours ()">
+                  <ion-select-option *ngIf="check_hour (item)" [value]="item">
+                    {{ item }}
+                  </ion-select-option>
+                </div>
+              </ion-select>
+            </ion-item>
+
+            <div style="margin-left: 1rem;" *ngIf="form.controls.hour.errors?.required">
+              <small class="color-red">
+              {{ '* Campo obligatorio' | translate }}
+            </small>
+            </div>
+
+            <!--Tipo de comprobante -->
+            <ion-item>
+              <ion-label style="font-size: 13pt !important; font-weight: 500;">{{ 'Tipo de comprobante' | translate }}</ion-label>
+              <ion-select interface="popover" formControlName="tipo_comprobante" (ionChange)="comprobanteChange ($event)">
+                <ion-select-option value="factura">{{ 'Factura' | translate }}</ion-select-option>
+                <ion-select-option value="boleta">{{ 'Boleta' | translate }}</ion-select-option>
+              </ion-select>
+            </ion-item>
+
+            <div style="margin-left: 1rem;" class="ion-margin-left" *ngIf="form.controls.tipo_comprobante.errors?.required">
+              <small class="color-red">
+                {{ '* Campo obligatorio' | translate }}
+              </small>
+            </div>
+
+            <div *ngIf="form.controls?.tipo_comprobante.value === 'factura'">
+              <ion-item>
+                <ion-label class="header-text" position="stacked">RUC:</ion-label>
+                <ion-input type="tel" maxlength="11" placeholder="{{ 'Número de ruc' | translate }}" formControlName="ruc"></ion-input>  
+              </ion-item>
+
+              <div style="margin-left: 1rem;" *ngIf="form.controls.ruc.errors?.required">
+                <small class="color-red">{{ '* Campo obligatorio' | translate }}</small>
+              </div>
+
+              <ion-item>
+                <ion-label class="header-text" position="stacked">{{ 'Razón social' | translate }}:</ion-label>
+                <ion-input type="text" placeholder="{{ 'Nombre de la razón social' | translate }}" formControlName="razon_social">
+                </ion-input>
+              </ion-item>
+
+              <div style="margin-left: 1rem;" *ngIf="form.controls.razon_social.errors?.required">
+                <small class="color-red">{{ '* Campo obligatorio' | translate }}</small>
+              </div>  
+            </div>
+          </ion-list>
+        </ion-col>
+
+        <ion-col size="12" size-sm="12" size-md="6"  size-lg="6" size-xl="6">
+          <ion-item>
+            <ion-label class="header-text" position="stacked">
+              {{ 'Dirección' | translate }}:
+            </ion-label>
+            <ion-input type="text" formControlName="address" placeholder="Avenida los Incas, Cusco"></ion-input>
+          </ion-item>
+
+          <div style="margin-left: 1rem;" class="ion-margin-left" *ngIf="form.controls.address.errors?.required">
+            <small class="color-red">{{ '* Campo obligatorio' | translate }}</small>
+          </div>
+
+          <ion-item lines="none" *ngIf="is_edit">
+            <ion-button ion-button full class="card-md" color="white" (click)="enableMapa ()">
+              {{ 'Cambiar ubicación en el mapa' | translate }}
+            </ion-button>
+          </ion-item>
+
+          <ion-item *ngIf="!is_edit" lines="none" class="ion-text-right">
+            <p style="width: 100% !important;" class="text-danger ion-text-right" (click)="getCurrentLocation ()">{{ 'Ubicación actual' | translate }}</p>
+          </ion-item>
+
+          <ion-card id="map-card" margin-top-top class="map-class">
+            <div #map id="map"></div>
+          </ion-card>
+
+          <div class="conditions">
+            <ion-checkbox color="blue" formControlName="terms_conditions"></ion-checkbox>
+            {{ 'Acepto los' | translate }} <a href="https://www.cps.com.pe/terms?item=home-inyectable">{{ 'términos & condiciones' | translate }}</a>
+          </div>
+
+          <ion-grid>
+            <ion-row>
+              <ion-col *ngIf="!is_edit" size="8" offset="2">
+                <ion-button class="no-border" expand="block" ion-button color="blue" [disabled]="!form.valid" (click)="submit ()">
+                  {{ 'Pedir' | translate }}
+                </ion-button>
+              </ion-col>
+
+              <ion-col *ngIf="is_edit" size="8" offset="2">
+                <ion-button class="no-border" expand="block" ion-button color="blue" [disabled]="!form.valid" (click)="submit ()">
+                  {{ 'Actualizar' | translate }}
+                </ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ion-content>

@@ -1,0 +1,248 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+
+    <ion-title><img class="logotio" src="assets/imgs/logotio.png"></ion-title>
+    <ion-buttons slot="end">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item-group>
+    <ion-item lines="none" color="blue">
+      <ion-label><b>{{ 'PHARMACY_DELIVERY' | translate }}</b></ion-label>
+      <ion-select [(ngModel)]="deliveries_type" (ionChange)="change ($event, 'farmacia')">
+        <ion-select-option value="c">{{ 'Cancelados' | translate }}</ion-select-option>
+        <ion-select-option value="f">{{ 'Finalizados' | translate }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item *ngFor="let item of deliveries" (tap)="goDeliveryCheck (item.dataGeneral)">
+      <h2>{{ 'Pedido:' | translate }} {{ getFormatDate (item.dataGeneral?.date) }}</h2>
+      <p>{{ item.dataGeneral?.address }}</p>
+      
+      <ion-badge slot="end" *ngIf="item.dataGeneral?.state === 'created'" color="blue">
+        {{ 'Solicitado' | translate }}
+      </ion-badge>
+
+      <ion-badge slot="end" *ngIf="item.dataGeneral?.state === 'observed'" color="danger">
+        {{ 'Observado' | translate }}
+      </ion-badge>
+
+      <ion-badge slot="end" *ngIf="item.dataGeneral?.state === 'canceled'" color="danger">
+        {{ 'Cancelado' | translate }}
+      </ion-badge>
+
+      <ion-badge slot="end" *ngIf="item.dataGeneral?.state === 'approved'" color="blue">
+        {{ 'Aprobado' | translate }}
+      </ion-badge>
+
+      <ion-badge slot="end" *ngIf="item.dataGeneral?.state === 'completed'" color="blue">
+        {{ 'Completado' | translate }}
+      </ion-badge>
+
+      <ion-badge slot="end" *ngIf="item.dataGeneral?.state === 'finalized'" color="blue">
+        {{ 'Finalizado' | translate }}
+      </ion-badge>
+    </ion-item>
+  </ion-item-group>
+
+  <ion-item-group>
+    <ion-item lines="none" color="blue">
+      <ion-label><b>{{ 'HOME_INJECTION' | translate }}</b></ion-label>
+      <ion-select [(ngModel)]="home_injections_type" (ionChange)="change ($event, 'inyeccion')">
+        <ion-select-option value="c">{{ 'Cancelados' | translate }}</ion-select-option>
+        <ion-select-option value="f">{{ 'Finalizados' | translate }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item *ngFor="let item of home_injections" (tap)="goHomeIinjection (item.dataGeneral)">
+      <h2>{{ 'Pedido:' | translate }} {{ getFormatDate (item.dataGeneral?.date) }}</h2>
+      <p>{{ item.dataGeneral?.address }}</p>
+      
+      <ion-badge slot="end" *ngIf="item.dataGeneral?.state === 'created'" color="blue">
+        {{ 'Solicitado' | translate }}
+      </ion-badge>
+
+      <ion-badge slot="end" *ngIf="item.dataGeneral?.state === 'observed'" color="danger">
+        {{ 'Observado' | translate }}
+      </ion-badge>
+
+      <ion-badge slot="end" *ngIf="item.dataGeneral?.state === 'canceled'" color="danger">
+        {{ 'Cancelado' | translate }}
+      </ion-badge>
+
+      <ion-badge slot="end" *ngIf="item.dataGeneral?.state === 'approved'" color="blue">
+        {{ 'Aprobado' | translate }}
+      </ion-badge>
+
+      <ion-badge slot="end" *ngIf="item.dataGeneral?.state === 'completed'" color="blue">
+        {{ 'Completado' | translate }}
+      </ion-badge>
+
+      <ion-badge slot="end" *ngIf="item.dataGeneral?.state === 'finalized'" color="blue">
+        {{ 'Finalizado' | translate }}
+      </ion-badge>
+    </ion-item>
+  </ion-item-group>
+
+  <ion-item-group>
+    <ion-item lines="none" color="blue">
+      <ion-label><b>{{ 'TRANSFER_BY_AMBULANCE' | translate }}</b></ion-label>
+      <ion-select [(ngModel)]="transf_ambulance_type" (ionChange)="change ($event, 'transf_ambulance')">
+        <ion-select-option value="c">{{ 'Cancelados' | translate }}</ion-select-option>
+        <ion-select-option value="f">{{ 'Finalizados' | translate }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item *ngFor="let item of transf_ambulance" (tap)="goTransferAmbulances (item.dataGeneral)">
+      <h2>{{ 'Pedido:' | translate }} {{ getFormatDate (item.dataGeneral?.date) }}</h2>
+      <p>{{ item.dataGeneral?.address }}</p>
+      
+      <ion-badge slot="end" *ngIf="item.dataGeneral?.state === 'created'" color="blue">
+        {{ 'Solicitado' | translate }}
+      </ion-badge>
+
+      <ion-badge slot="end" *ngIf="item.dataGeneral?.state === 'observed'" color="danger">
+        {{ 'Observado' | translate }}
+      </ion-badge>
+
+      <ion-badge slot="end" *ngIf="item.dataGeneral?.state === 'canceled'" color="danger">
+        {{ 'Cancelado' | translate }}
+      </ion-badge>
+
+      <ion-badge slot="end" *ngIf="item.dataGeneral?.state === 'approved'" color="blue">
+        {{ 'Aprobado' | translate }}
+      </ion-badge>
+
+      <ion-badge slot="end" *ngIf="item.dataGeneral?.state === 'completed'" color="blue">
+        {{ 'Completado' | translate }}
+      </ion-badge>
+
+      <ion-badge slot="end" *ngIf="item.dataGeneral?.state === 'finalized'" color="blue">
+        {{ 'Finalizado' | translate }}
+      </ion-badge>
+    </ion-item>
+  </ion-item-group>
+
+  <ion-item-group>
+    <ion-item lines="none" color="blue">
+      <ion-label><b>{{ 'MEDICAL_SCORT' | translate }}</b></ion-label>
+      <ion-select [(ngModel)]="medical_type" (ionChange)="change ($event, 'medical')">
+        <ion-select-option value="c">{{ 'Cancelados' | translate }}</ion-select-option>
+        <ion-select-option value="f">{{ 'Finalizados' | translate }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item *ngFor="let item of medical" (tap)="goMedical (item.dataGeneral)">
+      <h2>Pedido: {{ getFormatDate (item.dataGeneral?.date) }}</h2>
+      <p>{{ item.dataGeneral?.address }}</p>
+      
+      <ion-badge slot="end" *ngIf="item.dataGeneral?.state === 'created'" color="blue">
+        Solicitado
+      </ion-badge>
+
+      <ion-badge slot="end" *ngIf="item.dataGeneral?.state === 'observed'" color="danger">
+        Observado
+      </ion-badge>
+
+      <ion-badge slot="end" *ngIf="item.dataGeneral?.state === 'canceled'" color="danger">
+        Cancelado
+      </ion-badge>
+
+      <ion-badge slot="end" *ngIf="item.dataGeneral?.state === 'approved'" color="blue">
+        Aprobado
+      </ion-badge>
+
+      <ion-badge slot="end" *ngIf="item.dataGeneral?.state === 'completed'" color="blue">
+        Completado
+      </ion-badge>
+
+      <ion-badge slot="end" *ngIf="item.dataGeneral?.state === 'finalized'" color="blue">
+        Finalizado
+      </ion-badge>
+    </ion-item>
+  </ion-item-group>
+
+  <ion-item-group>
+    <ion-item lines="none" color="blue">
+      <ion-label><b>{{ 'enfermera_a_domicilio' | translate }}</b></ion-label>
+      <ion-select [(ngModel)]="home_pressure_type" (ionChange)="change ($event, 'home_pressure')">
+        <ion-select-option value="c">{{ 'Cancelados' | translate }}</ion-select-option>
+        <ion-select-option value="f">{{ 'Finalizados' | translate }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item *ngFor="let item of home_pressure" (tap)="goHomePressure (item.dataGeneral)">
+      <h2>{{ 'Pedido:' | translate }} {{ getFormatDate (item.dataGeneral?.date) }}</h2>
+      <p>{{ item.dataGeneral?.address }}</p>
+      
+      <ion-badge slot="end" *ngIf="item.dataGeneral?.state === 'created'" color="blue">
+        {{ 'Solicitado' | translate }}
+      </ion-badge>
+
+      <ion-badge slot="end" *ngIf="item.dataGeneral?.state === 'observed'" color="danger">
+        {{ 'Observado' | translate }}
+      </ion-badge>
+
+      <ion-badge slot="end" *ngIf="item.dataGeneral?.state === 'canceled'" color="danger">
+        {{ 'Cancelado' | translate }}
+      </ion-badge>
+
+      <ion-badge slot="end" *ngIf="item.dataGeneral?.state === 'approved'" color="blue">
+        {{ 'Aprobado' | translate }}
+      </ion-badge>
+
+      <ion-badge slot="end" *ngIf="item.dataGeneral?.state === 'completed'" color="blue">
+        {{ 'Completado' | translate }}
+      </ion-badge>
+
+      <ion-badge slot="end" *ngIf="item.dataGeneral?.state === 'finalized'" color="blue">
+        {{ 'Finalizado' | translate }}
+      </ion-badge>
+    </ion-item>
+  </ion-item-group>
+
+  <ion-item-group>
+    <ion-item lines="none" color="blue">
+      <ion-label><b>{{ 'medico_a_domicilio' | translate }}</b></ion-label>
+      <ion-select [(ngModel)]="home_doctor_type" (ionChange)="change ($event, 'home_doctor')">
+        <ion-select-option value="c">{{ 'Cancelados' | translate }}</ion-select-option>
+        <ion-select-option value="f">{{ 'Finalizados' | translate }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item *ngFor="let item of home_doctor" (tap)="goHomeDoctor (item.dataGeneral)">
+      <h2>{{ 'Pedido:' | translate }} {{ getFormatDate (item.dataGeneral?.date) }}</h2>
+      <p>{{ item.dataGeneral?.address }}</p>
+      
+      <ion-badge slot="end" *ngIf="item.dataGeneral?.state === 'created'" color="blue">
+        {{ 'Solicitado' | translate }}
+      </ion-badge>
+
+      <ion-badge slot="end" *ngIf="item.dataGeneral?.state === 'observed'" color="danger">
+        {{ 'Observado' | translate }}
+      </ion-badge>
+
+      <ion-badge slot="end" *ngIf="item.dataGeneral?.state === 'canceled'" color="danger">
+        {{ 'Cancelado' | translate }}
+      </ion-badge>
+
+      <ion-badge slot="end" *ngIf="item.dataGeneral?.state === 'approved'" color="blue">
+        {{ 'Aprobado' | translate }}
+      </ion-badge>
+
+      <ion-badge slot="end" *ngIf="item.dataGeneral?.state === 'completed'" color="blue">
+        {{ 'Completado' | translate }}
+      </ion-badge>
+
+      <ion-badge slot="end" *ngIf="item.dataGeneral?.state === 'finalized'" color="blue">
+        {{ 'Finalizado' | translate }}
+      </ion-badge>
+    </ion-item>
+  </ion-item-group>
+</ion-content>

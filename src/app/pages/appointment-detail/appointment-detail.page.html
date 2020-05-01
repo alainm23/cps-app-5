@@ -1,0 +1,85 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title><img class="logotio" src="assets/imgs/logotio.png"></ion-title>
+    <ion-buttons slot="end">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" size-sm="12" size-md="6" size-lg="6" size-xl="6">
+        <ion-item class="ion-text-center" lines="none">
+          <ion-label>
+            <h1 class="title-label">Detalle de la cita</h1>
+          </ion-label>
+        </ion-item>
+        
+        <ion-item class="ion-text-center" lines="none">
+          <p class="ion-text-wrap">
+            Hemos realizado la reserva de tu cita médica en la especialidad de ({{ appointment?.specialty_name }})
+          </p>
+        </ion-item>
+
+        <ion-list>
+          <ion-item>
+            <ion-label>
+              <h2><b>Fecha / Hora de cita</b></h2>
+              <p>{{ appointment?.date }} - {{ appointment?.hour }}</p>
+            </ion-label>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>
+              <h2><b>Paciente</b></h2>
+              <p>{{ appointment?.cliente_nombre }}</p>
+            </ion-label>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>
+              <h2><b>Telefono</b></h2>
+              <p>{{ appointment?.phone_number }}</p>
+            </ion-label>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>
+              <h2><b>Correo electrónico</b></h2>
+              <p>{{ appointment?.email }}</p>
+            </ion-label>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>
+              <h2><b>Nacionalidad</b></h2>
+              <p>{{ appointment?.nationality }}</p>
+            </ion-label>
+          </ion-item>
+
+          <ion-item *ngIf="appointment?.message !== ''">
+            <ion-label>
+              <h2><b>Notas</b></h2>
+              <p>{{ appointment?.message }}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+        
+        <ion-item class="ion-text-center">
+          <ion-label>
+            <h4 class="ion-text-wrap">Su cita esta confirmada, por favor visitenos 20 minutos antes de la fecha y hora indicada</h4>
+            <h4 class="ion-text-wrap">Se le a enviado un correo electronico a <b>{{ appointment?.email }}</b> con los detalles de la reserva.</h4>
+          </ion-label>
+        </ion-item>
+
+        <div class="ion-text-center">
+          <ion-button color="blue" (click)="goHome ()">
+            {{ 'HOME' | translate }}
+          </ion-button>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid> 
+</ion-content>

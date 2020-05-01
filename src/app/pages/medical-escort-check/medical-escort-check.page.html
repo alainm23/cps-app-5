@@ -1,0 +1,263 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+
+    <ion-title><img class="logotio" src="assets/imgs/logotio.png"></ion-title>
+    <ion-buttons slot="end">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>button
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid> 
+    <ion-row>
+      <ion-col>
+        <div *ngIf="!medical_escort?.is_checked">
+          <ion-item class="ion-text-center" lines="none">
+            <h1 class="title-label">{{ 'escolta_medica' | translate }}</h1>
+            <br>
+            <p text-wrap>{{ 'Tu pedido está siendo atendido, por favor espere nuestra confirmación' | translate }}</p>
+          </ion-item>
+
+          <ion-item class="ion-text-center height-70" lines="none">
+            <ion-label>
+              <ion-icon class="icon-wait" name="time"></ion-icon>
+              <p class="ion-margin-top">{{ 'Gracias por su paciencia' | translate }}</p>
+            </ion-label>
+          </ion-item>
+
+          <ion-card>
+            <ion-list lines="none">
+              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
+                <b>{{ 'Cliente' | translate }}</b>
+              </ion-label>
+              <ion-item>
+                {{ auth.user?.first_name }}
+              </ion-item>
+
+              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
+                <b>{{ 'Fecha' | translate }}</b>
+              </ion-label>
+              <ion-item>
+                {{ getFormatDate (medical_escort?.date) }}
+              </ion-item>
+
+               <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark"><b>{{ 'Horario de servicio' | translate }}</b>
+              </ion-label>
+              <ion-item lines="none">
+                {{ medical_escort?.hour }}
+              </ion-item>
+
+              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark"><b>{{ 'Origen' | translate }}</b></ion-label>
+              <ion-item lines="none" class="detalle">
+                {{ medical_escort?.address_ori }}
+              </ion-item>
+
+              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark"><b>{{ 'Destino' | translate }}</b></ion-label>
+              <ion-item lines="none" class="detalle">
+                {{ medical_escort?.address_des }}
+              </ion-item>
+
+              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark"><b>{{ 'Cantidad de personas' | translate }}</b></ion-label>
+              <ion-item lines="none" class="detalle">
+                {{ medical_escort?.number_patients }}
+              </ion-item>
+
+              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark"><b>{{ 'Numero de dias' | translate }}</b></ion-label>
+              <ion-item lines="none" class="detalle">
+                {{ medical_escort?.number_days }}
+              </ion-item>
+
+              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark"><b>{{ 'Detalles' | translate }}</b></ion-label>
+              <ion-item lines="none" class="detalle">
+                <p *ngIf="medical_escort?.need_doctor">{{ 'Doctor: Si' | translate }}</p>
+                <p *ngIf="!medical_escort?.need_doctor">{{ 'Doctor: No' | translate }}</p>
+
+                <p *ngIf="medical_escort?.need_nurse">{{ 'Enfermera: Si' | translate }}</p>
+                <p *ngIf="!medical_escort?.need_nurse">{{ 'Enfermera: No' | translate }}</p>
+
+                <p *ngIf="medical_escort?.need_paramedic">{{ 'Paramedico: Si' | translate }}</p>
+                <p *ngIf="!medical_escort?.need_paramedic">{{ 'Paramedico: No' | translate }}</p>
+
+                <p *ngIf="medical_escort?.need_oxygen">{{ 'Oxigeno: Si' | translate }}</p>
+                <p *ngIf="!medical_escort?.need_oxygen">{{ 'Oxigeno: No' | translate }}</p>
+                <br>
+                <p *ngIf="medical_escort?.need_spanish">{{ 'Español: Si' | translate }}</p>
+                <p *ngIf="!medical_escort?.need_spanish">{{ 'Español: No' | translate }}</p>
+
+                <p *ngIf="medical_escort?.need_english">{{ 'Ingles: Si' | translate }}</p>
+                <p *ngIf="!medical_escort?.need_english">{{ 'Ingles: No' | translate }}</p>
+              </ion-item>
+
+              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark"><b>{{ 'Descripcion' | translate }}</b></ion-label>
+              <ion-item lines="none" class="detalle">
+                <p class="white-space">{{ medical_escort?.description }}</p>
+              </ion-item>
+            </ion-list>   
+          </ion-card>
+          
+          <ion-grid padding>
+            <ion-row>
+              <ion-col col-6>
+                <ion-button class="no-border" expand="block" color="blue" (click)="edit ()">
+                  {{ 'Editar pedido' | translate }}
+                </ion-button>
+              </ion-col>
+              <ion-col col-6>
+                <ion-button class="no-border" expand="block" color="red" (click)="cancel ()">
+                  {{ 'Cancelar pedido' | translate }}
+                </ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+
+        <div *ngIf="medical_escort?.is_checked">
+          <ion-item class="ion-text-center" lines="none">
+            <h1 class="title-label">{{ 'escolta_medica' | translate }}</h1>
+          </ion-item>
+          
+          <ion-card color="danger" *ngIf="medical_escort?.state === 'observed' || medical_escort?.state === 'cancelled'">
+            <ion-card-header>
+              <b *ngIf="medical_escort?.state == 'observed'">{{ 'Estado: Observado' | translate }}</b>
+              <b *ngIf="medical_escort?.state == 'cancelled'">{{ 'Estado: Cancelado' | translate }}</b>
+            </ion-card-header> 
+            <ion-card-content>
+              {{ medical_escort?.last_message }}
+            </ion-card-content>
+          </ion-card>
+
+          <ion-card color="blue" *ngIf="medical_escort?.state == 'approved'">
+            <ion-card-header>
+              <b>{{ 'Estado: Aprobado' | translate }}</b>
+            </ion-card-header> 
+            <ion-card-content>
+              {{ medical_escort?.last_message }}
+            </ion-card-content>
+          </ion-card>
+          
+          <ion-card color="green" *ngIf="medical_escort?.state === 'completed'">
+              <ion-card-header>
+                <b *ngIf="medical_escort?.payment_type === 'online'">{{ 'Pagado' | translate }}</b>
+                <b *ngIf="medical_escort?.payment_type === 'cash'">{{ 'Tipo de pago: contra entrega' | translate }}</b>
+              </ion-card-header> 
+              <ion-card-content>
+                <p *ngIf="medical_escort?.payment_type === 'online'">
+                  {{ 'Por favor llegaremos en el horario solicitado.' | translate }}
+                </p>
+                <p *ngIf="medical_escort?.payment_type === 'cash'">
+                  {{ 'Por favor, llegaremos en el horario solicitado, pague al doctor(a). Gracias.' | translate }}
+                </p>
+              </ion-card-content>
+          </ion-card>
+
+          <ion-card>
+            <ion-list lines="none">
+              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
+                <b>{{ 'Cliente' | translate }}</b>
+              </ion-label>
+              <ion-item>
+                {{ auth.user?.first_name }}
+              </ion-item>
+
+              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
+                <b>{{ 'Fecha' | translate }}</b>
+              </ion-label>
+              <ion-item>
+                {{ getFormatDate (medical_escort?.date) }}
+              </ion-item>
+
+               <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark"><b>{{ 'Horario de servicio' | translate }}</b>
+              </ion-label>
+              <ion-item lines="none">
+                {{ medical_escort?.hour }}
+              </ion-item>
+
+              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark"><b>{{ 'Origen' | translate }}</b></ion-label>
+              <ion-item lines="none" class="detalle">
+                {{ medical_escort?.address_ori }}
+              </ion-item>
+
+              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark"><b>{{ 'Destino' | translate }}</b></ion-label>
+              <ion-item lines="none" class="detalle">
+                {{ medical_escort?.address_des }}
+              </ion-item>
+
+              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark"><b>{{ 'Cantidad de personas' | translate }}</b></ion-label>
+              <ion-item lines="none" class="detalle">
+                {{ medical_escort?.number_patients }}
+              </ion-item>
+
+              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark"><b>{{ 'Numero de dias' | translate }}</b></ion-label>
+              <ion-item lines="none" class="detalle">
+                {{ medical_escort?.number_days }}
+              </ion-item>
+
+              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark"><b>{{ 'Detalles' | translate }}</b></ion-label>
+              <ion-item lines="none" class="detalle">
+                <p *ngIf="medical_escort?.need_doctor">{{ 'Doctor: Si' | translate }}</p>
+                <p *ngIf="!medical_escort?.need_doctor">{{ 'Doctor: No' | translate }}</p>
+
+                <p *ngIf="medical_escort?.need_nurse">{{ 'Enfermera: Si' | translate }}</p>
+                <p *ngIf="!medical_escort?.need_nurse">{{ 'Enfermera: No' | translate }}</p>
+
+                <p *ngIf="medical_escort?.need_paramedic">{{ 'Paramedico: Si' | translate }}</p>
+                <p *ngIf="!medical_escort?.need_paramedic">{{ 'Paramedico: No' | translate }}</p>
+
+                <p *ngIf="medical_escort?.need_oxygen">{{ 'Oxigeno: Si' | translate }}</p>
+                <p *ngIf="!medical_escort?.need_oxygen">{{ 'Oxigeno: No' | translate }}</p>
+                <br>
+                <p *ngIf="medical_escort?.need_spanish">{{ 'Español: Si' | translate }}</p>
+                <p *ngIf="!medical_escort?.need_spanish">{{ 'Español: No' | translate }}</p>
+
+                <p *ngIf="medical_escort?.need_english">{{ 'Ingles: Si' | translate }}</p>
+                <p *ngIf="!medical_escort?.need_english">{{ 'Ingles: No' | translate }}</p>
+              </ion-item>
+
+              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark"><b>{{ 'Descripcion' | translate }}</b></ion-label>
+              <ion-item lines="none" class="detalle">
+                <p class="white-space">{{ medical_escort?.description }}</p>
+              </ion-item>
+            </ion-list>   
+          </ion-card>
+          
+          <div class="ion-text-center" *ngIf="medical_escort?.state == 'observed'">
+            <ion-row>
+              <ion-col size="12" size-sm="6">
+                <ion-button class="no-border" color="blue" (click)="edit (medical_escort?.id)">
+                  {{ 'Correguir' | translate }}
+                </ion-button>
+              </ion-col>
+
+              <ion-col size="12" size-sm="6">
+                <ion-button class="no-border" color="red" (click)="cancel (medical_escort?.id)">
+                  {{ 'CANCEL' | translate }}
+                </ion-button>
+              </ion-col>
+            </ion-row>
+          </div>
+
+          <div *ngIf="medical_escort?.state == 'approved'">
+            <ion-card>
+              <ion-card-header>
+                <b>{{ 'Costo' | translate }}</b>
+              </ion-card-header> 
+              <ion-card-content>
+                <p>{{ 'Total (inc. IGV):' | translate }} S/. {{ getFormatPrice (medical_escort?.price + medical_escort?.delivery_price) }}</p>
+              </ion-card-content>
+            </ion-card>
+
+            <div class="ion-text-center" padding>
+              <ion-button class="no-border" ion-ion-button color="blue" (click)="presentActionSheet (medical_escort?.price + medical_escort?.delivery_price)">
+                {{ 'Pedir' | translate }}
+              </ion-button>
+            </div>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

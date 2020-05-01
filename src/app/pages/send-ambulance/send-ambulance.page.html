@@ -1,0 +1,84 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+
+    <ion-title><img class="logotio" src="assets/imgs/logotio.png"></ion-title>
+    <ion-buttons slot="end">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="form">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" size-sm="12" size-md="6"  size-lg="6" size-xl="6">
+        <ion-list>
+          <ion-item class="ion-text-center" lines="none">
+            <ion-label>
+              <h1 class="title-label">{{ 'enviar una ambulancia' | translate }}</h1>
+              <p text-wrap>{{ 'Con medico' | translate }}</p>
+            </ion-label>
+          </ion-item>
+          
+          <ion-label style="font-size: 16px !important;" class="margin-left" position="stacked">{{ 'Numero de teléfono' | translate }}:</ion-label>
+
+          <ion-item no-lines>
+            <ion-button slot="start" size="small" color="blue" (click)="select_code ()">
+              <img [src]="getFlat ()">&nbsp;
+              {{ pais_selected.dial_code }}
+            </ion-button>
+
+            <ion-input class="entry" type="tel" formControlName="phone_number" placeholder="998 858 858"></ion-input>
+          </ion-item>
+          <!--ion-row no-padding>              
+            <ion-col col-4 no-padding>
+              
+            </ion-col>
+            <ion-col col-8 no-padding>
+              <ion-item>
+                
+              </ion-item>
+            </ion-col>
+          </ion-row-->
+        </ion-list>
+      </ion-col>
+      <ion-col size="12" size-sm="12" size-md="6"  size-lg="6" size-xl="6">
+        <ion-list>
+          <ion-item>
+            <ion-label style="font-size: 23px !important;" position="stacked">{{ 'Dirección' | translate }}:</ion-label>
+            <ion-input class="entry" formControlName="address" placeholder="{{ 'Ingrese su direccion' | translate }}"></ion-input>
+          </ion-item>
+          
+          <ion-button expand="block" size="small" color="white" (click)="selectOrigen ()">
+            {{ 'Marcar en mapa' | translate }} {{ editar_1 }}
+          </ion-button>
+
+          <!--ion-item>
+            <ion-card margin class="map-class">
+            <div #map id="map"></div>
+          </ion-card>
+          </ion-item-->
+          
+          <!--ion-item no-lines text-right>
+            <p (click)="getCurrentLocation ()">Posicion actual</p>
+          </ion-item-->
+        </ion-list>
+        
+        <ion-grid>
+          <ion-row>
+            <ion-col size="8" offset="2">
+              <ion-button expand="block" color="blue" [disabled]="!form.valid" (click)="goConfirmAmbulance ()">
+                {{ 'Ordenar' | translate }}
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  </form>
+</ion-content>

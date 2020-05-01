@@ -1,0 +1,8 @@
+{
+  "name": "cps-app-usuario@ionic5",
+  "integrations": {
+    "capacitor": {},
+    "cordova": {}
+  },
+  "type": "angular"
+}

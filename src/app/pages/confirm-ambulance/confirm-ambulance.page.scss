@@ -1,0 +1,33 @@
+#map2 {
+    width: 100%;
+    height: 100%;
+  }
+
+  .map-class {
+    height: 250px;
+    width: auto;
+  }
+
+  a[href^="http://maps.google.com/maps"]{display:none !important}
+  a[href^="https://maps.google.com/maps"]{display:none !important}
+
+  .gmnoprint a, .gmnoprint span, .gm-style-cc {
+    display:none;
+  }
+  
+  .gmnoprint div {
+    background:none !important;
+  }
+
+  .icon-wait {
+    font-size: 128px;
+    color: gray;
+  }
+
+  .height-70 {
+    height: 70% !important;
+  }
+
+  .button-call {
+    width: 24px;
+  }

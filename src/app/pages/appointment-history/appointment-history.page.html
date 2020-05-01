@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+
+    <ion-title><img class="logotio" src="assets/imgs/logotio.png"></ion-title>
+    <ion-buttons slot="end">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="appointments?.length > 0">
+    <ion-item *ngFor="let item of appointments" (click)="goAppointmentDetailPage (item.data.key)">
+      <ion-label>
+        <h2>{{ item?.dataAppointment.specialty_name }}</h2>
+        <h3>{{ item?.dataAppointment.date }} - {{ item?.dataAppointment.hour }}</h3>
+      </ion-label>
+    </ion-item>
+  </div>
+  <div class="window-center" *ngIf="!appointments?.length > 0">
+    <ion-item lines="none" class="ion-text-center">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <h1>{{ 'Ninguna cita' | translate }}</h1>
+            <p>{{ 'No tiene ninguna cita reservada' | translate }}</p>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+  </div>
+</ion-content>

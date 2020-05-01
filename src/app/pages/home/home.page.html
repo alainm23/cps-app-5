@@ -1,0 +1,734 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title><img class="logotio" src="assets/imgs/logotio.png"></ion-title>
+    <ion-buttons slot="end">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card *ngIf="ambulance_object" class="ambulance-card" (click)="seeSendAmbulance ()">
+    <ion-item color="danger" *ngIf="ambulance_object?.state === 'created'">
+      <ion-avatar slot="start">
+        <img src="assets/imgs/ambulance.png">
+      </ion-avatar>
+
+      <ion-label style="margin-left: 1rem;">
+        <h2 class="label-white"><b>{{ 'ambulancia_solicitada' | translate }}</b></h2>
+        <p class="ion-text-wrap">
+          {{ 'aun_por_confirmar' | translate }}
+        </p>
+      </ion-label>
+
+      <ion-button slot="end" color="white" fill="clear">
+        <ion-icon slot="icon-only" name="arrow-forward-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <ion-item color="blue" *ngIf="ambulance_object?.state === 'approved'">
+      <ion-avatar slot="start">
+        <img src="assets/imgs/ambulance.png">
+      </ion-avatar>
+
+      <ion-label style="margin-left: 1rem;">
+        <h2 class="label-white"><b>Ambulancia solicitada</b></h2>
+      <p class="ion-text-wrap">
+        {{ 'Esperando que la ambulancia se ponga en camino' | translate }}
+      </p>
+      </ion-label>
+
+      <ion-button slot="end" color="white" fill="clear">
+        <ion-icon slot="icon-only" name="arrow-forward-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <ion-item color="green" *ngIf="ambulance_object?.state === 'sent'">
+        <ion-avatar slot="start">
+          <img src="assets/imgs/ambulance.png">
+        </ion-avatar>
+
+        <ion-label style="margin-left: 1rem;">
+          <h2 class="label-white"><b>Ambulancia solicitada</b></h2>
+        <p class="ion-text-wrap">
+          {{ 'enviado_ambulancia_en_camino' | translate }}
+        </p>
+        </ion-label>
+
+        <ion-button slot="end" color="white" fill="clear">
+          <ion-icon slot="icon-only" name="arrow-forward-outline"></ion-icon>
+        </ion-button>
+    </ion-item>
+  </ion-card>
+  
+  <!-- Arreglado -->
+  <ion-card *ngIf="delivery_object" class="ambulance-card" (click)="seeDelivery ()">
+    <ion-item color="blue" *ngIf="delivery_object?.state === 'created'" color="blue">
+      <ion-avatar slot="start">
+        <img src="assets/imgs/iconos-03-symbolic.png">
+      </ion-avatar>
+
+      <ion-label style="margin-left: 1rem;">
+        <h2 class="label-white"><b>{{ 'pedido_solicitado' | translate }}</b></h2>
+        <p class="ion-text-wrap">
+          {{ 'aun_por_confirmar' | translate }}
+        </p>
+      </ion-label>
+
+      <ion-button slot="end" color="white" fill="clear">
+        <ion-icon slot="icon-only" name="arrow-forward-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <ion-item color="red" *ngIf="delivery_object?.state === 'observed'">
+      <ion-avatar slot="start">
+        <img src="assets/imgs/iconos-03-symbolic.png">
+      </ion-avatar>
+
+      <ion-label style="margin-left: 1rem;">
+        <h2 class="label-white"><b>{{ 'pedido_solicitado' | translate }}</b></h2>
+        <p class="ion-text-wrap">
+          {{ 'ver_detalles' | translate }}
+        </p>
+      </ion-label>
+
+      <ion-button slot="end" color="white" fill="clear">
+        <ion-icon slot="icon-only" name="arrow-forward-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <ion-item color="green" *ngIf="delivery_object?.state === 'approved'">
+      <ion-avatar slot="start">
+        <img src="assets/imgs/iconos-03-symbolic.png">
+      </ion-avatar>
+
+      <ion-label style="margin-left: 1rem;">
+        <h2 class="label-white"><b>{{ 'pedido_solicitado' | translate }}</b></h2>
+        <p class="ion-text-wrap">
+          {{ 'prosiga_con_el_pago' | translate }}
+        </p>
+      </ion-label>
+
+      <ion-button slot="end" color="white" fill="clear">
+        <ion-icon slot="icon-only" name="arrow-forward-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <ion-item color="green" *ngIf="delivery_object?.state === 'completed'">
+      <ion-avatar slot="start">
+        <img src="assets/imgs/iconos-03-symbolic.png">
+      </ion-avatar>
+
+      <ion-label style="margin-left: 1rem;">
+        <h2 class="label-white">
+          <b>{{ 'pedido_completado' | translate }}</b>
+        </h2>
+        <p *ngIf="delivery_object?.payment_type === 'online'" class="ion-text-wrap">
+          {{ 'pagado' | translate }}
+        </p>
+      </ion-label>
+
+      <p *ngIf="delivery_object?.payment_type !== 'online'" class="ion-text-wrap">
+        {{ 'pedido_contra_entrega' | translate }}
+      </p>
+      <ion-button slot="end" color="white" fill="clear">
+        <ion-icon slot="icon-only" name="arrow-forward-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-card>
+
+  <!-- Arreglado -->
+  <ion-card *ngIf="injection_object" class="ambulance-card" (click)="seeHomeInjection ()">
+    <ion-item color="blue" *ngIf="injection_object?.state === 'created'">
+      <ion-avatar slot="start">
+        <img src="assets/imgs/iconos-04-symbolic.png">
+      </ion-avatar>
+
+      <ion-label style="margin-left: 1rem;">
+        <h2 class="label-white"><b>{{ 'inyeccion_a_domicilio' | translate }}</b></h2>
+        <p class="ion-text-wrap">
+          {{ 'aun_por_confirmar' | translate }}
+        </p>
+      </ion-label>
+
+      <ion-button slot="end" color="white" fill="clear">
+        <ion-icon slot="icon-only" name="arrow-forward-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <ion-item color="red" *ngIf="injection_object?.state === 'observed'">
+      <ion-avatar slot="start">
+        <img src="assets/imgs/iconos-04-symbolic.png">
+      </ion-avatar>
+
+      <ion-label style="margin-left: 1rem;">
+        <h2 class="label-white"><b>{{ 'inyeccion_a_domicilio' | translate }}</b></h2>
+        <p class="ion-text-wrap">
+          {{ 'ver_detalles' | translate }}
+        </p>
+      </ion-label>
+
+      <ion-button slot="end" color="white" fill="clear">
+        <ion-icon slot="icon-only" name="arrow-forward-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <ion-item color="green" *ngIf="injection_object?.state === 'approved'">
+      <ion-avatar slot="start">
+        <img src="assets/imgs/iconos-04-symbolic.png">
+      </ion-avatar>
+
+      <ion-label style="margin-left: 1rem;">
+        <h2 class="label-white"><b>{{ 'inyeccion_a_domicilio' | translate }}</b></h2>
+        <p class="ion-text-wrap">
+          {{ 'prosiga_con_el_pago' | translate }}
+        </p>
+      </ion-label>
+
+      <ion-button slot="end" color="white" fill="clear">
+        <ion-icon slot="icon-only" name="arrow-forward-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <ion-item color="green" *ngIf="injection_object?.state === 'completed'">
+      <ion-avatar slot="start">
+        <img src="assets/imgs/iconos-04-symbolic.png">
+      </ion-avatar>
+
+      <ion-label style="margin-left: 1rem;">
+        <h2 class="label-white"><b>{{ 'inyeccion_a_domicilio' | translate }}</b></h2>
+        <p *ngIf="injection_object?.payment_type === 'online'" class="ion-text-wrap">
+          {{ 'pagado' | translate }}
+        </p>
+
+        <p *ngIf="injection_object?.payment_type !== 'online'" class="ion-text-wrap">
+          {{ 'pedido_contra_entrega' | translate }}
+        </p>
+      </ion-label>
+
+      <ion-button slot="end" color="white" fill="clear">
+        <ion-icon slot="icon-only" name="arrow-forward-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-card>
+
+  <!-- Arreglado -->
+  <ion-card *ngIf="transfer_ambulance" class="ambulance-card" (click)="seeTransferAmbulance ()">
+    <ion-item color="blue" *ngIf="transfer_ambulance?.state === 'created'">
+      <ion-avatar slot="start">
+        <img src="assets/imgs/ambulance.png">
+      </ion-avatar>
+
+      <ion-label style="margin-left: 1rem;">
+        <h2 class="label-white"><b>{{ 'trasnferencia_en_ambulancia' | translate }}</b></h2>
+        <p class="ion-text-wrap">
+          {{ 'aun_por_confirmar' | translate }}
+        </p>
+      </ion-label>
+      
+      <ion-button slot="end" color="white" fill="clear">
+        <ion-icon slot="icon-only" name="arrow-forward-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <ion-item color="red" *ngIf="transfer_ambulance?.state === 'observed'">
+      <ion-avatar slot="start">
+        <img src="assets/imgs/ambulance.png">
+      </ion-avatar>
+
+      <ion-label style="margin-left: 1rem;">
+        <h2 class="label-white"><b>{{ 'trasnferencia_en_ambulancia' | translate }}</b></h2>
+        <p class="ion-text-wrap">
+          {{ 'ver_detalles' | translate }}
+        </p>  
+      </ion-label>
+
+      <ion-button slot="end" color="white" fill="clear">
+        <ion-icon slot="icon-only" name="arrow-forward-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <ion-item color="green" *ngIf="transfer_ambulance?.state === 'approved'">
+      <ion-avatar slot="start">
+        <img src="assets/imgs/ambulance.png">
+      </ion-avatar>
+
+      <ion-label style="margin-left: 1rem;">
+        <h2 class="label-white"><b>{{ 'trasnferencia_en_ambulancia' | translate }}</b></h2>
+        <p class="ion-text-wrap">
+          {{ 'prosiga_con_el_pago' | translate }}
+        </p>
+      </ion-label>
+
+      <ion-button slot="end" color="white" fill="clear">
+        <ion-icon slot="icon-only" name="arrow-forward-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <ion-item color="green" *ngIf="transfer_ambulance?.state === 'completed'">
+      <ion-avatar slot="start">
+        <img src="assets/imgs/iconos-05-symbolic.svg">
+      </ion-avatar>
+
+      <ion-label style="margin-left: 1rem;">
+        <h2 class="label-white"><b>{{ 'trasnferencia_en_ambulancia' | translate }}</b></h2>
+        <p *ngIf="transfer_ambulance?.payment_type === 'online'" class="ion-text-wrap">
+          {{ 'pagado' | translate }}
+        </p>
+  
+        <p *ngIf="transfer_ambulance?.payment_type !== 'online'" class="ion-text-wrap">
+          {{ 'pedido_contra_entrega' | translate }}
+        </p>  
+      </ion-label>
+
+      <ion-button slot="end" color="white" fill="clear">
+        <ion-icon slot="icon-only" name="arrow-forward-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-card>
+
+  <!-- Fixed -->
+  <ion-card *ngIf="medical" class="ambulance-card" (click)="seeMedical ()">
+    <ion-item color="blue" *ngIf="medical?.state === 'created'">
+      <ion-avatar slot="start">
+        <img src="assets/imgs/iconos-06-symbolic.png">
+      </ion-avatar>
+
+      <ion-label style="margin-left: 1rem;">
+        <h2 class="label-white"><b>{{ 'MEDICAL_SCORT' | translate }}</b></h2>
+        <p class="ion-text-wrap">
+          {{ 'aun_por_confirmar' | translate }}
+        </p>
+      </ion-label>
+      
+      <ion-button slot="end" color="white" fill="clear">
+        <ion-icon slot="icon-only" name="arrow-forward-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <ion-item color="red" *ngIf="medical?.state === 'observed'">
+      <ion-avatar slot="start">
+        <img src="assets/imgs/iconos-06-symbolic.png">
+      </ion-avatar>
+
+      <ion-label style="margin-left: 1rem;">
+        <h2 class="label-white"><b>{{ 'MEDICAL_SCORT' | translate }}</b></h2>
+        <p class="ion-text-wrap">
+         {{ 'ver_detalles' | translate }}
+        </p>
+      </ion-label>
+
+      <ion-button slot="end" color="white" fill="clear">
+        <ion-icon slot="icon-only" name="arrow-forward-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <ion-item color="green" *ngIf="medical?.state === 'approved'">
+      <ion-avatar slot="start">
+        <img src="assets/imgs/iconos-06-symbolic.png">
+      </ion-avatar>
+
+      <ion-label style="margin-left: 1rem;">
+        <h2 class="label-white"><b>{{ 'MEDICAL_SCORT' | translate }}</b></h2>
+        <p class="ion-text-wrap">
+          {{ 'prosiga_con_el_pago' | translate }}
+        </p>
+      </ion-label>
+
+      <ion-button slot="end" color="white" fill="clear">
+        <ion-icon slot="icon-only" name="arrow-forward-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <ion-item color="green" *ngIf="medical?.state === 'completed'">
+      <ion-avatar slot="start">
+        <img src="assets/imgs/iconos-06-symbolic.svg">
+      </ion-avatar>
+
+      <ion-label style="margin-left: 1rem;">
+        <h2 class="label-white"><b>{{ 'MEDICAL_SCORT' | translate }}</b></h2>
+        <p *ngIf="medical?.payment_type === 'online'" class="ion-text-wrap">
+          {{ 'pagado' | translate }}
+        </p>
+
+        <p *ngIf="medical?.payment_type !== 'online'" class="ion-text-wrap">
+          {{ 'pedido_contra_entrega' | translate }}
+        </p>
+      </ion-label>
+
+      <ion-button slot="end" color="white" fill="clear">
+        <ion-icon slot="icon-only" name="arrow-forward-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-card>
+  
+  <!-- Arreglado -->
+  <ion-card *ngIf="home_pressure" class="ambulance-card" (click)="seeHomePressure ()">
+    <ion-item color="blue" *ngIf="home_pressure?.state === 'created'">
+      <ion-avatar slot="start">
+        <img src="assets/imgs/iconos-10-symbolic.png">
+      </ion-avatar>
+
+      <ion-label style="margin-left: 1rem;">
+        <h2 class="label-white"><b>{{ 'enfermera_a_domicilio' | translate }}</b></h2>
+        <p class="ion-text-wrap">
+          {{ 'aun_por_confirmar' | translate }}
+        </p>
+      </ion-label>
+
+      <ion-button slot="end" color="white" fill="clear">
+        <ion-icon slot="icon-only" name="arrow-forward-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <ion-item color="red" *ngIf="home_pressure?.state === 'observed'">
+      <ion-avatar slot="start">
+        <img src="assets/imgs/iconos-10-symbolic.png">
+      </ion-avatar>
+
+      <ion-label style="margin-left: 1rem;">
+        <h2 class="label-white"><b>{{ 'enfermera_a_domicilio' | translate }}</b></h2>
+        <p class="ion-text-wrap">
+          {{ 'ver_detalles' | translate }}
+        </p>
+      </ion-label>
+
+      <ion-button slot="end" color="white" fill="clear">
+        <ion-icon slot="icon-only" name="arrow-forward-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <ion-item color="green" *ngIf="home_pressure?.state === 'approved'">
+      <ion-avatar slot="start">
+        <img src="assets/imgs/iconos-10-symbolic.png">
+      </ion-avatar>
+
+      <ion-label style="margin-left: 1rem;">
+        <h2 class="label-white"><b>{{ 'enfermera_a_domicilio' | translate }}</b></h2>
+        <p class="ion-text-wrap">
+          {{ 'prosiga_con_el_pago' | translate }}
+        </p>
+      </ion-label>
+
+      <ion-button slot="end" color="white" fill="clear">
+        <ion-icon slot="icon-only" name="arrow-forward-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <ion-item color="green" *ngIf="home_pressure?.state === 'completed'">
+      <ion-avatar slot="start">
+        <img src="assets/imgs/iconos-10-symbolic.svg">
+      </ion-avatar>
+
+      <ion-label style="margin-left: 1rem;">
+        <h2 class="label-white"><b>{{ 'enfermera_a_domicilio' | translate }}</b></h2>
+        <p *ngIf="home_pressure?.payment_type === 'online'" class="ion-text-wrap">
+          {{ 'pagado' | translate }}
+        </p>
+
+        <p *ngIf="home_pressure?.payment_type !== 'online'" class="ion-text-wrap">
+          {{ 'pedido_contra_entrega' | translate }}
+        </p>
+      </ion-label>
+
+      <ion-button slot="end" color="white" fill="clear">
+        <ion-icon slot="icon-only" name="arrow-forward-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-card>
+
+  <!-- Arreglado -->
+  <ion-card *ngIf="home_doctor" class="ambulance-card" (click)="seeHomeDoctor ()">
+    <ion-item color="blue" *ngIf="home_doctor?.state === 'created'">
+      <ion-avatar slot="start">
+        <img src="assets/imgs/iconos-11-symbolic.png">
+      </ion-avatar>
+      
+      <ion-label style="margin-left: 1rem;">
+        <h2 class="label-white"><b>{{ 'doctor_a_domicilio' | translate }}</b></h2>
+        <p class="ion-text-wrap">
+          {{ 'aun_por_confirmar' | translate }}
+        </p>
+      </ion-label>
+
+      <ion-button slot="end" color="white" fill="clear">
+        <ion-icon slot="icon-only" name="arrow-forward-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <ion-item color="red" *ngIf="home_doctor?.state === 'observed'">
+      <ion-avatar slot="start">
+        <img src="assets/imgs/iconos-11-symbolic.png">
+      </ion-avatar>
+
+      <ion-label style="margin-left: 1rem;">
+        <h2 class="label-white"><b>{{ 'doctor_a_domicilio' | translate }}</b></h2>
+        <p class="ion-text-wrap">
+          {{ 'ver_detalles' | translate }}
+        </p>
+      </ion-label>
+
+      <ion-button slot="end" color="white" fill="clear">
+        <ion-icon slot="icon-only" name="arrow-forward-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <ion-item color="green" *ngIf="home_doctor?.state === 'approved'">
+      <ion-avatar slot="start">
+        <img src="assets/imgs/iconos-11-symbolic.png">
+      </ion-avatar>
+      
+      <ion-label style="margin-left: 1rem;">
+        <h2 class="label-white"><b>{{ 'doctor_a_domicilio' | translate }}</b></h2>
+        <p class="ion-text-wrap">
+          {{ 'prosiga_con_el_pago' | translate }}
+        </p>
+      </ion-label>
+
+      <ion-button slot="end" color="white" fill="clear">
+        <ion-icon slot="icon-only" name="arrow-forward-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <ion-item color="green" *ngIf="home_doctor?.state === 'completed'">
+      <ion-avatar slot="start">
+        <img src="assets/imgs/iconos-11-symbolic.png">
+      </ion-avatar>
+
+      <ion-label style="margin-left: 1rem;">
+        <h2 class="label-white"><b>{{ 'doctor_a_domicilio' | translate }}</b></h2>
+        <p *ngIf="home_doctor?.payment_type === 'online'" class="ion-text-wrap">
+          {{ 'pagado' | translate }}
+        </p>
+
+        <p *ngIf="home_doctor?.payment_type !== 'online'" class="ion-text-wrap">
+          {{ 'pedido_contra_entrega' | translate }}
+        </p>
+      </ion-label>
+
+      <ion-button slot="end" color="white" fill="clear">
+        <ion-icon slot="icon-only" name="arrow-forward-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <ion-item color="blue" *ngIf="home_doctor?.state === 'finalized'">
+      <ion-avatar slot="start">
+        <img src="assets/imgs/iconos-11-symbolic.png">
+      </ion-avatar>
+
+      <ion-label style="margin-left: 1rem;">
+        <h2 class="label-white"><b>{{ 'doctor_a_domicilio' | translate }}</b></h2>
+        <p *ngIf="home_doctor?.payment_type === 'online'" class="ion-text-wrap">
+          {{ 'pagado' | translate }}
+        </p>
+
+        <p *ngIf="home_doctor?.payment_type !== 'online'" class="ion-text-wrap">
+          {{ 'pedido_contra_entrega' | translate }}
+        </p>
+      </ion-label>
+
+      <ion-button slot="end" color="white" fill="clear">
+        <ion-icon slot="icon-only" name="arrow-forward-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-card>
+
+  <!-- Fixed -->
+  <ion-card *ngIf="request" class="ambulance-card" (click)="seeRequest ()">
+    <ion-item color="blue" *ngIf="request?.state === 'created'">
+      <ion-avatar slot="start">
+        <img src="assets/imgs/iconos-07-symbolic.png">
+      </ion-avatar>
+
+      <ion-label style="margin-left: 1rem;">
+        <h2 class="label-white"><b>{{ 'solicitud_de_resultados' | translate }}</b></h2>
+      <p class="ion-text-wrap">
+        {{ 'aun_por_confirmar' | translate }}
+      </p>
+      </ion-label>
+
+      <ion-button slot="end" color="white" fill="clear">
+        <ion-icon slot="icon-only" name="arrow-forward-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <ion-item color="red" *ngIf="request?.state === 'observed'">
+      <ion-avatar slot="start">
+        <img src="assets/imgs/iconos-07-symbolic.png">
+      </ion-avatar>
+
+      <ion-label style="margin-left: 1rem;">
+        <h2 class="label-white"><b>{{ 'solicitud_de_resultados' | translate }}</b></h2>
+      <p class="ion-text-wrap">
+        {{ 'ver_detalles' | translate }}
+      </p>
+      </ion-label>
+
+      <ion-button slot="end" color="white" fill="clear">
+        <ion-icon slot="icon-only" name="arrow-forward-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <ion-item color="green" *ngIf="request?.state === 'approved'">
+      <ion-avatar slot="start">
+        <img src="assets/imgs/iconos-07-symbolic.png">
+      </ion-avatar>
+
+      <ion-label style="margin-left: 1rem;">
+        <h2 class="label-white"><b>{{ 'solicitud_de_resultados' | translate }}</b></h2>
+      <p class="ion-text-wrap">
+        {{ 'prosiga_con_el_pago' | translate }}
+      </p>
+      </ion-label>
+
+      <ion-button slot="end" color="white" fill="clear">
+        <ion-icon slot="icon-only" name="arrow-forward-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <ion-item color="green" *ngIf="request?.state === 'completed'">
+      <ion-avatar slot="start">
+        <img src="assets/imgs/iconos-07-symbolic.svg">
+      </ion-avatar>
+
+      <ion-label style="margin-left: 1rem;">
+        <h2 class="label-white"><b>{{ 'solicitud_de_resultados' | translate }}</b></h2>
+      <p *ngIf="request?.payment_type === 'online'" class="ion-text-wrap">
+        {{ 'pagado' | translate }}
+      </p>
+
+      <p *ngIf="request?.payment_type !== 'online'" class="ion-text-wrap">
+        {{ 'pedido_contra_entrega' | translate }}
+      </p>
+      </ion-label>
+
+      <ion-button slot="end" color="white" fill="clear">
+        <ion-icon slot="icon-only" name="arrow-forward-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-card>
+
+  <ion-card *ngFor="let item of para_calificar">
+    <ion-item color="blue" (click)="calificar (item)">
+      <ion-avatar slot="start"> 
+        <img *ngIf="item.type === 'delivery'" src="assets/imgs/iconos-03-symbolic.png">
+        <img *ngIf="item.type === 'injection'" src="assets/imgs/iconos-04-symbolic.png">
+        <img *ngIf="item.type === 'transfer'" src="assets/imgs/ambulance.png">
+        <img *ngIf="item.type === 'medical'" src="assets/imgs/iconos-06-symbolic.png">
+        <img *ngIf="item.type === 'home_pressure'" src="assets/imgs/iconos-10-symbolic.png">
+        <img *ngIf="item.type === 'home_doctor'" src="assets/imgs/iconos-11-symbolic.png">
+        <img *ngIf="item.type === 'request'" src="assets/imgs/iconos-07-symbolic.png">
+      </ion-avatar>
+
+      <h2 *ngIf="item.type === 'delivery'" class="label-white"><b>{{ 'Calificar: Médico a domicilio' | translate }}</b></h2>
+      <h2 *ngIf="item.type === 'injection'" class="label-white"><b>{{ 'Calificar: inyectable a casa' | translate }}</b></h2>
+      <h2 *ngIf="item.type === 'transfer'" class="label-white"><b>{{ 'Calificar: translado ambulancia' | translate }}</b></h2>
+      <h2 *ngIf="item.type === 'medical'" class="label-white"><b>{{ 'Calificar: escolta medica' | translate }}</b></h2>
+      <h2 *ngIf="item.type === 'home_pressure'" class="label-white"><b>{{ 'Calificar: Enfermera a domicilio' | translate }}</b></h2>
+      <h2 *ngIf="item.type === 'home_doctor'" class="label-white"><b>{{ 'Calificar: Doctor a domicilio' | translate }}</b></h2>
+      <h2 *ngIf="item.type === 'request'" class="label-white"><b>{{ 'Calificar: Solicitud de resultados' | translate }}</b></h2>
+      
+      <p class="ion-text-wrap">
+        {{ 'Por favor, califica nuestro servicio' | translate }}
+      </p>
+
+      <button ion-button item-end outline clear icon-only>
+        <ion-icon color="light" name="arrow-round-forward"></ion-icon>
+      </button>
+    </ion-item>
+
+    <ion-item color="danger" (click)="cancelCalificacion (item)">
+      En otro momento
+    </ion-item>
+  </ion-card>
+
+  <ion-item style="margin-top: 0.5rem;" lines="none" *ngIf="auth.is_logged" class="ion-text-center">
+    <ion-label>
+      <h1 style="font-size: 2rem;" class="ion-text-wrap" class="title-label">{{ 'HELLO' | translate }} {{ auth.user?.first_name }}</h1>
+    </ion-label>
+  </ion-item>
+
+  <ion-item style="margin-top: 0.5rem;" lines="none" *ngIf="!auth.is_logged" class="ion-text-center">
+    <ion-label>
+      <h1 style="font-size: 2rem;" class="ion-text-wrap" class="title-label">{{ 'WELCOME_TO_CPS' | translate }}</h1>
+    </ion-label>
+  </ion-item>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6" size-sm="4" size-xl="3" size-md="4">
+        <ion-card class="home-item emergency ion-no-margin ion-no-padding" (click)="goEmergencyPage ()">
+          <img class="ion-padding-top logo-eme" src="assets/imgs/iconos-01-symbolic.png">
+          <h3 class="ion-padding-top ion-text-wrap text-white">{{ 'EMERGENCY' | translate }}</h3>
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="6" size-sm="4" size-xl="3" size-md="4">
+        <ion-card class="home-item ion-no-margin ion-no-padding" (click)="goPage ('home-doctor')">
+          <img class="ion-padding-top logo-css" src="assets/imgs/iconos-11.jpg">
+          <h3 class="ion-padding-top ion-text-wrap">{{ 'medico_a_domicilio' | translate }}</h3>
+          <small>{{ 'no_emergencia' | translate }}</small>
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="6" size-sm="4" size-xl="3" size-md="4">
+        <ion-card class="home-item ion-no-margin ion-no-padding" (click)="goPage ('pharmacy-delivery')">
+          <img class="ion-padding-top logo-css" src="assets/imgs/iconos-03.jpg">
+          <h3 class="ion-padding-top ion-text-wrap">{{ 'Pedido de farmacia' | translate }}</h3>
+          <small>{{ 'Vacunas' | translate }}</small>
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="6" size-sm="4" size-xl="3" size-md="4">
+        <ion-card class="home-item ion-no-margin ion-no-padding" (click)="goPage ('home-injection')">
+          <img class="ion-padding-top logo-css" src="assets/imgs/iconos-04.jpg">
+          <h3 class="ion-padding-top ion-text-wrap">{{ 'HOME_INJECTION' | translate }}</h3>
+          <small>{{ 'Vacunas' | translate }}</small>
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="6" size-sm="4" size-xl="3" size-md="4">
+        <ion-card class="home-item ion-no-margin ion-no-padding" (click)="goPage ('appointment-specialty')">
+          <img class="ion-padding-top logo-css" src="assets/imgs/iconos-02.jpg">
+          <h3 class="ion-padding-top ion-text-wrap">{{ 'MAKE_AND_APPOINTMENT' | translate }}</h3>
+          <small>{{ 'no_emergencia' | translate }}</small>
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="6" size-sm="4" size-xl="3" size-md="4">
+        <ion-card class="home-item ion-no-margin ion-no-padding" (click)="goPage ('home-nurse')">
+          <img class="ion-padding-top logo-css" src="assets/imgs/iconos-10.jpg">
+          <h3 class="ion-padding-top ion-text-wrap">{{ 'enfermera_a_domicilio' | translate }}</h3>
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="6" size-sm="4" size-xl="3" size-md="4">
+        <ion-card class="home-item ion-no-margin ion-no-padding" (click)="goPage ('transfer-ambulance')">
+          <img class="ion-padding-top logo-css" src="assets/imgs/iconos-05.jpg">
+          <h3 class="ion-padding-top ion-text-wrap">{{ 'TRANSFER_BY_AMBULANCE' | translate }}</h3>
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="6" size-sm="4" size-xl="3" size-md="4">
+        <ion-card class="home-item ion-no-margin ion-no-padding" (click)="goPage ('medical-escort')">
+          <img class="ion-padding-top logo-css" src="assets/imgs/iconos-06.jpg">
+          <h3 class="ion-padding-top ion-text-wrap">{{ 'MEDICAL_SCORT' | translate }}</h3>
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="6" size-sm="4" size-xl="3" size-md="4">
+        <ion-card class="home-item ion-no-margin ion-no-padding" (click)="goPage ('request-results')">
+          <img class="ion-padding-top logo-css" src="assets/imgs/iconos-07.jpg">
+          <h3 class="ion-padding-top ion-text-wrap">{{ 'REQUEST_RESULT' | translate }}</h3>
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="6" size-sm="4" size-xl="3" size-md="4" (click)="goBlogNews ()">
+        <ion-card class="home-item ion-no-margin ion-no-padding">
+          <img class="ion-padding-top logo-css" src="assets/imgs/iconos-08.jpg">
+          <h3 class="ion-padding-top ion-text-wrap">{{ 'BLOG_NEWS_ARTICLES' | translate }}</h3>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

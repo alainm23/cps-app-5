@@ -1,0 +1,71 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+
+    <ion-title><img class="logotio" src="assets/imgs/logotio.png"></ion-title>
+    <ion-buttons slot="end">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form [formGroup]="form" class="ion-padding-top">
+  <ion-grid>
+    <ion-row>
+      <ion-col size-xs="12" size-sm="8" size-offset-sm="2" size-md="6" size-offset-md="3" size-lg="4" size-offset-lg="4" size-xl="4" size-offset-xl="4">
+        <ion-card>
+          <img class="ion-padding" src="assets/imgs/logotio.png"/>
+
+          <ion-list class="input-padding" lines="none">
+            <ion-item lines="none">
+              <ion-label position="stacked">{{ 'Correo electronico' | translate }}</ion-label>
+              <ion-input class="border-bottom-input" formControlName="email" type="email" placeholder="abc@gmail.com"></ion-input>
+            </ion-item>
+
+            <ion-item lines="none">
+              <ion-label position="stacked">{{ 'Contraseña' | translate }}</ion-label>
+              <ion-input class="border-bottom-input" formControlName="password" type="password" placeholder="********"></ion-input>
+            </ion-item>
+          </ion-list>
+
+          <div class="ion-text-center ion-padding">
+            <ion-button class="button-height" expand="block" size="small" color="blue" [disabled]="!form.valid" (click)="onSubmit()">
+              {{ 'Ingresar' | translate }}
+            </ion-button>
+          </div>
+          
+          <div class="ion-text-center">
+            <h3 style="margin: 0px !important;">{{ 'Ó' | translate }}</h3>
+          </div>  
+            
+          <ion-row class="ion-padding">
+            <ion-col class="ion-no-padding" with-50>
+              <ion-button class="button-height" expand="block" size="small" color="danger" (click)="google ()">
+                <ion-icon slot="icon-only" name="logo-google"></ion-icon>
+              </ion-button>
+            </ion-col>
+            <ion-col class="ion-no-padding ion-padding-left" with-50>
+              <ion-button class="button-height" expand="block" size="small" color="facebook" (click)="facebook ()">
+                <ion-icon slot="icon-only" name="logo-facebook"></ion-icon>
+              </ion-button>
+            </ion-col>
+          </ion-row>
+
+          <div class="ion-text-center ion-padding">
+            <p>{{ 'Eres nuevo?' | translate }} <span style="font-weight: bold;" (click)="goRegistry ()">
+            {{ 'registrate aqui' | translate }}</span></p>
+          </div>
+
+          <div class="ion-text-center ion-padding-bottom">
+            <p style="margin: 0px !important;">{{ '¿Olvidaste tu contraseña?' | translate }}<span style="font-weight: bold;" (click)="resetPassword ()">
+            {{ '¿Recueralo aqui?' | translate }}</span></p>
+          </div>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  </form>
+</ion-content>

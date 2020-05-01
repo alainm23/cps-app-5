@@ -1,0 +1,232 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+
+    <ion-title><img class="logotio" src="assets/imgs/logotio.png"></ion-title>
+    <ion-buttons slot="end">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <div *ngIf="!delivery?.is_checked"> 
+          <ion-item class="ion-text-center" lines="none">
+            <h1 class="title-label">{{ 'Pedido de farmacia' | translate }}</h1>
+            <br>
+            <p class="ion-text-wrap">{{ 'Tu pedido está siendo atendido, por favor espere nuestra confirmación' | translate }}</p>
+          </ion-item>
+
+          <ion-item class="ion-text-center height-70" lines="none">
+            <ion-label>
+              <ion-icon class="icon-wait" name="time"></ion-icon>
+              <p class="ion-margin-top">{{ 'Gracias por su paciencia' | translate }}</p>
+            </ion-label>
+          </ion-item>
+
+          <ion-card>
+            <ion-list lines="none">
+              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
+                <b>{{ 'Cliente' | translate }}:</b>
+              </ion-label>
+              <ion-item lines="none">
+                {{ auth.user?.first_name }}
+              </ion-item>
+
+              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
+                <b>{{ 'Fecha' | translate }}:</b>
+              </ion-label>
+              <ion-item lines="none">
+                {{ getFormatDate (delivery?.date) }}
+              </ion-item>
+
+              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
+                <b>{{ 'Tipo de comprobante' | translate }}:</b>
+              </ion-label>
+              <ion-item lines="none">
+                <span *ngIf="delivery?.tipo_comprobante === 'factura'">Factura</span>
+                <span *ngIf="delivery?.tipo_comprobante === 'boleta'">Boleta</span>
+              </ion-item>
+
+              <div *ngIf="delivery?.ruc !== ''">
+              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
+                <b>RUC:</b>
+              </ion-label>
+              <ion-item lines="none">
+                 {{ delivery?.ruc }}
+              </ion-item>
+              </div>
+
+              <div *ngIf="delivery?.razon_social !== ''">
+              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
+                <b>{{ 'Razón social' | translate }}:</b>
+              </ion-label>
+              <ion-item lines="none">
+                 {{ delivery?.razon_social }}
+              </ion-item>
+              </div>
+
+              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
+                <b>{{ 'Su pedido de' | translate }}:</b>
+              </ion-label>
+              <ion-item class="ion-text-wrap" lines="none">
+                <p class="detalle">{{ delivery?.medicines }}</p>
+              </ion-item>
+            </ion-list>
+          </ion-card>
+
+          <ion-grid class="ion-padding">
+            <ion-row>
+              <ion-col size="6">
+                <ion-button class="no-border" expand="block" color="blue" (click)="editDelivery ()">
+                  {{ 'Editar pedido' | translate }}
+                </ion-button>
+              </ion-col>
+              <ion-col size="6">
+                <button class="no-border" expand="block" color="red" (click)="cancelDelivery ()">
+                  {{ 'Cancelar pedido' | translate }}
+                </button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>  
+        </div>
+
+        <div *ngIf="delivery?.is_checked">
+          <ion-item class="ion-text-center" lines="none">
+            <h1 class="title-label">{{ 'PHARMACY_DELIVERY' | translate }}</h1>
+          </ion-item>    
+          
+          <ion-card color="danger" *ngIf="delivery?.state == 'observed' || delivery?.state == 'canceled'">
+            <ion-card-header>
+              <b *ngIf="delivery?.state == 'observed'">{{ 'Estado: Observado' | translate }}</b>
+              <b *ngIf="delivery?.state == 'canceled'">{{ 'Estado: Cancelado' | translate }}</b>
+            </ion-card-header> 
+            <ion-card-content>
+              {{ delivery?.last_message }}
+            </ion-card-content>
+          </ion-card>
+
+          <ion-card color="green" *ngIf="delivery?.state == 'approved'">
+            <ion-card-header>
+              <b>{{ 'Estado: Aprobado' | translate }}</b>
+            </ion-card-header> 
+            <ion-card-content>
+              {{ delivery?.last_message }}
+            </ion-card-content>
+          </ion-card>
+          
+          <ion-card color="green" *ngIf="delivery?.state === 'completed'">
+              <ion-card-header>
+                <b *ngIf="delivery?.payment_type === 'online'">{{ 'Pagado' | translate }}</b>
+                <b *ngIf="delivery?.payment_type === 'cash'">{{ 'Tipo de pago: contra entrega' | translate }}</b>
+              </ion-card-header> 
+              <ion-card-content>
+                <p *ngIf="delivery?.payment_type === 'online'">
+                  {{ 'Por favor espere. Se le notificara cuando el pedido haya sido enviado.' | translate }}
+                </p>
+                <p *ngIf="delivery?.payment_type === 'cash'">
+                  {{ 'Por favor espere. Se le notificara cuando el pedido haya sido enviado. por favor, pague al mensajero. Gracias.' | translate }}
+                </p>
+              </ion-card-content>
+          </ion-card>
+
+          <ion-card>
+            <ion-list lines="none">
+              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
+                <b>{{ 'Cliente' | translate }}:</b>
+              </ion-label>
+              <ion-item lines="none">
+                {{ auth.user?.first_name }}
+              </ion-item>
+
+              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
+                <b>{{ 'Fecha' | translate }}:</b>
+              </ion-label>
+              <ion-item lines="none">
+                {{ getFormatDate (delivery?.date) }}
+              </ion-item>
+
+              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
+                <b>{{ 'Tipo de comprobante' | translate }}:</b>
+              </ion-label>
+              <ion-item lines="none">
+                <span *ngIf="delivery?.tipo_comprobante === 'factura'">Factura</span>
+                <span *ngIf="delivery?.tipo_comprobante === 'boleta'">Boleta</span>
+              </ion-item>
+
+              <div *ngIf="delivery?.ruc !== ''">
+              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
+                <b>RUC:</b>
+              </ion-label>
+              <ion-item lines="none">
+                 {{ delivery?.ruc }}
+              </ion-item>
+              </div>
+
+              <div *ngIf="delivery?.razon_social !== ''">
+              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
+                <b>{{ 'Razón social' | translate }}:</b>
+              </ion-label>
+              <ion-item lines="none">
+                 {{ delivery?.razon_social }}
+              </ion-item>
+              </div>
+
+              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
+                <b>{{ 'Su pedido de:' | translate }}:</b>
+              </ion-label>
+              <ion-item class="ion-text-wrap" lines="none">
+                <p class="detalle">{{ delivery?.medicines }}</p>
+              </ion-item>
+            </ion-list>
+          </ion-card>
+        
+          <div class="ion-text-center" *ngIf="delivery?.state == 'observed'">
+            <ion-row>
+              <ion-col size="6">
+                <ion-button class="no-border" expand="block" color="blue" (click)="editDelivery (delivery?.id)">
+                  {{ 'Correguir' | translate }}
+                </ion-button>
+              </ion-col>
+
+              <ion-col size="6">
+                <ion-button class="no-border" expand="block" color="red" (click)="cancelDelivery ()">
+                  {{ 'CANCEL' | translate }}
+                </ion-button>
+              </ion-col>
+            </ion-row>
+          </div>
+
+          <div *ngIf="delivery?.state === 'approved'">
+            <ion-card>
+              <ion-card-header>
+                <b>{{ 'Costo' | translate }}</b>
+              </ion-card-header> 
+              <ion-card-content>
+                <p>{{ 'Costo:' | translate }} S/.{{ getFormatPrice (delivery?.price) }}</p>
+                <p>{{ 'Costo de envio:' | translate }} S/.{{ getFormatPrice (delivery?.delivery_price) }}</p>
+                <p>{{ 'Total (inc. IGV):' | translate }} S/. {{ getFormatPrice (delivery?.price + delivery?.delivery_price) }}</p>
+                <p class="ion-margin-top">{{ 'Tiempo de entrega:' | translate }} {{ getRelativeTime (delivery?.delivery_time) }} min.</p>
+              </ion-card-content>
+            </ion-card>
+            
+            <ion-grid>
+              <ion-row>
+                <ion-col size="8" offset="2">
+                  <ion-button class="no-border" expand="block" color="blue" (click)="goBuy (delivery?.price + delivery?.delivery_price)">
+                    {{ 'Pedir' | translate }}
+                  </ion-button>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

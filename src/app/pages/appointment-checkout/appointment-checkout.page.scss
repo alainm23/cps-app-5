@@ -1,0 +1,44 @@
+.entry {
+    --background: #E7E7E7;
+    background: #E7E7E7;
+  }
+
+  .entry-css {
+    --background: #E7E7E7;
+  }
+
+  .padding-top {
+    padding-top: 8px;
+  }
+
+  .entry-2 {
+    .item-inner {
+      .input-wrapper {
+        background-color: #E7E7E7 !important;
+      }
+    }
+  }
+
+  .padding-left {
+    padding-left: 8px;
+  }
+
+  .text-area {
+    height: 120px;
+
+    .text-input {
+      height: 100px;
+    }
+  }
+
+  .nacio {
+    margin-left: 1rem;
+  }
+
+  .card-precio {
+    background-color: #CBECF2;
+  }
+
+  .padding-left-error {
+    padding-left: 1rem;
+  }

@@ -1,0 +1,167 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+
+    <ion-title><img class="logotio" src="assets/imgs/logotio.png"></ion-title>
+    <ion-buttons slot="end">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="form">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12" size-sm="12" size-md="6"  size-lg="6" size-xl="6">
+          <ion-list>
+            <ion-item class="ion-text-center ion-text-wrap" lines="none">
+              <ion-label>
+                <h1 *ngIf="!is_edit" class="title-label">
+                  {{ 'Medico a domicilio' | translate }}
+                </h1>
+                <p>{{ 'Medico general' | translate }}</p>
+                
+                <h1 *ngIf="is_edit" class="title-label">
+                  {{ 'Editar medico a domicilio' | translate }}
+                </h1>
+  
+                <p>{{ 'Luego de validar' | translate }}</p>
+              </ion-label>
+            </ion-item>
+            
+            <div class="ion-text-center">
+              <ion-button size="small" color="red" class="no-border" (click)="goEmergency ()">
+                {{ 'Es una emergencia' | translate }}
+              </ion-button>
+            </div>
+
+            <ion-item lines="none">
+              <ion-label style="font-size: 18pt !important; font-weight: 500;" position="stacked">{{ 'Sintomas' | translate }}:</ion-label>
+              <ion-textarea row="3" formControlName="note" placeholder="{{ 'Me siento' | translate }}"></ion-textarea>
+            </ion-item>
+
+            <ion-item lines="none">
+              <ion-label class="header-text">{{ 'Fecha' | translate }}:</ion-label>
+              <ion-datetime 
+                cancelText="Cancelar" doneText="Seleccionar"
+                monthNames="enero, febrero, marzo, abril, mayo, junio, julio, agosto, septiembre, octubre, noviembre, diciembre"
+                [min]="min_date" displayFormat="D MMM YYYY" formControlName="date"></ion-datetime>
+            </ion-item>
+            
+            <div style="margin-left: 1rem;" class="ion-margin-left" *ngIf="form.controls.date.errors?.required">
+              <small class="color-red">
+              {{ '* Campo obligatorio' | translate }}
+            </small>
+            </div>
+
+            <ion-item lines="none">
+              <ion-label class="header-text">{{ 'Horario de servicio' | translate }}:</ion-label>
+              <ion-select class="card-md" block formControlName="hour">
+                <div *ngFor="let item of get_hours ()">
+                  <ion-select-option *ngIf="check_hour (item)" [value]="item">
+                    {{ item }}
+                  </ion-select-option>
+                </div>
+              </ion-select>
+            </ion-item>
+
+            <div style="margin-left: 1rem;" class="ion-margin-left" *ngIf="form.controls.hour.errors?.required">
+              <small class="color-red">
+              {{ '* Campo obligatorio' | translate }}
+            </small>
+            </div>
+
+            <ion-item>
+              <ion-label class="header-telefono" position="stacked">
+                {{ 'Numero de teléfono' | translate }}:
+              </ion-label>
+            </ion-item>
+
+            <ion-grid>
+              <ion-row>              
+                <ion-col size="4" class="ion-align-self-end">
+                  <ion-button size="small" expand="block" color="blue" (click)="select_code ()">
+                    <img [src]="getFlat ()">&nbsp;
+                    {{ pais_selected.dial_code }}
+                  </ion-button>
+                </ion-col>
+                <ion-col size="8">
+                  <ion-item>
+                    <ion-input type="tel" formControlName="phone_number" placeholder="+51 985 858 787"></ion-input>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+
+            <div style="margin-left: 1rem;" class="iob-margin-left" *ngIf="form.controls.phone_number.errors?.required">
+              <small class="color-red">{{ '* Campo obligatorio' | translate }}</small>
+            </div>
+
+            <ion-item lines="none">
+              <ion-label class="header-text">{{ 'Idioma' | translate }}</ion-label>
+            </ion-item>
+
+            <ion-list>
+              <ion-radio-group formControlName="lang">
+                <ion-item>
+                  <ion-label>{{ 'Español' | translate }}</ion-label>
+                  <ion-radio slot="start" color="blue" value="es" checked></ion-radio>
+                </ion-item>
+                
+                <ion-item>
+                  <ion-label>{{ 'Ingles' | translate }}</ion-label>
+                  <ion-radio slot="start" color="blue" value="en"></ion-radio>
+                </ion-item>
+              </ion-radio-group>
+            </ion-list>
+          </ion-list>
+        </ion-col>
+        <ion-col size="12" size-sm="12" size-md="6"  size-lg="6" size-xl="6">
+          <ion-list> 
+            <ion-item>
+              <ion-label class="header-telefono" position="stacked">{{ 'Dirección de atención' | translate }}:</ion-label>
+              <ion-input type="text" formControlName="address" placeholder="Avenida los Incas, Cusco"></ion-input>
+            </ion-item>
+
+            <div style="margin-left: 1rem;" class="ion-margin-left" *ngIf="form.controls.address.errors?.required">
+              <small class="color-red">{{ '* Campo obligatorio' | translate }}</small>
+            </div>
+            
+            <ion-item lines="none" *ngIf="is_edit">
+              <ion-button expand="full" class="card-md" color="white" (click)="enableMapa ()">
+                {{ 'Cambiar ubicación en el mapa' | translate }}
+              </ion-button>
+            </ion-item>  
+
+            <ion-item *ngIf="!is_edit" lines="none" class="ion-text-right">
+              <p style="width: 100% !important;" class="text-danger ion-text-right" (click)="getCurrentLocation ()">{{ 'Ubicación actual' | translate }}</p>
+            </ion-item>
+
+            <ion-card id="map-card" class="map-class">
+              <div #map id="map"></div>
+            </ion-card>
+          </ion-list>
+
+          <ion-grid>
+            <ion-row>
+              <ion-col *ngIf="!is_edit" size="8" offset="2">
+                <ion-button class="no-border" expand="block" color="blue" [disabled]="!form.valid" (click)="submit ()">
+                  {{ 'Pedir' | translate }}
+                </ion-button>
+              </ion-col>
+
+              <ion-col *ngIf="is_edit" size="8" offset="2">
+                <ion-button class="no-border" expand="block" color="blue" [disabled]="!form.valid" (click)="submit ()">
+                  {{ 'Actualizar' | translate }}
+                </ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ion-content>

@@ -1,0 +1,108 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+
+    <ion-title><img class="logotio" src="assets/imgs/logotio.png"></ion-title>
+    <ion-buttons slot="end">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form [formGroup]="form">
+    <ion-list>
+      <ion-item class="ion-text-center" lines="none">
+        <ion-label>
+          <h1 class="title-label">{{ 'Registrar nuevo usuario' | translate }}</h1>
+        </ion-label>
+      </ion-item>
+
+      <ion-item>
+        <ion-input type="text" formControlName="first_name" placeholder="{{ 'Nombres' | translate }}"></ion-input>
+      </ion-item>
+      
+      <small margin-left *ngIf="form.controls.first_name.errors?.required && form.controls.first_name?.dirty" class="danger">
+        {{ '* Campo obligatorio' | translate }}
+      </small>
+
+      <ion-item>
+        <ion-input type="text" formControlName="last_name" placeholder="{{ 'Apellidos' | translate }}"></ion-input>
+      </ion-item>
+      
+      <small margin-left *ngIf="form.controls.last_name.errors?.required && form.controls.last_name?.dirty" class="danger">
+        {{ '* Campo obligatorio' | translate }}
+      </small>
+
+      <ion-row class="ion-no-padding">              
+        <ion-col size="4" class="ion-no-padding">
+          <ion-item lines="none">
+            <ion-button size="small" color="blue" (click)="select_code ()">
+              <img [src]="getFlat ()">&nbsp;
+              {{ pais_selected.dial_code }}
+            </ion-button>
+          </ion-item>
+        </ion-col>
+        <ion-col size="8" class="ion-no-padding">
+          <ion-item>
+            <ion-label position="stacked">{{ 'Numero de teléfono' | translate }}</ion-label>
+            <ion-input type="tel" formControlName="phone_number" placeholder=""></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      
+      <small class="ion-margin-left" class="danger" *ngIf="form.get ('phone_number').hasError ('required') && form.get ('phone_number').dirty" >
+        {{ '* Campo obligatorio' | translate }}
+      </small>
+
+      <ion-item>
+        <ion-input type="email" formControlName="email" placeholder="{{ 'Correo electronico' | translate }}"></ion-input>
+      </ion-item>
+      
+      <div class="ion-margin-left" *ngIf="form.controls.email.errors?.required && form.controls.email?.dirty">
+        <small class="danger">
+          {{ '* Campo obligatorio' | translate }}
+        </small>
+      </div>
+
+      <div class="ion-margin-left" *ngIf="form.controls.email.errors?.email && form.controls.email?.dirty">
+        <small class="danger">
+          {{ 'Ingrese un correo electronico válido' | translate }}
+        </small>
+      </div>
+      <ion-item>
+        <ion-input type="password" formControlName="password" placeholder="{{ 'Contraseña' | translate }}"></ion-input>
+      </ion-item>
+      
+      <small class="ion-margin-left" *ngIf="form.controls.password.errors?.required && form.controls.password?.dirty" class="danger">
+        {{ '* Campo obligatorio' | translate }}
+      </small>
+
+      <ion-item>
+        <ion-input type="password" formControlName="confirm_password" placeholder="{{ 'Confirmar contraseña' | translate }}"></ion-input>
+      </ion-item>
+
+      <div class="ion-margin-left" *ngIf="form.controls.confirm_password.errors?.required && form.controls.confirm_password?.dirty">
+        <small  class="danger">col
+          {{ '* Campo obligatorio' | translate }}
+        </small>
+      </div>
+
+      <div class="ion-margin-left" *ngIf="form.controls.confirm_password.errors?.equalTo && form.controls.confirm_password?.dirty">
+        <small class="danger">
+          {{ '* Las contraseñas no coinciden' | translate }}
+        </small>
+      </div>
+    </ion-list>
+    
+    <ion-grid>
+      <ion-row>
+        <ion-col size="8" offset="2">
+          <ion-button expand="block" color="blue" (tap)="onSubmit ()" [disabled]="!form.valid">{{ 'Registrarme' | translate }}</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ion-content>

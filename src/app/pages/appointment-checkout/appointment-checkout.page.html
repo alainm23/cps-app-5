@@ -1,0 +1,99 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+
+    <ion-title><img class="logotio" src="assets/imgs/logotio.png"></ion-title>
+    <ion-buttons slot="end">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-item class="ion-text-center" lines="none">
+          <ion-label>
+            <h1 class="title-label">{{ 'Personal details' | translate }}</h1>
+          </ion-label>
+        </ion-item>
+        
+        <form [formGroup]="form">
+          <ion-list>
+            <ion-card>
+              <ion-list>
+                <ion-item class="entry">
+                  <ion-input  type="text" formControlName="name" placeholder="{{ 'Nombre del paciente' | translate }}"></ion-input>
+                </ion-item>
+
+                <ion-item class="entry">
+                  <ion-input type="text" formControlName="phone_number" placeholder="{{ 'Numero de teléfono' | translate }}"></ion-input>
+                </ion-item>
+
+                <ion-item class="entry-css" (click)="selectCountry()">
+                  <ion-label *ngIf="nationality === ''">
+                    {{ "Seleccione una nacionalidad" | translate }}
+                  </ion-label>
+                  <ion-label *ngIf="nationality !== ''">
+                    {{ nationality }}
+                  </ion-label>
+                  <ion-icon slot="end" name="arrow-dropright"></ion-icon>
+                </ion-item>
+
+                <div class="padding-left-error entry" *ngIf="form.controls.nationality.errors?.required">
+                  <small class="color-red">{{ '* Campo obligatorio' | translate }}</small>
+                </div>
+
+                <ion-item class="entry">
+                  <ion-input type="text" formControlName="email" placeholder="{{ 'Correo electrónico' | translate }}"></ion-input>
+                </ion-item>
+
+                <ion-item class="entry">
+                  <ion-textarea class="text-area" formControlName="message" placeholder="{{ '¿Algún mensaje?' | translate }}"></ion-textarea>
+                </ion-item>
+              </ion-list>
+            </ion-card>
+
+            <ion-item class="ion-padding-top ion-text-center" lines="none">
+              <ion-label>
+                <h1>{{ 'Mi cita' | translate }}</h1>
+                <h2>{{ final_data.nombre }}</h2>
+                <h3>{{ getFormatDate (final_data.fecha, final_data.hor_con) }}</h3>
+                <br>
+                <div *ngIf="check_1">
+                  <h2>{{ 'Precio' | translate }}</h2>
+                  <h2><b>{{ price | currency:'S/. ' }}</b></h2>
+                </div>
+              </ion-label>
+            </ion-item>
+            
+            <ion-card *ngIf="check_2">
+              <ion-item class="ion-text-wrap card-precio ion-text-center">
+                {{ 'Por ser peruano' | translate }}
+              </ion-item>
+            </ion-card>
+            
+            <ion-row>
+              <ion-col size="2" class="ion-text-right">
+                <ion-checkbox color="blue" formControlName="terms_conditions"></ion-checkbox>
+              </ion-col>
+
+              <ion-col size="10">
+                {{ 'Acepto los' | translate }}<a href="http://www.cps.com.pe/terms"> {{ 'términos & condiciones' | translate }}</a>
+              </ion-col>
+            </ion-row>
+
+            <div class="ion-text-center ion-padding-top">
+              <ion-button class="no-border" [disabled]="!form.valid" color="blue" (click)="openCheckout ()">
+                {{ 'Reservar ahora' | translate }}
+              </ion-button>
+            </div>
+          </ion-list>
+        </form>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

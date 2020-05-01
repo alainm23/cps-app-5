@@ -1,0 +1,75 @@
+<ion-app>
+  <ion-menu side="end" menuId="first" contentId="content1">
+    <ion-content padding>
+      <ion-list>
+        <ion-menu-toggle auto-hide="false" >
+          <ion-item menuClose detail-none (click)="goHome ()">
+            {{ 'HOME' | translate }}
+          </ion-item>
+        </ion-menu-toggle>
+        
+        <ion-menu-toggle auto-hide="false">
+          <ion-item menuClose detail-none *ngIf="auth.is_logged" (click)="goAppointmentHistory ()">
+            {{ 'APPOINTMENT_HISTORIES' | translate }}
+          </ion-item>  
+        </ion-menu-toggle>
+        
+        <ion-menu-toggle auto-hide="false">
+          <ion-item menuClose detail-none *ngIf="auth.is_logged" (click)="goOrdersHistory ()">
+            {{ 'DELIVERY_HISTORY' | translate }}
+          </ion-item>
+        </ion-menu-toggle>
+        
+        <ion-menu-toggle auto-hide="false">
+          <ion-item menuClose detail-none (click)="goAbout ()">
+            {{ 'ABOUT_US' | translate }}
+          </ion-item>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle auto-hide="false">
+          <ion-item menuClose detail-none *ngIf="auth.is_logged" (click)="goPartner ()">
+            {{ 'I_WANT_TO_BE_A_PARTNER' | translate }}
+          </ion-item>
+        </ion-menu-toggle>
+        
+        <ion-menu-toggle auto-hide="false">
+          <ion-item menuClose detail-none (click)="goBlogs ()">
+            {{ 'BLOG_AND_TIPS' | translate }}
+          </ion-item>
+        </ion-menu-toggle>
+        
+        <ion-menu-toggle auto-hide="false">
+          <ion-item menuClose detail-none (click)="goWork ()">
+            {{ 'WORK_WITH_US' | translate }}
+          </ion-item>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle auto-hide="false">
+          <ion-item menuClose detail-none (click)="changeLanguage ()">
+            {{ 'LANGUAGE' | translate }}
+            <img slot="end" [src]="getFlat ()">
+          </ion-item>
+        </ion-menu-toggle>
+        
+        <ion-menu-toggle auto-hide="false">
+          <ion-item *ngIf="!auth.is_logged" menuClose detail-none (click)="goLoginPage ()">
+            {{ 'LOGIN' | translate }}
+          </ion-item>
+        </ion-menu-toggle>
+        
+        <ion-menu-toggle auto-hide="false">
+          <ion-item menuClose detail-none (click)="reportIssue ()">
+            {{ 'Reportar un problema' | translate }}
+          </ion-item>
+        </ion-menu-toggle>
+        
+        <ion-menu-toggle auto-hide="false">
+          <ion-item *ngIf="auth.is_logged" menuClose detail-none (click)="signOut ()">
+            {{ 'SIGN_OFF' | translate }}
+          </ion-item>
+        </ion-menu-toggle>
+      </ion-list>
+    </ion-content>
+  </ion-menu>
+  <ion-router-outlet id="content1"></ion-router-outlet>
+</ion-app>

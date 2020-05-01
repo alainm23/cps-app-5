@@ -1,0 +1,39 @@
+.input-telefone {
+    //padding: 3px;
+    background-color: #F4F4F4;
+    font-size: 16px !important;
+    border: 1px solid #C8C8C8;
+    
+    input {
+      text-align: center;
+      /* IF YOU ALSO WANT TO PUSH PLACHEHOLDER TO THE RIGHT USE THE FOLLOWING, IF NOT JUST DELETE THE ::-webkit-input-placeholder*/
+      ::-webkit-input-placeholder {
+      text-align: center;
+      }
+    }
+  }
+  
+  .margin-left {    
+    margin-left: 1rem;
+  }
+
+  .list-md {
+    margin: -1px 0 0px !important;
+  }
+
+  .list-ios {
+    margin: -1px 0 0px !important;
+  }
+
+  .card-md {
+    margin: 0px !important;
+  }
+
+  .card-ios {
+    margin: 0px !important;
+  }
+
+  .text {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  }
+  

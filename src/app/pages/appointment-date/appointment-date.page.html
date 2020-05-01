@@ -1,0 +1,189 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+
+    <ion-title><img class="logotio" src="assets/imgs/logotio.png"></ion-title>
+    <ion-buttons slot="end">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content padding id="scroll-animation-content">
+  <ion-item class="ion-padding-top ion-text-center" lines="none">
+    <ion-label>
+      <h1 class="title-label">{{ final_data.nombre }}</h1>
+      <p class="ion-margin-top ion-text-wrap">{{ final_data.descripcion }}</p>
+    </ion-label>
+  </ion-item>
+
+  <!--------------- Calendario ---------------->
+
+  <div *ngIf="citas?.length > 0" style="margin-left: 1rem; margin-right: 1rem;">
+    <div class="ion-text-center">
+      <h3 class="ion-margin-top title-label">{{ 'Elige una fecha' | translate }}:</h3>
+    </div>
+    
+    <div class="ion-margin-top calendar-header">
+        <ion-row class="calendar-month ion-align-items-center">
+          <ion-col class="ion-text-center ion-align-self-center" size=2 (click)="goToLastMonth()">
+            <ion-icon name="arrow-back"></ion-icon>
+          </ion-col>
+          <ion-col class="ion-text-center ion-align-self-center" size=8>
+            {{currentMonth}} {{currentYear}}
+          </ion-col>
+          <ion-col class="ion-text-center ion-align-self-center" size=2 (click)="goToNextMonth()">
+            <ion-icon name="arrow-forward"></ion-icon>
+          </ion-col>
+        </ion-row>
+    </div>
+
+    <div class="calendar-body">
+        <ion-grid>
+          <ion-row class="calendar-weekday">
+            <ion-col>{{ 'Dom' | translate }}</ion-col>
+            <ion-col>{{ 'Lun' | translate }}</ion-col>
+            <ion-col>{{ 'Mar' | translate }}</ion-col>
+            <ion-col>{{ 'Mié' | translate }}</ion-col>
+            <ion-col>{{ 'Jue' | translate }}</ion-col>
+            <ion-col>{{ 'Vie' | translate }}</ion-col>
+            <ion-col>{{ 'Sáb' | translate }}</ion-col>
+          </ion-row>
+          <ion-row class="calendar-date">
+            <ion-col size=1 *ngFor="let lastDay of daysInLastMonth" class="last-month col-1">
+              {{ lastDay }}
+            </ion-col>
+            <ion-col size=1 class="col-1" *ngFor="let day of daysInThisMonth" [id]="'calendar-' + day" (click)="selectDate (day, day)">
+              <!--div class="currentDate" *ngIf="currentDate === day">
+                {{ day }}
+              </div-->
+              <div class="enabled-day" *ngIf="is_enable_day (day)">
+                {{ day }}
+              </div>
+              <div class="no-enabled-day" *ngIf="!is_enable_day (day)">
+                {{ day }}
+              </div>
+            </ion-col>
+            <ion-col size=1 *ngFor="let nextDay of daysInNextMonth" class="next-month col-1">
+              {{ nextDay }}
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+    </div>
+
+    <ion-item>
+      <span class="dot-gray" slot="start"></span>
+      <span>{{ 'Dias disponible' | translate }}</span>
+    </ion-item>
+
+    <ion-item>
+      <span class="dot-black" slot="start"></span>
+      <span>{{ 'Dia seleccionado' | translate }}</span>
+    </ion-item>
+
+    <ion-grid *ngIf="check_1 === true" text-cente>
+      <div *ngIf="horas?.length > 0">
+        <div class="ion-text-center">
+          <h3 margin-top class="title-label">{{ 'Elige una hora' | translate }}:</h3>
+        </div>
+
+        <ion-row class="ion-text-center">        
+          <ion-col size=4 class="ion-text-center">
+            <div class="ion-text-center">
+              <ion-list>
+                <ion-item lines="none" class="ion-text-center">
+                  <ion-label>
+                    {{ 'Mañana' | translate }}
+                  </ion-label>
+                </ion-item>
+                <div *ngFor="let hora of horas">
+                  <ion-card style="padding: 12px;" [id]="'h-' + hora.id_con" *ngIf="isMorning (hora.hor_con)" (click)="selectHour (hora)">
+                    {{ hora.hor_con }}
+                  </ion-card>
+                </div>
+              </ion-list>
+            </div>
+          </ion-col>
+
+
+          <ion-col size=4 class="ion-text-center">
+            <div class="ion-text-center">
+              <ion-list>
+                <ion-item lines="none" class="ion-text-center">
+                  <ion-label>
+                    {{ 'Tarde' | translate }}
+                  </ion-label>
+                </ion-item>
+                <div *ngFor="let hora of horas">
+                  <ion-card style="padding: 12px;" [id]="'h-' + hora.id_con" *ngIf="isAfternoon (hora.hor_con)" (click)="selectHour (hora)">
+                    {{ hora.hor_con }}
+                  </ion-card>
+                </div>
+              </ion-list>
+            </div>
+          </ion-col>
+
+
+          <ion-col size=4 class="ion-text-center">
+            <div  class="ion-text-center">
+              <ion-list>
+                <ion-item lines="none"  class="ion-text-center">
+                  <ion-label>
+                    {{ 'Noche' | translate }}
+                  </ion-label>
+                </ion-item>
+                <div *ngFor="let hora of horas">
+                  <ion-card style="padding: 12px;" [id]="'h-' + hora.id_con" *ngIf="isEvening (hora.hor_con)" (click)="selectHour (hora)">
+                    {{ hora.hor_con }}
+                  </ion-card>
+                </div>
+              </ion-list>
+            </div>
+          </ion-col>
+        </ion-row>
+      </div>
+      
+      <div *ngIf="horas.length > 0 === false"  class="ion-text-center">
+        <h3>{{ 'Lo sentimos' | translate }}</h3>
+        <p text-wrap>{{ 'Todas las citas para esta especialidad ya estan reservadas.' | translate }}</p>
+      </div>
+    </ion-grid>
+
+    <div *ngIf="check_2 === true">
+      <ion-item class="ion-text-center" lines="none">
+        <ion-label>
+          <h1>{{ 'Mi cita' | translate }}</h1>
+          <h2>{{ especialidad_name }}</h2>
+          <h2>{{ final_date_format }}</h2>
+        </ion-label>
+      </ion-item>
+      
+      <div  class="ion-text-center">
+      <ion-button class="ion-text-center" color="blue" (click)="goNext ()">
+        {{ 'Siguiente' | translate }}
+      </ion-button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!citas?.length > 0">
+    <ion-item class="ion-padding-top ion-text-center" lines="none">
+      <ion-label>
+        <h2 class="ion-text-wrap">{{ 'En este momento no tenemos citas disponibles' | translate }}</h2>
+        <h2 class="ion-padding-top ion-text-wrap">{{ 'Atención' | translate }}</h2>
+        <p class="ion-text-wrap">
+          {{ 'La especialidad está disponible para atención de emergencia' | translate }} 
+        </p>
+      </ion-label>
+    </ion-item>
+
+    <div class="ion-padding-top ion-text-center">
+      <ion-button class="no-border" color="red" (click)="goEmergency ()">
+        {{ 'Es una emergencia' | translate }}
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

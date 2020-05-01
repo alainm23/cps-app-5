@@ -1,0 +1,224 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+
+    <ion-title><img class="logotio" src="assets/imgs/logotio.png"></ion-title>
+    <ion-buttons slot="end">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <div *ngIf="!home_injection?.is_checked">
+          <ion-item class="ion-text-center" lines="none">
+            <ion-label>
+              <h1 class="title-label">{{ 'enfermera_a_domicilio' | translate }}</h1>
+              <br>
+              <p class="ion-text-wrap">{{ 'Tu pedido está siendo atendido, por favor espere nuestra confirmación' | translate }}</p>
+            </ion-label>
+          </ion-item>
+
+          <ion-item class="ion-text-center height-70" lines="none">
+            <ion-label>
+              <ion-icon class="icon-wait" name="time"></ion-icon>
+              <p class="ion-margin-top">{{ 'Gracias por su paciencia' | translate }}</p>
+            </ion-label>
+          </ion-item>
+
+          <ion-card>
+            <ion-list lines="none">
+              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
+                <b>{{ 'Cliente' | translate }}:</b>
+              </ion-label>
+              <ion-item lines="none">
+                {{ auth.user?.first_name }}
+              </ion-item>
+
+              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
+                <b>{{ 'Fecha' | translate }}:</b>
+              </ion-label>
+              <ion-item lines="none">
+                {{ getFormatDate (home_injection?.date) }}
+              </ion-item>
+
+              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
+                <b>{{ 'Horario de servicio' | translate }}:</b>
+              </ion-label>
+              <ion-item lines="none" class="detalle">
+                {{ home_injection?.hour }}
+              </ion-item>
+
+              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
+                <b>{{ 'Servicio' | translate }}:</b>
+              </ion-label>
+              <ion-item *ngIf="home_injection?.s_tipo === 's_01'">
+                - {{ 'Control de presión' | translate }}
+              </ion-item>
+
+              <ion-item *ngIf="home_injection?.s_tipo === 's_02'">
+                - {{ 'Control de funciones vitales' | translate }}
+              </ion-item>
+
+              <ion-item *ngIf="home_injection?.s_tipo === 's_03'">
+                - {{ 'Curaciones simples' | translate }}
+              </ion-item>
+
+              <ion-item *ngIf="home_injection?.s_tipo === 's_04'">
+                - {{ 'Cambio de sondas, bolsa de colostomía' | translate }}
+              </ion-item>
+
+              <ion-item *ngIf="home_injection?.s_tipo === 's_05'">
+                - {{ 'Otros' | translate }}
+              </ion-item>
+
+              <div *ngIf="home_injection?.note !== ''">
+                <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
+                  <b>{{ 'Notas adicionales' | translate }}:</b>
+                </ion-label>
+                <ion-item lines="none">
+                  <p class="detalle">{{ home_injection?.note }}</p>
+                </ion-item>
+              </div>
+            </ion-list>   
+          </ion-card>
+
+
+          <ion-grid class="ion-padding">
+            <ion-row>
+              <ion-col col-6>
+                <ion-button class="no-border" expand="block" color="blue" (click)="edit ()">
+                  {{ 'Editar pedido' | translate }}
+                </ion-button>
+              </ion-col>
+              <ion-col col-6>
+                <ion-button class="no-border" expand="block" color="red" (click)="cancel ()">
+                  {{ 'Cancelar pedido' | translate }}
+                </ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+
+        <div *ngIf="home_injection?.is_checked">
+          <ion-item class="ion-text-center" lines="none">
+            <h1 class="title-label">{{ 'enfermera_a_domicilio' | translate }}</h1>
+          </ion-item> 
+
+          <ion-card color="green" *ngIf="home_injection?.state === 'completed'">
+              <ion-card-header>
+                <b *ngIf="home_injection?.payment_type === 'online'">{{ 'Pagado' | translate }}</b>
+                <b *ngIf="home_injection?.payment_type === 'cash'">{{ 'Tipo de pago: contra entrega' | translate }}</b>
+              </ion-card-header> 
+              <ion-card-content>
+                <p *ngIf="home_injection?.payment_type === 'online'">
+                  {{ 'Por favor llegaremos en el horario solicitado.' | translate }}
+                </p>
+                <p *ngIf="home_injection?.payment_type === 'cash'">
+                  {{ 'Por favor, llegaremos en el horario solicitado, pague a la enfermera(o). Gracias.' | translate }}
+                </p>
+              </ion-card-content>
+          </ion-card>
+          
+          <ion-card color="danger" *ngIf="home_injection?.state == 'observed' || home_injection?.state == 'canceled'">
+            <ion-card-header>
+              <b *ngIf="home_injection?.state == 'observed'">{{ 'Estado: Observado' | translate }}</b>
+              <b *ngIf="home_injection?.state == 'canceled'">{{ 'Estado: Cancelado' | translate }}</b>
+            </ion-card-header> 
+            <ion-card-content>
+              {{ home_injection?.last_message }}
+            </ion-card-content> 
+          </ion-card>
+
+          <ion-card color="blue" *ngIf="home_injection?.state == 'approved'">
+            <ion-card-header>
+              <b>{{ 'Estado: Aprobado' | translate }}</b>
+            </ion-card-header> 
+            <ion-card-content>
+              {{ home_injection?.last_message }}
+            </ion-card-content>
+          </ion-card>
+
+          <ion-card>
+            <ion-list lines="none">
+              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark"><b>{{ 'Cliente' | translate }}</b></ion-label>
+              <ion-item lines="none">
+                {{ auth.user?.first_name }}
+              </ion-item>
+
+              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark"><b>{{ 'Fecha' | translate }}</b></ion-label>
+              <ion-item lines="none">
+                {{ getFormatDate (home_injection?.date) }}
+              </ion-item>
+
+              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark"><b>{{ 'Horario de servicio' | translate }}</b></ion-label>
+              <ion-item lines="none" class="detalle">
+                {{ home_injection?.hour }}
+              </ion-item>
+
+              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark"><b>{{ 'Notas adicionales' | translate }}</b></ion-label>
+              <ion-item lines="none" class="detalle">
+                {{ home_injection?.note }}
+              </ion-item>
+
+              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark"><b>{{ 'Servicio' | translate }}</b></ion-label>
+              <ion-item *ngIf="home_injection?.s_tipo === 's_01'">
+                - {{ 'Control de presión' | translate }}
+              </ion-item>
+
+              <ion-item *ngIf="home_injection?.s_tipo === 's_02'">
+                - {{ 'Control de funciones vitales' | translate }}
+              </ion-item>
+
+              <ion-item *ngIf="home_injection?.s_tipo === 's_03'">
+                - {{ 'Curaciones simples' | translate }}
+              </ion-item>
+
+              <ion-item *ngIf="home_injection?.s_tipo === 's_04'">
+                - {{ 'Cambio de sondas, bolsa de colostomía' | translate }}
+              </ion-item>
+            </ion-list>   
+          </ion-card>
+
+          <div class="ion-text-center" *ngIf="home_injection?.state == 'observed'">
+            <ion-row>
+              <ion-col size="12" size-sm="6">
+                <ion-button class="no-border" color="blue" (click)="edit (home_injection?.id)">
+                  {{ 'Correguir' | translate }}
+                </ion-button>
+              </ion-col>
+
+              <ion-col size="12" size-sm="6">
+                <ion-button class="no-border" color="red" (click)="cancel (home_injection?.id)">
+                  {{ 'CANCEL' | translate }}
+                </ion-button>
+              </ion-col>
+            </ion-row>
+          </div>
+
+          <div *ngIf="home_injection?.state === 'approved'">
+            <ion-card>
+              <ion-card-header>
+                <b>{{ 'Costo' | translate }}</b>
+              </ion-card-header> 
+              <ion-card-content>
+                <p>{{ 'Total (inc. IGV):' | translate }} S/. {{ getFormatPrice (home_injection?.price) }}</p>
+              </ion-card-content>
+            </ion-card>
+
+            <div class="ion-text-center ion-padding">
+              <ion-button class="no-border" color="blue" (click)="presentActionSheet (home_injection?.price + home_injection?.delivery_price)">
+                {{ 'Pedir' | translate }}
+              </ion-button>
+            </div>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

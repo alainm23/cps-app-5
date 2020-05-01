@@ -1,0 +1,102 @@
+.col-1 {
+text-align: center;
+padding: 5px;
+
+-webkit-box-flex: 0 !important;
+-webkit-flex: 0 0 8.33333% !important;
+-ms-flex: 0 0 8.33333% !important;
+flex: 0 0 14.285714285714286% !important;
+width: 14.285714285714286% !important;
+max-width: 14.285714285714286% !important;
+}
+
+.col {
+    text-align: center;
+    padding: 5px;
+  }
+  .last-month, .next-month {
+    padding-top: 12px;
+    color: #999999;
+    font-size: 90%;
+  }
+  .currentDate, .otherDate {
+    padding: 5px;
+  }
+  .currentDate {
+    font-weight: bold;
+    color: #230084;
+    border-radius: 30px;
+  }
+  .calendar-header {
+    color: #fff;
+    background-color: #230084;
+    border-radius: 6px 6px 0px 0px;
+  }
+  
+  .no-enabled-day {
+    padding: 5px;
+    color: #999999;
+    border-radius: 30px;
+  }
+  
+  .enabled-day {
+    padding: 5px;
+    font-weight: bold;
+    //background-color: green;
+    color: #230084;
+  }
+
+  .calendar-body {
+    border: 1px solid #00004a;
+    border-radius: 0px 0px 6px 6px;
+    
+    .grid {
+      padding: 0;
+    }
+    .col:last-child {
+      border-right: none;
+    }
+    .calendar-weekday, .calendar-date {
+      text-align: center;
+      margin: 0;
+    }
+    .calendar-weekday {
+      font-weight: bold;
+      border-bottom: solid 1px gray;
+    }
+    .calendar-date {
+
+    }
+  }
+  
+  .card-es {
+    border-radius: 6px;
+  }
+
+  .dot-gray {
+    height: 16px;
+    width: 16px;
+    background: #230084;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .dot-black {
+    height: 16px;
+    width: 16px;
+    border:3px solid #230084;
+    border-radius: 3px;
+    display: inline-block;
+  }
+
+  .leyend {
+    margin-bottom: 3px;
+  }
+
+  .dot {
+    height: 25px;
+    width: 25px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+  }

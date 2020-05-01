@@ -1,0 +1,156 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+
+    <ion-title><img class="logotio" src="assets/imgs/logotio.png"></ion-title>
+    <ion-buttons slot="end">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div *ngIf="ambulance_object?.state === 'created'">
+    <ion-item class="ion-text-center" lines="none">
+      <ion-label>
+        <h1 class="title-label">{{ 'ambulancia_solicitada' | translate }}</h1>
+        <br>
+        <p text-wrap>{{ 'Tu pedido está siendo atendido, por favor espere nuestra confirmación' | translate }}</p>
+      </ion-label>
+    </ion-item>
+    
+    <ion-item class="ion-text-center height-70" lines="none">
+      <ion-label>
+        <ion-icon class="icon-wait" name="time"></ion-icon>
+        <p class="ion-margin-top">{{ 'Gracias por su paciencia' | translate }}</p>
+      </ion-label>
+    </ion-item>
+
+    <ion-card color="blue">
+      <ion-list lines="none">
+        <ion-item-divider class="header-top" color="blue"><b>{{ 'Direccion' | translate }}</b></ion-item-divider>
+        <ion-item>{{ ambulance_object?.address }}</ion-item>
+
+        <ion-item-divider color="blue"><b>{{ 'Numero de teléfono' | translate }}</b></ion-item-divider>
+        <ion-item>{{ ambulance_object?.country_dial_code }} {{ ambulance_object?.phone_number }}</ion-item>
+      </ion-list>
+    </ion-card>
+  </div>
+  
+  <div *ngIf="ambulance_object?.state === 'approved'">
+    <ion-item class="ion-text-center" lines="none">
+      <h1 class="title-label">{{ 'Ambulancia aprobada' | translate }}</h1>
+      <br>
+      <p class="ion-text-wrap">{{ 'ambulance_approved' | translate }}</p>
+    </ion-item>
+
+    <ion-item class="ion-text-center height-70" lines="none">
+      <ion-label>
+        <ion-icon class="icon-wait" name="time"></ion-icon>
+        <p class="ion-margin-top">{{ 'Gracias por su paciencia' | translate }}</p>
+      </ion-label>
+    </ion-item>
+
+    <ion-card color="blue">
+      <ion-list lines="none">
+        <ion-item-divider class="header-top" color="blue"><b>{{ 'Direccion' | translate }}</b></ion-item-divider>
+        <ion-item>{{ ambulance_object?.address }}</ion-item>
+
+        <ion-item-divider color="blue"><b>{{ 'Numero de teléfono' | translate }}</b></ion-item-divider>
+        <ion-item>{{ ambulance_object?.country_dial_code }} {{ ambulance_object?.phone_number }}</ion-item>
+      </ion-list>
+    </ion-card> 
+  </div>
+
+  <div *ngIf="ambulance_object?.state === 'sent'">
+    <ion-item class="ion-text-center" lines="none">
+      <ion-label>
+        <h1 class="title-label">{{ '¡Ambulancia enviada!' | translate }}</h1>
+        <br>
+        <h2>{{ '¡Por favor se paciente, estamos en camino!' | translate }}</h2>
+      </ion-label>
+    </ion-item>
+    
+    <ion-card color="blue">
+      <ion-list lines="none">
+        <ion-item-divider class="header-top" color="blue"><b>{{ 'Direccion' | translate }}</b></ion-item-divider>
+        <ion-item>{{ ambulance_object?.address }}</ion-item>
+
+        <ion-item-divider color="blue"><b>{{ 'Numero de teléfono' | translate }}</b></ion-item-divider>
+        <ion-item>{{ ambulance_object?.country_dial_code }} {{ ambulance_object?.phone_number }}</ion-item>
+      </ion-list>
+    </ion-card>
+  </div>
+
+  <div *ngIf="ambulance_object?.state === 'canceled'">
+    <ion-item class="ion-text-center" lines="none">
+      <ion-label>
+        <h1 class="title-label">{{ 'Ambulancia cancelada' | translate }}</h1>
+      </ion-label>
+    </ion-item>
+
+    <ion-card color="blue">
+      <ion-list lines="none">
+        <ion-item-divider class="header-top" color="blue"><b>{{ 'Direccion' | translate }}</b></ion-item-divider>
+        <ion-item>{{ ambulance_object?.address }}</ion-item>
+
+        <ion-item-divider color="blue"><b>{{ 'Numero de teléfono' | translate }}</b></ion-item-divider>
+        <ion-item>{{ ambulance_object?.country_dial_code }} {{ ambulance_object?.phone_number }}</ion-item>
+      </ion-list>
+    </ion-card>
+  </div>
+
+  <div *ngIf="ambulance_object?.state === 'finalized'">
+    <ion-item class="ion-text-center" lines="none">
+      <ion-label>
+        <h1 class="title-label">{{ 'La ambulancia llegó' | translate }}</h1>
+        <br>  
+      </ion-label>
+    </ion-item>
+
+    <ion-card color="blue">
+      <ion-list lines="none">
+        <ion-item-divider class="header-top" color="blue"><b>{{ 'Direccion' | translate }}</b></ion-item-divider>
+        <ion-item>{{ ambulance_object?.address }}</ion-item>
+
+        <ion-item-divider color="blue"><b>{{ 'Numero de teléfono' | translate }}</b></ion-item-divider>
+        <ion-item>{{ ambulance_object?.country_dial_code }} {{ ambulance_object?.phone_number }}</ion-item>
+      </ion-list>
+    </ion-card>
+  </div>
+
+  <ion-card class="map-class">
+    <div #map2 id="map2"></div>
+  </ion-card>
+  
+  <ion-grid *ngIf="ambulance_object?.state === 'created' || ambulance_object?.state === 'approved'">
+    <ion-row>
+      <ion-col size="6">
+        <ion-button class="no-border" expand="block" color="blue" (click)="cancel ()">
+          Cancelar
+        </ion-button>
+      </ion-col>
+
+      <ion-col size="6">
+        <ion-button expand="block" color="red" class="round" (click)="callNow ()">
+          <img class="button-call" src="assets/imgs/call.png">
+          <h6 class="ion-padding-left">
+            {{ 'llamanos' | translate }}
+          </h6>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  
+  <ion-grid *ngIf="ambulance_object?.state === 'sent'">
+    <ion-row>
+      <ion-col col-12 col-sm-6>
+        <ion-button class="no-border" expand="block" color="red" (click)="cancel ()">
+          {{ 'CANCEL' | translate }}
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

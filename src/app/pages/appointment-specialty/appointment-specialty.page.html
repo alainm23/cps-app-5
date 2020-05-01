@@ -1,0 +1,79 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+
+    <ion-title><img class="logotio" src="assets/imgs/logotio.png"></ion-title>
+    <ion-buttons slot="end">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item class="ion-padding-top ion-text-center" lines="none">
+    <ion-label>
+      <h1 class="title-label ion-text-wrap">{{ 'Elija una especialidad' | translate }}</h1>
+    </ion-label> 
+    <!--p padding-top text-wrap>{{ 'Seleccione una especialidad' | translate }}</p-->
+  </ion-item>
+
+  <div class="ion-text-center">
+    <ion-button fill="clear" color="blue" (click)="changeEs ()">
+      <ion-icon slot="start" name="shuffle"></ion-icon>
+      {{ text_changed }}
+    </ion-button>
+  </div>
+
+  <!--ion-segment *ngIf="is_specialties === true" padding mode="ios" color="blue" [(ngModel)]="type" (ionChange)="segmentChanged($event)" class="padding-segment">
+    <ion-segment-button value="specialties">
+      {{ 'Especialidades' | translate }}
+    </ion-segment-button>
+    <ion-segment-button value="services">
+      {{ 'Servicios' | translate }}
+    </ion-segment-button>
+  </ion-segment-->
+
+  <ion-grid *ngIf="type === 'specialties' && is_specialties === true">
+    <ion-row center>
+      <ion-col size="6" size-sm="4" size-xl="3" size-md="4" *ngFor="let item of especialidades">
+        <ion-card class="home-item ion-text-center" [id]="'es-' + item.id" (click)="select (item)">
+          <img class="img-icono" [src]="getImage (item.imagen_esp)"/>
+
+          <ion-card-header class="ion-text-wrap ion-no-padding" class="header">
+            <b class="xyz">{{ item.nombre }}</b>
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid *ngIf="type === 'services' && is_specialties === true">
+    <ion-row center>
+      <ion-col size="6" size-sm="4" size-xl="3" size-md="4" *ngFor="let item of servicios">
+        <ion-card class="home-item ion-text-center" [id]="'es-' + item.id" (click)="select (item)">
+          <img class="img-icono" [src]="getImage (item.imagen_esp)"/>
+
+          <ion-card-header class="ion-text-wrap ion-no-padding" class="header">
+            <b class="xyz">{{ item.nombre }}</b>
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid *ngIf="is_specialties === false">
+    <ion-row center>
+      <ion-col size="6" size-sm="4" size-xl="3" size-md="4" *ngFor="let item of sintomas">
+        <ion-card class="ion-text-center home-item" [id]="'es-' + item.id" (click)="select (item)">
+          <img class="img-icono" [src]="getImage (item.imagen)"/>
+
+          <ion-card-header class="ion-text-wrap ion-no-padding" class="header">
+            <b class="xyz">{{ item.nombre_sintoma }}</b>
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

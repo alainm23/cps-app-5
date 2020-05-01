@@ -1,0 +1,130 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+
+    <ion-title><img class="logotio" src="assets/imgs/logotio.png"></ion-title>
+    <ion-buttons slot="end">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid> 
+      <ion-row>
+        <ion-col size="12" size-sm="12" size-md="6"  size-lg="6" size-xl="6">
+          <ion-item class="ion-text-center ion-text-wrap" lines="none">
+            <ion-label>
+              <h1 class="title-label">{{ 'CONTACT_US' | translate }}</h1>
+            </ion-label>
+          </ion-item>
+
+          <ion-grid>
+            <ion-row>
+              <ion-col size="12">
+                <ion-button expand="block" icon-start color="red" class="round" (click)="goSendAmbulance ()">
+                  <img class="button-image" src="assets/imgs/ambulance.png">
+                  {{ 'enviar una ambulancia' | translate }}
+                </ion-button>
+              </ion-col>
+              <ion-col size="12">
+                <ion-button expand="block" icon-start color="blue" class="round" (click)="callNow ()">
+                  <img class="button-call" src="assets/imgs/call.png">
+                  {{ 'llamanos' | translate }}
+                </ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-col>
+        <ion-col size="12" size-sm="12" size-md="6"  size-lg="6" size-xl="6">
+          <ion-item class="ion-text-center" lines="none">
+            <ion-label>
+              <h2>{{ 'también nos puedes contactar vía:' | translate }}</h2>
+            </ion-label>
+          </ion-item>
+          
+          <ion-grid>
+            <ion-row>
+              <ion-col size="4" text-center (click)="chatWhatsapp ()">
+                <img src="../../assets/imgs/wa.png">
+              </ion-col>
+                        
+              <ion-col size="4" text-center (click)="sendSMS ()">
+                <img src="../../assets/imgs/sms.png">
+              </ion-col>
+
+              <ion-col size="4" text-center (click)="chatMessenger ()">
+                <img src="../../assets/imgs/messenger.png">
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+
+        </ion-col>
+          
+        <ion-col size="12">
+          <ion-item lines="none" class="ion-text-center">
+            <ion-label>
+              <h1 class="color-red" (click)="callNow ()">{{ '¿Emergencia? Llamar' | translate }}</h1>
+              <h1 class="color-red" (click)="callNow ()">{{ 'llamar' | translate }} (+51) 989 316 622</h1>
+            </ion-label>
+            <br>
+          </ion-item>
+        </ion-col>
+
+        <ion-col size="12" size-sm="12" size-md="12"  size-lg="12" size-xl="12">
+          <div class="ion-text-center">
+            <h2 class="color-gray"><b>{{ '¿No es tan urgente?' | translate }}</b></h2>
+            <p class="ion-text-wrap">
+              {{ 'Escríbanos una nota con sus datos y nos pondremos en contacto con usted lo antes posible.' | translate }}
+            </p>
+          </div>
+        
+          <form class="ion-padding" [formGroup]="form">
+            <ion-list>
+              <ion-item>
+                <ion-input class="border-bottom" type="text" formControlName="fullname" placeholder="{{ 'Nombre completo' | translate }}"></ion-input>
+              </ion-item>
+              
+              <div class="padding-left-error" *ngIf="form.controls.fullname.errors?.required">
+                <small class="color-red">{{ '* Campo obligatorio' | translate }}</small>
+              </div>
+
+              <ion-item>
+                <ion-input class="border-bottom" type="email" formControlName="email" placeholder="{{ 'Correo electrónico' | translate }}"></ion-input>
+              </ion-item>
+              
+              <div class="padding-left-error" *ngIf="form.controls.email.errors?.required">
+                <small class="color-red">{{ '* Campo obligatorio' | translate }}</small>
+              </div>
+
+              <div class="padding-left-error" *ngIf="form.controls.email.errors?.email">
+                <small class="color-red">{{ '* Ingrese un correo electronico válido' | translate }}</small>
+              </div>
+
+              <ion-item>
+                <ion-input class="border-bottom" type="number" formControlName="phone_number" maxlength="9" placeholder="{{ 'Numero de teléfono' | translate }}"></ion-input>
+              </ion-item>
+              
+              <div class="padding-left-error" *ngIf="form.controls.phone_number.errors?.required">
+                <small class="color-red">{{ '* Campo obligatorio' | translate }}</small>
+              </div>
+
+              <ion-item>
+                <ion-input class="border-bottom" type="text" formControlName="message" placeholder="{{ 'Mensaje' | translate }}"></ion-input>
+              </ion-item>
+
+              <div class="padding-left-error" *ngIf="form.controls.message.errors?.required">
+                <small class="color-red">{{ '* Campo obligatorio' | translate }}</small>
+              </div>
+            </ion-list>
+
+            <ion-button class="no-border" expand="block" color="blue" (click)="submit ()" [disabled]="!form.valid">
+              {{ 'Enviar' | translate }}
+            </ion-button>
+          </form>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+</ion-content>

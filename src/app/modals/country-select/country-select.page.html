@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button block (click)="closeModal()">
+        <ion-icon class="icon-arrow" name="arrow-back"></ion-icon>
+        {{ 'Atras' | translate }}
+      </ion-button>
+    </ion-buttons> 
+
+    <ion-title>{{ 'Seleccione su pais' | translate }}</ion-title>
+  </ion-toolbar>
+
+  <ion-toolbar>
+    <ion-searchbar #searchbar [(ngModel)]="search_text"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <ion-item (click)="selectItem ({name: 'Perú', dial_code: '+51', code: 'PE' })">
+      Perú
+    </ion-item>
+    
+    <ion-item *ngFor="let item of country_list" (click)="selectItem (item)">
+      {{ item.name }}
+    </ion-item>
+  </ion-list>
+</ion-content>
