@@ -33,6 +33,7 @@
     "@ionic-native/globalization": "^5.24.0",
     "@ionic-native/google-plus": "^5.24.0",
     "@ionic-native/location-accuracy": "^5.24.0",
+    "@ionic-native/onesignal": "^5.24.0",
     "@ionic-native/social-sharing": "^5.24.0",
     "@ionic-native/splash-screen": "^5.0.0",
     "@ionic-native/status-bar": "^5.0.0",
@@ -66,6 +67,7 @@
     "moment": "^2.24.0",
     "mx.ferreyra.callnumber": "0.0.2",
     "ng2-validation": "^4.2.0",
+    "onesignal-cordova-plugin": "^2.9.1",
     "rxjs": "^6.5.1",
     "rxjs-compat": "^6.3.0",
     "tslib": "^1.9.0",
@@ -116,15 +118,20 @@
       "cordova-plugin-appavailability": {},
       "cordova-sqlite-storage": {},
       "cordova-plugin-globalization": {},
-      "cordova-plugin-camera": {},
+      "cordova-plugin-camera": {
+        "ANDROID_SUPPORT_V4_VERSION": "27.+"
+      },
       "cordova-plugin-geolocation": {},
       "cordova-plugin-device": {},
       "cordova-plugin-x-socialsharing": {
         "PHOTO_LIBRARY_ADD_USAGE_DESCRIPTION": "This app requires photo library access to function properly.",
-        "PHOTO_LIBRARY_USAGE_DESCRIPTION": "This app requires photo library access to function properly."
+        "PHOTO_LIBRARY_USAGE_DESCRIPTION": "This app requires photo library access to function properly.",
+        "ANDROID_SUPPORT_V4_VERSION": "24.1.1+"
       },
       "cordova-plugin-android-permissions": {},
-      "cordova-plugin-request-location-accuracy": {},
+      "cordova-plugin-request-location-accuracy": {
+        "PLAY_SERVICES_LOCATION_VERSION": "16.+"
+      },
       "cordova-plugin-whitelist": {},
       "cordova-plugin-statusbar": {},
       "cordova-plugin-splashscreen": {},
@@ -139,7 +146,8 @@
         "APP_NAME": "Clinica Peruano Suiza",
         "FACEBOOK_HYBRID_APP_EVENTS": "false",
         "FACEBOOK_ANDROID_SDK_VERSION": "5.5.2"
-      }
+      },
+      "onesignal-cordova-plugin": {}
     },
     "platforms": [
       "android",

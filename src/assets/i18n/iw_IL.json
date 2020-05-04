@@ -44,6 +44,7 @@
     "LOGIN": "התחברות",
     "Reportar un problema": "דווח על בעיה",
     "SIGN_OFF": "התנתק",
+    "Contactanos": "Contact Us",
     
     "_Emergency": "String de la pagina _Emergency",
 
@@ -115,7 +116,7 @@
     "Tipo de comprobante": "סוג השובר",
     "Razón social": "שם החברה",
     "Cambiar ubicación en el mapa": "שנה מיקום במפה",
-    "Ubicación actual": "מיקום נוכחי",
+    "Ubicación actual": "השתמש במיקום הנוכחי",
     "Pedir": "הזמן",
     "Actualizar": "עדכון",
     "50 mg de": "50 מ'ג של ...",

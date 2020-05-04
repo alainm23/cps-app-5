@@ -43,7 +43,8 @@
     "LOGIN": "Log in",
     "Reportar un problema": "Report a problem",
     "SIGN_OFF": "Log out",
-    
+    "Contactanos": "Contact Us",
+
     "_Emergency": "String de la pagina _Emergency",
 
     "CONTACT_US": "Contact us",
@@ -112,7 +113,7 @@
     "Tipo de comprobante": "Type of voucher",
     "Razón social": "Company name",
     "Cambiar ubicación en el mapa": "Change location on map",
-    "Ubicación actual": "Current location",
+    "Ubicación actual": "Use my current location",
     "Pedir": "Order",
     "Actualizar": "Update",
     "50 mg de": "50 mg of ...",

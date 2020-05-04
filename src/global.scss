@@ -26,7 +26,10 @@
 @import "~@ionic/angular/css/flex-utils.css";
 
 .logotio {
-    height: 48px !important;
+  height: 38px !important;
+    /* text-align: center; */
+    /* width: 100%; */
+    margin-top: 6px;
   }
   
   .title-label {
@@ -34,7 +37,7 @@
   }
   
   .no-border {
-    border-radius: 0px;
+    --border-radius: 0px;
   }
   
   .header-label {
@@ -105,12 +108,7 @@
     color: black !important;
     font-weight: 500 !important;
   }
-  
-  
-  .entry {
-    border-bottom: 1px solid gray;
-  }
-  
+    
   .text-danger {
     color: #c6262e !important;
   }

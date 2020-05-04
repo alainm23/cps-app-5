@@ -115,80 +115,150 @@ export class AuthService {
   }
   
   async nativeGoogleLogin () {
-    const loading = await this.loadingCtrl.create ({
-      message: 'Procesando...'
+    const loading = await this.loadingCtrl.create({
+      message: 'Procesando informacion...',
+      spinner: 'dots'
     });
 
     await loading.present ();
 
-    this.googlePlus.login({
+    this.googlePlus.login ({
+      'scope': 'cpsappweb@gmail.com',
       'webClientId': '727960214488-rjv4mrhf0fnre8oprpogcqiv5g2e4l32.apps.googleusercontent.com',
       'offline': true
     }).then (async (res: any) => {
-      this.afAuth.auth.signInAndRetrieveDataWithCredential (firebase.auth.GoogleAuthProvider.credential (res.idToken))
-        .then ((credential: any) => {
-          this.database.isUser (credential.user.uid).pipe (first ()).toPromise ().then (async (response: any) => {
-            if (response === undefined) {
-              let user: any = {
-                id: credential.user.uid,
-                first_name: credential.user.displayName,
-                last_name: '',
-                email: credential.user.email,
-                phone_number: '', 
-                type: 'user',
-                is_free: false,
-                country_name: '',
-                country_dial_code: '',
-                country_code: '',
-                token_id: '',
-                disabled: false
-              };
-    
-              this.database.addUser (credential.user.uid, user)
-                .then (() => {
-                  loading.dismiss ();
-                  this.navController.navigateRoot ('home');
-                  this.api.enviarcorreologinapp (this.translateService.getDefaultLang (),
-                                                user.first_name + ' ' + user.last_name,
-                                                user.email);
-                })
-                .catch ((error: any) => {
-                  loading.dismiss ();
-                  console.log ("Error login", error);
-                });
-            } else {
-              loading.dismiss ();
-    
-              if (response.disabled) {
-                const alert = await this.alertCtrl.create({
-                  header: 'Usuario bloqueado',
-                  subHeader: 'Su usuario ha sido bloqueado, contacte al administrador',
-                  buttons: ['OK']
-                });
+      const credential = await this.afAuth.auth.signInWithCredential (firebase.auth.GoogleAuthProvider.credential(res.idToken));
+      const unsuscribe = this.database.getUser (credential.user.uid).subscribe (async (response: any) => {
+        unsuscribe.unsubscribe ();
 
-                await alert.present();
-      
-                this.signOut ();
-              } else {
-                this.navController.navigateRoot ('home');
-              }
-            }
-          }, error => {
-            loading.dismiss ();
-            console.log (error);
-            alert ('googlePlus.login' + JSON.stringify (error));
-          });
-        })
-        .catch ((error: any) => {
+        if (response === undefined) {
+          let user: any = {
+            id: credential.user.uid,
+            first_name: credential.user.displayName,
+            last_name: '',
+            email: credential.user.email,
+            phone_number: '', 
+            type: 'user',
+            is_free: false,
+            country_name: '',
+            country_dial_code: '',
+            country_code: '',
+            token_id: '',
+            disabled: false
+          };
+
+          this.database.addUser (credential.user.uid, user)
+            .then (() => {
+              loading.dismiss ();
+              this.navController.navigateRoot ('home');
+              this.api.enviarcorreologinapp (this.translateService.getDefaultLang (),
+                                            user.first_name + ' ' + user.last_name,
+                                            user.email);
+            })
+            .catch ((error: any) => {
+              loading.dismiss ();
+              console.log ("Error login", error);
+            });
+        } else {
           loading.dismiss ();
-          console.log (error);
-          alert ('signInAndRetrieveDataWithCredential' + JSON.stringify (error));
-        });
-    }).catch ((error: any) => {
+
+          if (response.disabled) {
+            const alert = await this.alertCtrl.create({
+              header: 'Usuario bloqueado',
+              subHeader: 'Su usuario ha sido bloqueado, contacte al administrador',
+              buttons: ['OK']
+            });
+
+            await alert.present();
+  
+            this.signOut ();
+          } else {
+            this.navController.navigateRoot ('home');
+          }
+        }
+      }, error => {
+        loading.dismiss ();
+        console.log ('Database error, ', error);
+      });
+    }).catch (err => {
+      console.log ('googlePlus', err);
       loading.dismiss ();
-      console.log (error);
-      alert ('googlePlus.login' + JSON.stringify (error));
     });
+
+    // const loading = await this.loadingCtrl.create ({
+    //   message: 'Procesando...'
+    // });
+
+    // await loading.present ();
+
+    // this.googlePlus.login({
+    //   'webClientId': '727960214488-rjv4mrhf0fnre8oprpogcqiv5g2e4l32.apps.googleusercontent.com',
+    //   'offline': true
+    // }).then (async (res: any) => {
+    //   this.afAuth.auth.signInAndRetrieveDataWithCredential (firebase.auth.GoogleAuthProvider.credential (res.idToken))
+    //     .then ((credential: any) => {
+    //       this.database.isUser (credential.user.uid).pipe (first ()).toPromise ().then (async (response: any) => {
+    //         if (response === undefined) {
+    //           let user: any = {
+    //             id: credential.user.uid,
+    //             first_name: credential.user.displayName,
+    //             last_name: '',
+    //             email: credential.user.email,
+    //             phone_number: '', 
+    //             type: 'user',
+    //             is_free: false,
+    //             country_name: '',
+    //             country_dial_code: '',
+    //             country_code: '',
+    //             token_id: '',
+    //             disabled: false
+    //           };
+    
+    //           this.database.addUser (credential.user.uid, user)
+    //             .then (() => {
+    //               loading.dismiss ();
+    //               this.navController.navigateRoot ('home');
+    //               this.api.enviarcorreologinapp (this.translateService.getDefaultLang (),
+    //                                             user.first_name + ' ' + user.last_name,
+    //                                             user.email);
+    //             })
+    //             .catch ((error: any) => {
+    //               loading.dismiss ();
+    //               console.log ("Error login", error);
+    //             });
+    //         } else {
+    //           loading.dismiss ();
+    
+    //           if (response.disabled) {
+    //             const alert = await this.alertCtrl.create({
+    //               header: 'Usuario bloqueado',
+    //               subHeader: 'Su usuario ha sido bloqueado, contacte al administrador',
+    //               buttons: ['OK']
+    //             });
+
+    //             await alert.present();
+      
+    //             this.signOut ();
+    //           } else {
+    //             this.navController.navigateRoot ('home');
+    //           }
+    //         }
+    //       }, error => {
+    //         loading.dismiss ();
+    //         console.log (error);
+    //         alert ('googlePlus.login' + JSON.stringify (error));
+    //       });
+    //     })
+    //     .catch ((error: any) => {
+    //       loading.dismiss ();
+    //       console.log (error);
+    //       alert ('signInAndRetrieveDataWithCredential' + JSON.stringify (error));
+    //     });
+    // }).catch ((error: any) => {
+    //   loading.dismiss ();
+    //   console.log (error);
+    //   alert ('googlePlus.login' + JSON.stringify (error));
+    // });
   }
   
   async webGoogleLogin () {

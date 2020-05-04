@@ -17,15 +17,17 @@
       <ion-col>
         <div *ngIf="!delivery?.is_checked"> 
           <ion-item class="ion-text-center" lines="none">
-            <h1 class="title-label">{{ 'Pedido de farmacia' | translate }}</h1>
-            <br>
-            <p class="ion-text-wrap">{{ 'Tu pedido está siendo atendido, por favor espere nuestra confirmación' | translate }}</p>
+            <ion-label>
+              <h1 class="title-label">{{ 'Pedido de farmacia' | translate }}</h1>
+              <br>
+              <p class="ion-text-wrap">{{ 'Tu pedido está siendo atendido, por favor espere nuestra confirmación' | translate }}</p>
+            </ion-label>
           </ion-item>
 
           <ion-item class="ion-text-center height-70" lines="none">
             <ion-label>
               <ion-icon class="icon-wait" name="time"></ion-icon>
-              <p class="ion-margin-top">{{ 'Gracias por su paciencia' | translate }}</p>
+              <p class="ion-margin-top ion-text-wrap">{{ 'Gracias por su paciencia' | translate }}</p>
             </ion-label>
           </ion-item>
 
@@ -98,7 +100,9 @@
 
         <div *ngIf="delivery?.is_checked">
           <ion-item class="ion-text-center" lines="none">
-            <h1 class="title-label">{{ 'PHARMACY_DELIVERY' | translate }}</h1>
+            <ion-label>
+              <h1 class="title-label">{{ 'PHARMACY_DELIVERY' | translate }}</h1>
+            </ion-label>
           </ion-item>    
           
           <ion-card color="danger" *ngIf="delivery?.state == 'observed' || delivery?.state == 'canceled'">
@@ -189,7 +193,7 @@
           <div class="ion-text-center" *ngIf="delivery?.state == 'observed'">
             <ion-row>
               <ion-col size="6">
-                <ion-button class="no-border" expand="block" color="blue" (click)="editDelivery (delivery?.id)">
+                <ion-button class="no-border" expand="block" color="blue" (click)="editDelivery ()">
                   {{ 'Correguir' | translate }}
                 </ion-button>
               </ion-col>

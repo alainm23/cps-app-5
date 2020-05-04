@@ -566,7 +566,7 @@ export class HomeInjectionPage implements OnInit {
     this.imagenes.splice(this.imagenes.indexOf(image), 1);
   }
 
-  change (event: any) {
+  change () {
     const value = this.form.value;
 
     if (value.has_all === true) {
@@ -575,7 +575,7 @@ export class HomeInjectionPage implements OnInit {
     }
   }
 
-  change2 (event: any) {
+  change2 () {
     /*
     const value = this.form.value;
 

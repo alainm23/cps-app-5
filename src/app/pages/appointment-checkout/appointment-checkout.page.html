@@ -24,34 +24,34 @@
         <form [formGroup]="form">
           <ion-list>
             <ion-card>
-              <ion-list>
-                <ion-item class="entry">
+              <ion-list style="padding: 0px;">
+                <ion-item class="entry" lines="none" style="margin-bottom: 6px;">
                   <ion-input  type="text" formControlName="name" placeholder="{{ 'Nombre del paciente' | translate }}"></ion-input>
                 </ion-item>
 
-                <ion-item class="entry">
+                <ion-item class="entry" lines="none" style="margin-bottom: 6px;">
                   <ion-input type="text" formControlName="phone_number" placeholder="{{ 'Numero de teléfono' | translate }}"></ion-input>
                 </ion-item>
 
-                <ion-item class="entry-css" (click)="selectCountry()">
+                <ion-item class="entry-css" (click)="selectCountry()" lines="none" style="margin-bottom: 6px;">
                   <ion-label *ngIf="nationality === ''">
                     {{ "Seleccione una nacionalidad" | translate }}
                   </ion-label>
                   <ion-label *ngIf="nationality !== ''">
                     {{ nationality }}
                   </ion-label>
-                  <ion-icon slot="end" name="arrow-dropright"></ion-icon>
+                  <ion-icon style="font-size: 16px;" slot="end" color="grey" name="caret-down-outline"></ion-icon>
                 </ion-item>
 
-                <div class="padding-left-error entry" *ngIf="form.controls.nationality.errors?.required">
+                <!-- <div class="padding-left-error entry" *ngIf="form.controls.nationality.errors?.required">
                   <small class="color-red">{{ '* Campo obligatorio' | translate }}</small>
-                </div>
+                </div> -->
 
-                <ion-item class="entry">
+                <ion-item class="entry" lines="none" style="margin-bottom: 6px;">
                   <ion-input type="text" formControlName="email" placeholder="{{ 'Correo electrónico' | translate }}"></ion-input>
                 </ion-item>
 
-                <ion-item class="entry">
+                <ion-item class="entry" lines="none">
                   <ion-textarea class="text-area" formControlName="message" placeholder="{{ '¿Algún mensaje?' | translate }}"></ion-textarea>
                 </ion-item>
               </ion-list>

@@ -44,6 +44,7 @@
     "LOGIN": "Iniciar sesión",
     "Reportar un problema": "Reportar un problema",
     "SIGN_OFF": "Cerrar sesión",
+    "Contactanos": "Contactanos",
     
     "_Emergency": "String de la pagina _Emergency", 
 
@@ -116,7 +117,7 @@
     "Tipo de comprobante": "Tipo de comprobante",
     "Razón social": "Razón social",
     "Cambiar ubicación en el mapa": "Cambiar ubicación en el mapa",
-    "Ubicación actual": "Ubicación actual",
+    "Ubicación actual": "Usar mi ubicación actual",
     "Pedir": "Pedir",
     "Actualizar": "Actualizar",
     "50 mg de": "50 mg de ...",

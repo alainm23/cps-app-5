@@ -5,7 +5,6 @@
 .button-image {
     width: 32px;
     margin-right: 1rem;
-    margin-bottom: 0.5rem;
 }
 
 .button-call {
@@ -28,5 +27,11 @@
 
 .padding-left-error {
     padding-left: 2rem;
+}
+
+.button {
+    --border-radius: 10px;
+    height: 48px;
+    font-size: 15px !important;
 }
   

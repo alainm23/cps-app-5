@@ -13,6 +13,9 @@ import { AuthService } from './providers/auth.service';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { AppVersion } from '@ionic-native/app-version/ngx';
 import { Device } from '@ionic-native/device/ngx';
+import { OneSignal } from '@ionic-native/onesignal/ngx';
+import { ToastController } from '@ionic/angular';
+import { DatabaseService } from './providers/database.service';
 
 @Component({
   selector: 'app-root',
@@ -36,7 +39,10 @@ export class AppComponent {
     private alertCtrl: AlertController,
     private socialSharing: SocialSharing,
     private appVersion: AppVersion,
-    private device: Device
+    private device: Device,
+    private oneSignal: OneSignal,
+    public toastController: ToastController,
+    public database: DatabaseService
   ) {
     this.initializeApp ();
   }
@@ -47,7 +53,7 @@ export class AppComponent {
       this.splashScreen.hide();
 
       if (this.platform.is('cordova')) {
-        // this.initNotifications ();
+        this.initNotifications ();
       }
 
       if (this.platform.is ('android')) {
@@ -83,447 +89,372 @@ export class AppComponent {
     this.navCtrl.navigateForward ('login');
   }
   
-  // initNotifications () {
-  //   this.oneSignal.startInit('f62ec6a9-740d-4840-9149-bf759347ce60', '727960214488');
-  //   this.oneSignal.inFocusDisplaying (this.oneSignal.OSInFocusDisplayOption.Notification);
-  //   this.oneSignal.handleNotificationOpened ().subscribe(async (jsonData: any) => {
-  //     const clave = jsonData.notification.payload.additionalData.clave;
-  //     const destino: any = JSON.parse (jsonData.notification.payload.additionalData.destino);
+  initNotifications () {
+    this.oneSignal.startInit('f62ec6a9-740d-4840-9149-bf759347ce60', '727960214488');
+    this.oneSignal.inFocusDisplaying (this.oneSignal.OSInFocusDisplayOption.Notification);
+    this.oneSignal.handleNotificationOpened ().subscribe(async (jsonData: any) => {
+      const clave = jsonData.notification.payload.additionalData.clave;
+      const destino: any = JSON.parse (jsonData.notification.payload.additionalData.destino);
 
-  //     if (destino.page === 'ambulancia') {
-  //       if (destino.state === 'canceled') {
-  //         let alert = await this.alertCtrl.create ({
-  //           header: jsonData.notification.payload.title,
-  //           message: jsonData.notification.payload.body,
-  //           buttons: ['OK']
-  //         });
+      if (destino.page === 'ambulancia') {
+        if (destino.state === 'canceled') {
+          let alert = await this.alertCtrl.create ({
+            header: jsonData.notification.payload.header,
+            message: jsonData.notification.payload.body,
+            buttons: ['OK']
+          });
           
-  //         await alert.present();
-  //       } else {
-  //         this.navCtrl.push ("ConfirmAmbulancePage", {
-  //           id: clave
-  //         });
-  //       }
-  //     } else if (destino.page === 'farmacia') {
-  //       if (destino.state === 'approved' || destino.state === 'observed') {
-  //         this.navCtrl.push ("PharmacyPharmacyDeliveryCheckupPage", {
-  //           id: clave,
-  //           type: 'created'
-  //         });
-  //       } else {
-  //         this.navCtrl.push ("PharmacyPharmacyDeliveryCheckupPage", {
-  //           id: clave,
-  //           type: destino.state
-  //         });
-  //       }
-  //     } else if (destino.page === 'inyeccion') {
-  //       if (destino.state === 'approved' || destino.state === 'observed') {
-  //         this.navCtrl.push ("HomeInjectionCheckPage", {
-  //           id: clave,
-  //           type: 'created'
-  //         });
-  //       } else {
-  //         this.navCtrl.push ("HomeInjectionCheckPage", {
-  //           id: clave,
-  //           type: destino.state
-  //         });
-  //       }
-  //     } else if (destino.page === 'traslado') {
-  //       if (destino.state === 'approved' || destino.state === 'observed') {
-  //         this.navCtrl.push ("TransferAmbulanceCheckPage", {
-  //           id: clave,
-  //           type: 'created'
-  //         });
-  //       } else {
-  //         this.navCtrl.push ("TransferAmbulanceCheckPage", {
-  //           id: clave,
-  //           type: destino.state
-  //         });
-  //       }
-  //     } else if (destino.page === 'escolta') {
-  //       if (destino.state === 'approved' || destino.state === 'observed') {
-  //         this.navCtrl.push ("MedicalEscortCheckPage", {
-  //           id: clave,
-  //           type: 'created'
-  //         });
-  //       } else {
-  //         this.navCtrl.push ("MedicalEscortCheckPage", {
-  //           id: clave,
-  //           type: destino.state
-  //         });
-  //       }
-  //     } else if (destino.page === 'presion') {
-  //       if (destino.state === 'approved' || destino.state === 'observed') {
-  //         this.navCtrl.push ("HomePressureCheckPage", {
-  //           id: clave,
-  //           type: 'created'
-  //         });
-  //       } else {
-  //         this.navCtrl.push ("HomePressureCheckPage", {
-  //           id: clave,
-  //           type: destino.state
-  //         });
-  //       }
-  //     } else if (destino.page === 'doctor') {
-  //       if (destino.state === 'approved' || destino.state === 'observed') {
-  //         this.navCtrl.push ("HomeDoctorCheckPage", {
-  //           id: clave,
-  //           type: 'created'
-  //         });
-  //       } else {
-  //         this.navCtrl.push ("HomeDoctorCheckPage", {
-  //           id: clave,
-  //           type: destino.state
-  //         });
-  //       }
-  //     } else if (destino.page === 'resultados') {
-  //       if (destino.state === 'approved' || destino.state === 'observed') {
-  //         this.navCtrl.push ("RequestResultsCheckPage", {
-  //           id: clave,
-  //           type: 'created'
-  //         });
-  //       } else {
-  //         this.navCtrl.push ("RequestResultsCheckPage", {
-  //           id: clave,
-  //           type: destino.state
-  //         });
-  //       }
-  //     } 
-  //   });
+          await alert.present();
+        } else {
+          this.navCtrl.navigateForward (['confirm-ambulance', clave]);
+        }
+      } else if (destino.page === 'farmacia') {
+        if (destino.state === 'approved' || destino.state === 'observed') {
+          this.navCtrl.navigateForward (['pharmacy-delivery-check', clave, 'created']);
+        } else {
+          this.navCtrl.navigateForward (['pharmacy-delivery-check', clave, destino.state]);
+        }
+      } else if (destino.page === 'inyeccion') {
+        if (destino.state === 'approved' || destino.state === 'observed') {
+          this.navCtrl.navigateForward (['home-injection-check', clave, 'created']);
+        } else {
+          this.navCtrl.navigateForward (['home-injection-check', clave, destino.state]);
+        }
+      } else if (destino.page === 'traslado') {
+        if (destino.state === 'approved' || destino.state === 'observed') {
+          this.navCtrl.navigateForward (['transfer-ambulance-check', clave, 'created']);
+        } else {
+          this.navCtrl.navigateForward (['transfer-ambulance-check', clave, destino.state]);
+        }
+      } else if (destino.page === 'escolta') {
+        if (destino.state === 'approved' || destino.state === 'observed') {
+          this.navCtrl.navigateForward (['medical-escort-check', clave, 'created']);
+        } else {
+          this.navCtrl.navigateForward (['medical-escort-check', clave, destino.state]);
+        }
+      } else if (destino.page === 'presion') {
+        if (destino.state === 'approved' || destino.state === 'observed') {
+          this.navCtrl.navigateForward (['home-nurse-check', clave, 'created']);
+        } else {
+          this.navCtrl.navigateForward (['home-nurse-check', clave, destino.state]);
+        }
+      } else if (destino.page === 'doctor') {
+        if (destino.state === 'approved' || destino.state === 'observed') {
+          this.navCtrl.navigateForward (['home-doctor-check', clave, 'created']);
+        } else {
+          this.navCtrl.navigateForward (['home-doctor-check', clave, destino.state]);
+        }
+      } else if (destino.page === 'resultados') {
+        if (destino.state === 'approved' || destino.state === 'observed') {
+          this.navCtrl.navigateForward (['request-results-check', clave, 'created']);
+        } else {
+          this.navCtrl.navigateForward (['request-results-check', clave, destino.state]);
+        }
+      } 
+    });
 
-  //   this.oneSignal.handleNotificationReceived().subscribe((jsonData: any) => {
-  //     const clave = jsonData.payload.additionalData.clave;
-  //     const destino: any = JSON.parse (jsonData.payload.additionalData.destino);
+    this.oneSignal.handleNotificationReceived().subscribe(async (jsonData: any) => {
+      const clave = jsonData.payload.additionalData.clave;
+      const destino: any = JSON.parse (jsonData.payload.additionalData.destino);
 
-  //     if (destino.page === 'ambulancia') {
-  //       if (destino.state === 'canceled') {
-  //         let alert = this.alertCtrl.create ({
-  //           title: 'Solicitud de ambulancia cancelada',
-  //           message: jsonData.payload.body,
-  //           buttons: ['OK']
-  //         });
+      if (destino.page === 'ambulancia') {
+        if (destino.state === 'canceled') {
+          let alert = await this.alertCtrl.create ({
+            header: 'Solicitud de ambulancia cancelada',
+            message: jsonData.payload.body,
+            buttons: ['OK']
+          });
           
-  //         alert.present();
-  //       } else {
-  //         let toast = this.toastCtrl.create({
-  //           message: jsonData.payload.body,
-  //           duration: 5 * 1000,
-  //           position: 'top',
-  //           closeButtonText: this.i18n.Ver,
-  //           showCloseButton: true
-  //         });
+          alert.present();
+        } else {
+          let toast = await this.toastController.create({
+            message: jsonData.payload.body,
+            duration: 5 * 1000,
+            position: 'top',
+            buttons: [
+              {
+                text: 'Ver',
+                role: 'cancel',
+                handler: () => {
+                  this.navCtrl.navigateForward (['confirm-ambulance', clave]);
+                }
+              }
+            ]
+          });
+          
+          toast.present();
+        }
+      } else if (destino.page === 'farmacia') {
+        if (destino.state === 'approved' || destino.state === 'observed') {
+          let toast = await this.toastController.create({
+            message: jsonData.payload.body,
+            duration: 5 * 1000,
+            position: 'top',
+            buttons: [
+              {
+                text: 'Ver',
+                role: 'cancel',
+                handler: () => {
+                  this.navCtrl.navigateForward (['pharmacy-delivery-check', clave]);
+                }
+              }
+            ]
+          });
+          
+          toast.present();
+        } else {
+          let toast = await this.toastController.create({
+            message: jsonData.payload.body,
+            duration: 5 * 1000,
+            position: 'top',
+            buttons: [
+              {
+                text: 'Ver',
+                role: 'cancel',
+                handler: () => {
+                  this.navCtrl.navigateForward (['pharmacy-delivery-check', destino.state]);
+                }
+              }
+            ]
+          });
+        }
+      } else if (destino.page === 'inyeccion') {
+        if (destino.state === 'approved' || destino.state === 'observed') {
+          let toast = await this.toastController.create({
+            message: jsonData.payload.body,
+            duration: 5 * 1000,
+            position: 'top',
+            buttons: [
+              {
+                text: 'Ver',
+                role: 'cancel',
+                handler: () => {
+                  this.navCtrl.navigateForward (['home-injection-check', clave]);
+                }
+              }
+            ]
+          });
+          
+          toast.present();
+        } else {
+          let toast = await this.toastController.create({
+            message: jsonData.payload.body,
+            duration: 5 * 1000,
+            position: 'top',
+            buttons: [
+              {
+                text: 'Ver',
+                role: 'cancel',
+                handler: () => {
+                  this.navCtrl.navigateForward (['home-injection-check', destino.state]);
+                }
+              }
+            ]
+          });
+          
+          toast.present();
+        }
+      } else if (destino.page === 'traslado') {
+        if (destino.state === 'approved' || destino.state === 'observed') {
+          let toast = await this.toastController.create({
+            message: jsonData.payload.body,
+            duration: 5 * 1000,
+            position: 'top',
+            buttons: [
+              {
+                text: 'Ver',
+                role: 'cancel',
+                handler: () => {
+                  this.navCtrl.navigateForward (['home-injection-check', clave]);
+                }
+              }
+            ]
+          });
+          
+          toast.present();
+        } else {
+          let toast = await this.toastController.create({
+            message: jsonData.payload.body,
+            duration: 5 * 1000,
+            position: 'top',
+            buttons: [
+              {
+                text: 'Ver',
+                role: 'cancel',
+                handler: () => {
+                  this.navCtrl.navigateForward (['transfer-ambulance-check', destino.state]);
+                }
+              }
+            ]
+          });
+          
+          toast.present();
+        }
+      } else if (destino.page === 'escolta') {
+        if (destino.state === 'approved' || destino.state === 'observed') {
+          let toast = await this.toastController.create({
+            message: jsonData.payload.body,
+            duration: 5 * 1000,
+            position: 'top',
+            buttons: [
+              {
+                text: 'Ver',
+                role: 'cancel',
+                handler: () => {
+                  this.navCtrl.navigateForward (['medical-escort-check', clave]);
+                }
+              }
+            ]
+          });
+          
+          toast.present();
+        } else {
+          let toast = await this.toastController.create({
+            message: jsonData.payload.body,
+            duration: 5 * 1000,
+            position: 'top',
+            buttons: [
+              {
+                text: 'Ver',
+                role: 'cancel',
+                handler: () => {
+                  this.navCtrl.navigateForward (['medical-escort-check', destino.state]);
+                }
+              }
+            ]
+          });
+          
+          toast.present();
+        }
+      } else if (destino.page === 'presion') {
+        if (destino.state === 'approved' || destino.state === 'observed') {
+          let toast = await this.toastController.create({
+            message: jsonData.payload.body,
+            duration: 5 * 1000,
+            position: 'top',
+            buttons: [
+              {
+                text: 'Ver',
+                role: 'cancel',
+                handler: () => {
+                  this.navCtrl.navigateForward (['home-nurse-check', clave]);
+                }
+              }
+            ]
+          });
+          
+          toast.present();
+        } else {
+          let toast = await this.toastController.create({
+            message: jsonData.payload.body,
+            duration: 5 * 1000,
+            position: 'top',
+            buttons: [
+              {
+                text: 'Ver',
+                role: 'cancel',
+                handler: () => {
+                  this.navCtrl.navigateForward (['home-nurse-check', destino.state]);
+                }
+              }
+            ]
+          });
+          
+          toast.present();
+        }
+      } else if (destino.page === 'doctor') {
+        if (destino.state === 'approved' || destino.state === 'observed') {
+          let toast = await this.toastController.create({
+            message: jsonData.payload.body,
+            duration: 5 * 1000,
+            position: 'top',
+            buttons: [
+              {
+                text: 'Ver',
+                role: 'cancel',
+                handler: () => {
+                  this.navCtrl.navigateForward (['home-doctor-check', clave]);
+                }
+              }
+            ]
+          });
+          
+          toast.present();
+        } else {
+          let toast = await this.toastController.create({
+            message: jsonData.payload.body,
+            duration: 5 * 1000,
+            position: 'top',
+            buttons: [
+              {
+                text: 'Ver',
+                role: 'cancel',
+                handler: () => {
+                  this.navCtrl.navigateForward (['home-doctor-check', destino.state]);
+                }
+              }
+            ]
+          });
+          
+          toast.present();
+        }
+      } else if (destino.page === 'resultados') {
+        if (destino.state === 'approved' || destino.state === 'observed') {
+          let toast = await this.toastController.create({
+            message: jsonData.payload.body,
+            duration: 5 * 1000,
+            position: 'top',
+            buttons: [
+              {
+                text: 'Ver',
+                role: 'cancel',
+                handler: () => {
+                  this.navCtrl.navigateForward (['request-results-check', clave]);
+                }
+              }
+            ]
+          });
+          
+          toast.present();
+        } else {
+          let toast = await this.toastController.create({
+            message: jsonData.payload.body,
+            duration: 5 * 1000,
+            position: 'top',
+            buttons: [
+              {
+                text: 'Ver',
+                role: 'cancel',
+                handler: () => {
+                  this.navCtrl.navigateForward (['request-results-check', destino.state]);
+                }
+              }
+            ]
+          });
+          
+          toast.present();
+        }
+      } 
+    });
 
-  //         toast.onDidDismiss((data, role) => {
-  //           if (role == "close") {
-  //             this.navCtrl.push ("ConfirmAmbulancePage", {
-  //               id: clave
-  //             });
-  //           }
-  //         });
-
-  //         toast.present();
-  //       }
-  //     } else if (destino.page === 'farmacia') {
-  //       if (destino.state === 'approved' || destino.state === 'observed') {
-  //         let toast = this.toastCtrl.create({
-  //           message: jsonData.payload.body,
-  //           duration: 10 * 1000,
-  //           position: 'top',
-  //           closeButtonText: this.i18n.Ver,
-  //           showCloseButton: true
-  //         });
-
-  //         toast.onDidDismiss((data, role) => {
-  //           if (role == "close") {
-  //             this.navCtrl.push ("PharmacyPharmacyDeliveryCheckupPage", {
-  //               id: clave,
-  //               type: 'created'
-  //             });
-  //           }
-  //         });
-
-  //         toast.present();
-  //       } else {
-  //         let toast = this.toastCtrl.create({
-  //           message: jsonData.payload.body,
-  //           duration: 10 * 1000,
-  //           position: 'top',
-  //           closeButtonText: this.i18n.Ver,
-  //           showCloseButton: true
-  //         });
-
-  //         toast.onDidDismiss((data, role) => {
-  //           if (role == "close") {
-  //             this.navCtrl.push ("PharmacyPharmacyDeliveryCheckupPage", {
-  //               id: clave,
-  //               type: destino.state
-  //             });
-  //           }
-  //         });
-
-  //         toast.present();
-  //       }
-  //     } else if (destino.page === 'inyeccion') {
-  //       if (destino.state === 'approved' || destino.state === 'observed') {
-  //         let toast = this.toastCtrl.create({
-  //           message: jsonData.payload.body,
-  //           duration: 10 * 1000,
-  //           position: 'top',
-  //           closeButtonText: this.i18n.Ver,
-  //           showCloseButton: true
-  //         });
-
-  //         toast.onDidDismiss((data, role) => {
-  //           if (role == "close") {
-  //             this.navCtrl.push ("HomeInjectionCheckPage", {
-  //               id: clave,
-  //               type: 'created'
-  //             });
-  //           }
-  //         });
-
-  //         toast.present();
-  //       } else {
-  //         let toast = this.toastCtrl.create({
-  //           message: jsonData.payload.body,
-  //           duration: 10 * 1000,
-  //           position: 'top',
-  //           closeButtonText: this.i18n.Ver,
-  //           showCloseButton: true
-  //         });
-
-  //         toast.onDidDismiss((data, role) => {
-  //           if (role == "close") {
-  //             this.navCtrl.push ("HomeInjectionCheckPage", {
-  //               id: clave,
-  //               type: destino.state
-  //             });
-  //           }
-  //         });
-
-  //         toast.present();
-  //       }
-  //     } else if (destino.page === 'traslado') {
-  //       if (destino.state === 'approved' || destino.state === 'observed') {
-  //         let toast = this.toastCtrl.create({
-  //           message: jsonData.payload.body,
-  //           duration: 10 * 1000,
-  //           position: 'top',
-  //           closeButtonText: this.i18n.Ver,
-  //           showCloseButton: true
-  //         });
-
-  //         toast.onDidDismiss((data, role) => {
-  //           if (role == "close") {
-  //             this.navCtrl.push ("TransferAmbulanceCheckPage", {
-  //               id: clave,
-  //               type: 'created'
-  //             });
-  //           }
-  //         });
-
-  //         toast.present();
-  //       } else {
-  //         let toast = this.toastCtrl.create({
-  //           message: jsonData.payload.body,
-  //           duration: 10 * 1000,
-  //           position: 'top',
-  //           closeButtonText: this.i18n.Ver,
-  //           showCloseButton: true
-  //         });
-
-  //         toast.onDidDismiss((data, role) => {
-  //           if (role == "close") {
-  //             this.navCtrl.push ("TransferAmbulanceCheckPage", {
-  //               id: clave,
-  //               type: destino.state
-  //             });
-  //           }
-  //         });
-
-  //         toast.present();
-  //       }
-  //     } else if (destino.page === 'escolta') {
-  //       if (destino.state === 'approved' || destino.state === 'observed') {
-  //         let toast = this.toastCtrl.create({
-  //           message: jsonData.payload.body,
-  //           duration: 10 * 1000,
-  //           position: 'top',
-  //           closeButtonText: this.i18n.Ver,
-  //           showCloseButton: true
-  //         });
-
-  //         toast.onDidDismiss((data, role) => {
-  //           if (role == "close") {
-  //             this.navCtrl.push ("MedicalEscortCheckPage", {
-  //               id: clave,
-  //               type: 'created'
-  //             });
-  //           }
-  //         });
-
-  //         toast.present();
-  //       } else {
-  //         let toast = this.toastCtrl.create({
-  //           message: jsonData.payload.body,
-  //           duration: 10 * 1000,
-  //           position: 'top',
-  //           closeButtonText: this.i18n.Ver,
-  //           showCloseButton: true
-  //         });
-
-  //         toast.onDidDismiss((data, role) => {
-  //           if (role == "close") {
-  //             this.navCtrl.push ("MedicalEscortCheckPage", {
-  //               id: clave,
-  //               type: destino.state
-  //             });
-  //           }
-  //         });
-
-  //         toast.present();
-  //       }
-  //     } else if (destino.page === 'presion') {
-  //       if (destino.state === 'approved' || destino.state === 'observed') {
-  //         let toast = this.toastCtrl.create({
-  //           message: jsonData.payload.body,
-  //           duration: 10 * 1000,
-  //           position: 'top',
-  //           closeButtonText: this.i18n.Ver,
-  //           showCloseButton: true
-  //         });
-
-  //         toast.onDidDismiss((data, role) => {
-  //           if (role == "close") {
-  //             this.navCtrl.push ("HomePressureCheckPage", {
-  //               id: clave,
-  //               type: 'created'
-  //             });
-  //           }
-  //         });
-
-  //         toast.present();
-  //       } else {
-  //         let toast = this.toastCtrl.create({
-  //           message: jsonData.payload.body,
-  //           duration: 10 * 1000,
-  //           position: 'top',
-  //           closeButtonText: this.i18n.Ver,
-  //           showCloseButton: true
-  //         });
-
-  //         toast.onDidDismiss((data, role) => {
-  //           if (role == "close") {
-  //             this.navCtrl.push ("HomePressureCheckPage", {
-  //               id: clave,
-  //               type: destino.state
-  //             });
-  //           }
-  //         });
-
-  //         toast.present();
-  //       }
-  //     } else if (destino.page === 'doctor') {
-  //       if (destino.state === 'approved' || destino.state === 'observed') {
-  //         let toast = this.toastCtrl.create({
-  //           message: jsonData.payload.body,
-  //           duration: 10 * 1000,
-  //           position: 'top',
-  //           closeButtonText: this.i18n.Ver,
-  //           showCloseButton: true
-  //         });
-
-  //         toast.onDidDismiss((data, role) => {
-  //           if (role == "close") {
-  //             this.navCtrl.push ("HomeDoctorCheckPage", {
-  //               id: clave,
-  //               type: 'created'
-  //             });
-  //           }
-  //         });
-
-  //         toast.present();
-  //       } else {
-  //         let toast = this.toastCtrl.create({
-  //           message: jsonData.payload.body,
-  //           duration: 10 * 1000,
-  //           position: 'top',
-  //           closeButtonText: this.i18n.Ver,
-  //           showCloseButton: true
-  //         });
-
-  //         toast.onDidDismiss((data, role) => {
-  //           if (role == "close") {
-  //             this.navCtrl.push ("HomeDoctorCheckPage", {
-  //               id: clave,
-  //               type: destino.state
-  //             });
-  //           }
-  //         });
-
-  //         toast.present();
-  //       }
-  //     } else if (destino.page === 'resultados') {
-  //       if (destino.state === 'approved' || destino.state === 'observed') {
-  //         let toast = this.toastCtrl.create({
-  //           message: jsonData.payload.body,
-  //           duration: 10 * 1000,
-  //           position: 'top',
-  //           closeButtonText: this.i18n.Ver,
-  //           showCloseButton: true
-  //         });
-
-  //         toast.onDidDismiss((data, role) => {
-  //           if (role == "close") {
-  //             this.navCtrl.push ("RequestResultsCheckPage", {
-  //               id: clave,
-  //               type: 'created'
-  //             });
-  //           }
-  //         });
-
-  //         toast.present();
-  //       } else {
-  //         let toast = this.toastCtrl.create({
-  //           message: jsonData.payload.body,
-  //           duration: 10 * 1000,
-  //           position: 'top',
-  //           closeButtonText: this.i18n.Ver,
-  //           showCloseButton: true
-  //         });
-
-  //         toast.onDidDismiss((data, role) => {
-  //           if (role == "close") {
-  //             this.navCtrl.push ("RequestResultsCheckPage", {
-  //               id: clave,
-  //               type: destino.state
-  //             });
-  //           }
-  //         });
-
-  //         toast.present();
-  //       }
-  //     } 
-  //   });
-
-  //   this.oneSignal.endInit();
+    this.oneSignal.endInit();
     
-  //   this.auth.getUsuario ().subscribe (async (user: any) => {
-  //     this.oneSignal.getIds ().then (oS => {
-  //       this.storage.setValue ("token_id", oS.userId)
+    this.auth.getUsuario ().subscribe (async (user: any) => {
+      this.oneSignal.getIds ().then (oS => {
+        this.storage.setValue ("token_id", oS.userId)
 
-  //       if (user) {
-  //         this.database.updateToken (user.uid, oS.userId);
-  //       }
-  //     });
-  //   });
+        if (user) {
+          this.database.updateToken (user.uid, oS.userId);
+        }
+      });
+    });
 
-  //   this.oneSignal.getTags ().then (data => {
-  //     console.log (data);
-  //   });
+    this.oneSignal.getTags ().then (data => {
+      console.log (data);
+    });
 
-  //   this.oneSignal.sendTag ("Usuarios", "true");
-  // }
+    this.oneSignal.sendTag ("Usuarios", "true");
+  }
 
   async signOut () {
     let alert = await this.alertCtrl.create({
@@ -560,6 +491,10 @@ export class AppComponent {
 
   goAppointmentHistory () {
     this.navCtrl.navigateForward ('appointment-history');
+  }
+
+  reportEmergency () {
+    this.navCtrl.navigateForward ('emergency');
   }
 
   async changeLanguage () {

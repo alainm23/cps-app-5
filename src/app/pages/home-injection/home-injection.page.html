@@ -39,18 +39,17 @@
             </ion-item>
             
             <div style="margin-left: 1rem;" class="ion-margin-left">
-              <small style="margin-left: 1rem;" class="color-red">
+              <small class="color-red">
               {{ '(Fecha, sello y firma obligatorio)' | translate }}
             </small>
             </div>
 
             <ion-list>
-              <div class="ion-padding-top ion-padding-left ion-padding-right">
-                <ion-button size="small" expand="block" color="white" (click)="presentActionSheet ()">
-                  <ion-icon class="ion-padding-right" name="camera"></ion-icon>
-                  {{ 'Adjuntar' | translate }}
-                </ion-button>
-              </div>
+              <ion-button class="buuu" size="small" expand="block" color="white" (click)="presentActionSheet ()">
+                <ion-icon slot="start" class="ion-padding-right" name="camera"></ion-icon>
+                {{ 'Adjuntar' | translate }}
+              </ion-button>
+
               <ion-item *ngFor="let imagen of imagenes">
                 <img class="image-preview" [src]="imagen" #myImage (click)="imageView (myImage)" imageViewer/>
                 <ion-button slot="end" fill="clear" color="red" (click)="deleteImage (imagen)">
@@ -84,7 +83,7 @@
               </ion-label>
             </ion-item>
 
-            <ion-grid>
+            <ion-grid style="margin-top: -10px; margin-bottom: -6px;">
               <ion-row>              
                 <ion-col size="4" class="ion-align-self-end">
                   <ion-button size="small" expand="small" color="blue" (click)="select_code ()">
@@ -112,17 +111,17 @@
 
             <ion-item class="ion-text-wrap" lines="none">
               <ion-label class="label-nm">{{ 'Requiero los insumos' | translate }}</ion-label>
-              <ion-checkbox color="blue" formControlName="need_supplies" (ionChange)="change2 (rmchecked)"></ion-checkbox>
+              <ion-checkbox color="blue" formControlName="need_supplies" (ionChange)="change2 ()"></ion-checkbox>
             </ion-item>
 
             <ion-item lines="none" class="ion-text-wrap">
               <ion-label class="label-nm">{{ 'Requiero la medicina' | translate }}</ion-label>
-              <ion-checkbox color="blue" formControlName="need_medicine" (ionChange)="change2 (rmchecked)"></ion-checkbox>
+              <ion-checkbox color="blue" formControlName="need_medicine" (ionChange)="change2 ()"></ion-checkbox>
             </ion-item>
             
             <ion-item lines="none" class="ion-text-wrap">
               <ion-label class="label-nm">{{ 'Cuanto con todo lo necesario' | translate }}</ion-label>
-              <ion-checkbox color="blue" formControlName="has_all" (ionChange)="change (rmchecked)"></ion-checkbox>
+              <ion-checkbox color="blue" formControlName="has_all" (ionChange)="change ()"></ion-checkbox>
             </ion-item>
 
             <ion-item>
@@ -133,7 +132,7 @@
               <ion-textarea row="3" formControlName="note" placeholder="..."></ion-textarea>
             </ion-item>
             
-            <ion-item lines="none">
+            <ion-item>
               <ion-label style="font-size: 13pt !important; font-weight: 500;">{{ 'Fecha' | translate }}:</ion-label>
               <ion-datetime [min]="min_date" 
                 cancelText="Cancelar" doneText="Seleccionar"
@@ -147,7 +146,7 @@
             </small>
             </div>
 
-            <ion-item lines="none">
+            <ion-item>
               <ion-label style="font-size: 13pt !important; font-weight: 500;">{{ 'Horario de servicio' | translate }}:</ion-label>
               <ion-select class="card-md" expand="small" formControlName="hour">
                 <div *ngFor="let item of get_hours ()">
@@ -221,7 +220,7 @@
           </ion-item>
 
           <ion-item *ngIf="!is_edit" lines="none" class="ion-text-right">
-            <p style="width: 100% !important;" class="text-danger ion-text-right" (click)="getCurrentLocation ()">{{ 'Ubicación actual' | translate }}</p>
+            <p style="width: 100% !important; margin-bottom: -12px;" class="text-danger ion-text-right" (click)="getCurrentLocation ()">{{ 'Ubicación actual' | translate }}</p>
           </ion-item>
 
           <ion-card id="map-card" margin-top-top class="map-class">

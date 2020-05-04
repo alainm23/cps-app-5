@@ -32,64 +32,60 @@
             </ion-item>
 
             <ion-item>
-              <ion-label class="header-text" position="stacked">
+              <ion-label style="font-size: 18pt !important;" class="header-text" position="stacked">
                 {{ 'Origen' | translate }}:
               </ion-label>
               <ion-input type="text" formControlName="address_ori" placeholder="{{ 'Direccion de origen' | translate }}"></ion-input>
             </ion-item>
 
-            <div class="ion-margin-left" *ngIf="form.controls.address_ori.errors?.required">
+            <div style="margin-left: 1rem;" class="ion-margin-left" *ngIf="form.controls.address_ori.errors?.required">
               <small class="color-red">
                 {{ '* Campo obligatorio' | translate }}
               </small>
             </div>
 
-            <div class="ion-margin-left" *ngIf="form.controls.location_ori_lat.errors?.required ||
+            <div style="margin-left: 1rem;" class="ion-margin-left" *ngIf="form.controls.location_ori_lat.errors?.required ||
               form.controls.location_ori_lon.errors?.required">
               <small class="color-red">
                 {{ "* Seleccione una ubicacion de origen en el mapa" | translate }}
               </small>
             </div>
 
-            <ion-item lines="none">
-              <ion-button ion-button expand="full" class="card-md" color="white" (click)="selectOrigen ()">
-                {{ 'Marcar en mapa' | translate }} {{ editar_1 }}
-              </ion-button>
-            </ion-item>
+            <ion-button style="margin-left: 1rem; margin-right: 0.2rem;" expand="block" class="card-md" color="white" (click)="selectOrigen ()">
+              {{ 'Marcar en mapa' | translate }} {{ editar_1 }}
+            </ion-button>
 
             <ion-item>
-              <ion-label class="header-text" position="stacked">
+              <ion-label style="font-size: 18pt !important;" class="header-text" position="stacked">
                 {{ 'Destino' | translate }}:
               </ion-label>
               <ion-input type="text" formControlName="address_des" placeholder="{{ 'Direccion de destino' | translate }}"></ion-input>
             </ion-item>
 
-            <div class="ion-margin-left" *ngIf="form.controls.address_des.errors?.required">
+            <div style="margin-left: 1rem;" class="ion-margin-left" *ngIf="form.controls.address_des.errors?.required">
               <small class="color-red">
               {{ '* Campo obligatorio' | translate }}
             </small>
             </div>
             
-            <div class="ion-margin-left" *ngIf="form.controls.location_des_lat.errors?.required ||
+            <div style="margin-left: 1rem;" class="ion-margin-left" *ngIf="form.controls.location_des_lat.errors?.required ||
               form.controls.location_des_lon.errors?.required">
               <small class="color-red">
                 {{ "* Seleccione una ubicacion de destino en el mapa" | translate }}
               </small>
             </div>
 
-            <ion-item lines="none">
-              <ion-button expand="full" class="card-md" color="white" (click)="selectDestino ()">
-                {{ 'Marcar en mapa' | translate }} {{ editar_2 }}
-              </ion-button>
-            </ion-item>
+            <ion-button style="margin-left: 1rem; margin-right: 0.2rem;" expand="full" class="card-md" color="white" (click)="selectDestino ()">
+              {{ 'Marcar en mapa' | translate }} {{ editar_2 }}
+            </ion-button>
 
             <ion-item>
-              <ion-label class="header-text" position="stacked">
+              <ion-label style="font-size: 18pt !important;" class="header-text" position="stacked">
                 {{ 'Numero de teléfono' | translate }}:
               </ion-label>
             </ion-item>
 
-            <ion-grid>
+            <ion-grid style="margin-bottom: -6px; margin-top: -12px;">
               <ion-row>              
                 <ion-col size="4" class="ion-align-self-end">
                   <ion-button small ion-button block color="blue" (click)="select_code ()">
@@ -105,7 +101,7 @@
               </ion-row>
             </ion-grid>
 
-            <div class="ion-margin-left" *ngIf="form.controls.phone_number.errors?.required">
+            <div style="margin-left: 1rem;" class="ion-margin-left" *ngIf="form.controls.phone_number.errors?.required">
               <small class="color-red">
               {{ '* Campo obligatorio' | translate }}
             </small>
@@ -114,8 +110,8 @@
         </ion-col>
 
         <ion-col size="12" size-sm="12" size-md="6"  size-lg="6" size-xl="6">
-          <ion-list lines="none">
-            <ion-item lines="none">
+          <ion-list>
+            <ion-item>
               <ion-label class="header-text">{{ 'Fecha' | translate }}:</ion-label>
               <ion-datetime [min]="min_date" 
                 cancelText="Cancelar" doneText="Seleccionar"
@@ -123,13 +119,13 @@
                 displayFormat="D MMMM YYYY" formControlName="date"></ion-datetime>
             </ion-item>
 
-            <div class="ion-margin-left" *ngIf="form.controls.date.errors?.required">
+            <div style="margin-left: 1rem;" class="ion-margin-left" *ngIf="form.controls.date.errors?.required">
               <small class="color-red">
               {{ '* Campo obligatorio' | translate }}
             </small>
             </div> 
 
-            <ion-item lines="none">
+            <ion-item>
               <ion-label class="header-text">{{ 'Horario de servicio' | translate }}:</ion-label>
               <ion-select class="card-md" block formControlName="hour">
                 <div *ngFor="let item of get_hours ()">
@@ -140,7 +136,7 @@
               </ion-select>
             </ion-item>
 
-            <div class="ion-margin-left" *ngIf="form.controls.hour.errors?.required">
+            <div style="margin-left: 1rem;" class="ion-margin-left" *ngIf="form.controls.hour.errors?.required">
               <small class="color-red">
                 {{ '* Campo obligatorio' | translate }}
               </small>
@@ -155,8 +151,10 @@
               </ion-select>
             </ion-item>
 
-            <ion-item text-wrap text-center class="color-blue">
-              <b>"{{ ambulancia_des }}"</b>
+            <ion-item class="ion-text-wrap ion-text-center color-blue">
+              <ion-label>
+                <p class="ion-text-wrap"><b>"{{ ambulancia_des }}"</b></p>
+              </ion-label>
             </ion-item>
 
             <!--Tipo de comprobante -->
@@ -168,7 +166,7 @@
               </ion-select>
             </ion-item>
 
-            <div class="ion-margin-left" *ngIf="form.controls.tipo_comprobante.errors?.required">
+            <div style="margin-left: 1rem;" class="ion-margin-left" *ngIf="form.controls.tipo_comprobante.errors?.required">
               <small class="color-red">
                 {{ '* Campo obligatorio' | translate }}
               </small>
@@ -180,7 +178,7 @@
                 <ion-input type="tel" maxlength="11" placeholder="{{ 'Número de ruc' | translate }}" formControlName="ruc"></ion-input>  
               </ion-item>
 
-              <div class="ion-margin-left" *ngIf="form.controls.ruc.errors?.required">
+              <div style="margin-left: 1rem;" class="ion-margin-left" *ngIf="form.controls.ruc.errors?.required">
                 <small class="color-red">{{ '* Campo obligatorio' | translate }}</small>
               </div>
 
@@ -190,7 +188,7 @@
                 </ion-input>
               </ion-item>
 
-              <div class="ion-margin-left" *ngIf="form.controls.razon_social.errors?.required">
+              <div style="margin-left: 1rem;" class="ion-margin-left" *ngIf="form.controls.razon_social.errors?.required">
                 <small class="color-red">{{ '* Campo obligatorio' | translate }}</small>
               </div>  
             </div>

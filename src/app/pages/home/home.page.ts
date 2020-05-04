@@ -65,7 +65,7 @@ export class HomePage implements OnInit {
               private database: DatabaseService) {
   }
   
-  ngOnInit() {
+  ionViewDidEnter () {
     this.storage.getValue ('i18n').then (i18n => {
       console.log ('i18n', i18n);
 
@@ -148,18 +148,11 @@ export class HomePage implements OnInit {
     });
   }
 
-  clear_all () {
-    this.ambulance_object = null;
-    this.delivery_object = null;
-    this.injection_object = null;
-    this.transfer_ambulance = null;
-    this.medical = null;
-    this.home_pressure = null;
-    this.home_doctor = null;
-    this.request = null;
+  ngOnInit() {
+    
   }
 
-  ionViewWillLeave () {
+  ionViewDidLeave () {
     if (this.subscription_1 != undefined && this.subscription_1 != null) {
       this.subscription_1.unsubscribe ();
     }
@@ -192,7 +185,17 @@ export class HomePage implements OnInit {
       this.subscription_8.unsubscribe ();
     }
   }
-
+  clear_all () {
+    this.ambulance_object = null;
+    this.delivery_object = null;
+    this.injection_object = null;
+    this.transfer_ambulance = null;
+    this.medical = null;
+    this.home_pressure = null;
+    this.home_doctor = null;
+    this.request = null;
+  }
+  
   goEmergencyPage () {
     this.navCtrl.navigateForward ('emergency');
   }

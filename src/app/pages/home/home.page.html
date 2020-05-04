@@ -644,13 +644,13 @@
 
   <ion-item style="margin-top: 0.5rem;" lines="none" *ngIf="auth.is_logged" class="ion-text-center">
     <ion-label>
-      <h1 style="font-size: 2rem;" class="ion-text-wrap" class="title-label">{{ 'HELLO' | translate }} {{ auth.user?.first_name }}</h1>
+      <h1 style="font-size: 1.6rem;" class="ion-text-wrap title-label">{{ 'HELLO' | translate }} {{ auth.user?.first_name }}</h1>
     </ion-label>
   </ion-item>
 
   <ion-item style="margin-top: 0.5rem;" lines="none" *ngIf="!auth.is_logged" class="ion-text-center">
     <ion-label>
-      <h1 style="font-size: 2rem;" class="ion-text-wrap" class="title-label">{{ 'WELCOME_TO_CPS' | translate }}</h1>
+      <h1 style="font-size: 1.6rem;" class="ion-text-wrap title-label">{{ 'WELCOME_TO_CPS' | translate }}</h1>
     </ion-label>
   </ion-item>
 

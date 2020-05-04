@@ -34,8 +34,8 @@ export class AppointmentDatePage implements OnInit {
   final_date_format: string;
 
   enabled_days = [];
-  citas: any;
-  horas: any;
+  citas: any [] = [];
+  horas: any [] = [];
 
   final_data: any = {
     precio_extranjero: 0,
@@ -50,6 +50,8 @@ export class AppointmentDatePage implements OnInit {
 
   check_1: boolean = false;
   check_2: boolean = false;
+
+  especialidad_name: string = "";
 
   i18n: any;
   constructor(public navCtrl: NavController,

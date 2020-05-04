@@ -107,7 +107,7 @@ export class HomeInjectionCheckPage implements OnInit {
     return n.toString ();
   }
 
-  edit (id: string) {
+  edit () {
     this.navCtrl.navigateForward (['home-injection', this.route.snapshot.paramMap.get ('id'), 'true']);
   }
 

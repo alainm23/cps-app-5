@@ -62,7 +62,13 @@
             {{ 'Reportar un problema' | translate }}
           </ion-item>
         </ion-menu-toggle>
-        
+
+        <ion-menu-toggle auto-hide="false">
+          <ion-item menuClose detail-none (click)="reportEmergency ()">
+            {{ 'Contactanos' | translate }}
+          </ion-item>
+        </ion-menu-toggle>
+
         <ion-menu-toggle auto-hide="false">
           <ion-item *ngIf="auth.is_logged" menuClose detail-none (click)="signOut ()">
             {{ 'SIGN_OFF' | translate }}

@@ -44,6 +44,7 @@ import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
 import { Facebook } from '@ionic-native/facebook/ngx';
 import { AppVersion } from '@ionic-native/app-version/ngx';
 import { CustomFormsModule } from 'ng2-validation'
+import { OneSignal } from '@ionic-native/onesignal/ngx';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -93,6 +94,7 @@ import { CountrySelectPageModule } from './modals/country-select/country-select.
     SocialSharing,
     Facebook,
     AppAvailability,
+    OneSignal,
     AppVersion,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],

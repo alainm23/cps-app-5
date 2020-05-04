@@ -38,7 +38,7 @@
   <ion-grid *ngIf="type === 'specialties' && is_specialties === true">
     <ion-row center>
       <ion-col size="6" size-sm="4" size-xl="3" size-md="4" *ngFor="let item of especialidades">
-        <ion-card class="home-item ion-text-center" [id]="'es-' + item.id" (click)="select (item)">
+        <ion-card style="margin: 0px !important;" class="home-item ion-text-center" [id]="'es-' + item.id" (click)="select (item)">
           <img class="img-icono" [src]="getImage (item.imagen_esp)"/>
 
           <ion-card-header class="ion-text-wrap ion-no-padding" class="header">
@@ -52,7 +52,7 @@
   <ion-grid *ngIf="type === 'services' && is_specialties === true">
     <ion-row center>
       <ion-col size="6" size-sm="4" size-xl="3" size-md="4" *ngFor="let item of servicios">
-        <ion-card class="home-item ion-text-center" [id]="'es-' + item.id" (click)="select (item)">
+        <ion-card style="margin: 0px !important;" class="home-item ion-text-center" [id]="'es-' + item.id" (click)="select (item)">
           <img class="img-icono" [src]="getImage (item.imagen_esp)"/>
 
           <ion-card-header class="ion-text-wrap ion-no-padding" class="header">
@@ -66,11 +66,11 @@
   <ion-grid *ngIf="is_specialties === false">
     <ion-row center>
       <ion-col size="6" size-sm="4" size-xl="3" size-md="4" *ngFor="let item of sintomas">
-        <ion-card class="ion-text-center home-item" [id]="'es-' + item.id" (click)="select (item)">
+        <ion-card style="margin: 0px;" class="ion-text-center home-item" [id]="'es-' + item.id" (click)="select (item)">
           <img class="img-icono" [src]="getImage (item.imagen)"/>
 
-          <ion-card-header class="ion-text-wrap ion-no-padding" class="header">
-            <b class="xyz">{{ item.nombre_sintoma }}</b>
+          <ion-card-header class="ion-text-wrap ion-no-padding header-s">
+            <b class="xxx">{{ item.nombre_sintoma }}</b>
           </ion-card-header>
         </ion-card>
       </ion-col>

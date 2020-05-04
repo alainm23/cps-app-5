@@ -23,14 +23,14 @@
 
           <ion-grid>
             <ion-row>
-              <ion-col size="12">
-                <ion-button expand="block" icon-start color="red" class="round" (click)="goSendAmbulance ()">
+              <ion-col style="padding-bottom: 0px;" size="12">
+                <ion-button class="button" expand="block" icon-start color="red" class="round" (click)="goSendAmbulance ()">
                   <img class="button-image" src="assets/imgs/ambulance.png">
                   {{ 'enviar una ambulancia' | translate }}
                 </ion-button>
               </ion-col>
-              <ion-col size="12">
-                <ion-button expand="block" icon-start color="blue" class="round" (click)="callNow ()">
+              <ion-col style="padding-top: 0px;" size="12">
+                <ion-button class="button" expand="block" icon-start color="blue" class="round" (click)="callNow ()">
                   <img class="button-call" src="assets/imgs/call.png">
                   {{ 'llamanos' | translate }}
                 </ion-button>
@@ -87,37 +87,37 @@
                 <ion-input class="border-bottom" type="text" formControlName="fullname" placeholder="{{ 'Nombre completo' | translate }}"></ion-input>
               </ion-item>
               
-              <div class="padding-left-error" *ngIf="form.controls.fullname.errors?.required">
+              <!-- <div class="padding-left-error" *ngIf="form.controls.fullname.errors?.required">
                 <small class="color-red">{{ '* Campo obligatorio' | translate }}</small>
-              </div>
+              </div> -->
 
               <ion-item>
                 <ion-input class="border-bottom" type="email" formControlName="email" placeholder="{{ 'Correo electrónico' | translate }}"></ion-input>
               </ion-item>
               
-              <div class="padding-left-error" *ngIf="form.controls.email.errors?.required">
+              <!-- <div class="padding-left-error" *ngIf="form.controls.email.errors?.required">
                 <small class="color-red">{{ '* Campo obligatorio' | translate }}</small>
-              </div>
+              </div> -->
 
-              <div class="padding-left-error" *ngIf="form.controls.email.errors?.email">
+              <!-- <div class="padding-left-error" *ngIf="form.controls.email.errors?.email">
                 <small class="color-red">{{ '* Ingrese un correo electronico válido' | translate }}</small>
-              </div>
+              </div> -->
 
               <ion-item>
                 <ion-input class="border-bottom" type="number" formControlName="phone_number" maxlength="9" placeholder="{{ 'Numero de teléfono' | translate }}"></ion-input>
               </ion-item>
               
-              <div class="padding-left-error" *ngIf="form.controls.phone_number.errors?.required">
+              <!-- <div class="padding-left-error" *ngIf="form.controls.phone_number.errors?.required">
                 <small class="color-red">{{ '* Campo obligatorio' | translate }}</small>
-              </div>
+              </div> -->
 
               <ion-item>
                 <ion-input class="border-bottom" type="text" formControlName="message" placeholder="{{ 'Mensaje' | translate }}"></ion-input>
               </ion-item>
 
-              <div class="padding-left-error" *ngIf="form.controls.message.errors?.required">
+              <!-- <div class="padding-left-error" *ngIf="form.controls.message.errors?.required">
                 <small class="color-red">{{ '* Campo obligatorio' | translate }}</small>
-              </div>
+              </div> -->
             </ion-list>
 
             <ion-button class="no-border" expand="block" color="blue" (click)="submit ()" [disabled]="!form.valid">

@@ -21,14 +21,14 @@
             <ion-label>
               <h1 class="title-label">{{ 'TRANSFER_BY_AMBULANCE' | translate }}</h1>
               <br>
-              <p text-wrap>{{ 'Tu pedido está siendo atendido, por favor espere nuestra confirmación' | translate }}</p>
+              <p class="ion-text-wrap">{{ 'Tu pedido está siendo atendido, por favor espere nuestra confirmación' | translate }}</p>
             </ion-label>
           </ion-item>
 
           <ion-item class="ion-text-center height-70" lines="none">
             <ion-label>
               <ion-icon class="icon-wait" name="time"></ion-icon>
-              <p class="ion-margin-top">{{ 'Gracias por su paciencia' | translate }}</p>
+              <p class="ion-text-wrap ion-margin-top">{{ 'Gracias por su paciencia' | translate }}</p>
             </ion-label>
           </ion-item>
 
@@ -111,7 +111,9 @@
 
         <div *ngIf="transfer_ambulance?.is_checked">
           <ion-item class="ion-text-center" lines="none"> 
-            <h1 class="title-label">{{ 'TRANSFER_BY_AMBULANCE' | translate }}</h1>
+            <ion-label>
+              <h1 class="title-label">{{ 'TRANSFER_BY_AMBULANCE' | translate }}</h1>
+            </ion-label>
           </ion-item>     
           
           <ion-card color="danger" *ngIf="transfer_ambulance?.state == 'observed' || transfer_ambulance?.state == 'canceled'">
@@ -119,7 +121,7 @@
               <b *ngIf="transfer_ambulance?.state == 'observed'">{{ 'Estado: Observado' | translate }}</b>
               <b *ngIf="transfer_ambulance?.state == 'canceled'">{{ 'Estado: Cancelado' | translate }}</b>
             </ion-card-header> 
-            <ion-card-content>
+            <ion-card-content style="margin-left: 1rem;">
               {{ transfer_ambulance?.last_message }}
             </ion-card-content> 
           </ion-card>
@@ -128,7 +130,7 @@
             <ion-card-header>
               <b>{{ 'Estado: Aprobado' | translate }}</b>
             </ion-card-header> 
-            <ion-card-content>
+            <ion-card-content style="margin-left: 1rem;">
               {{ transfer_ambulance?.last_message }}
             </ion-card-content>
           </ion-card>
@@ -138,11 +140,11 @@
                 <b *ngIf="transfer_ambulance?.payment_type === 'online'">{{ 'Pagado' | translate }}</b>
                 <b *ngIf="transfer_ambulance?.payment_type === 'cash'">{{ 'Tipo de pago: contra entrega' | translate }}</b>
               </ion-card-header> 
-              <ion-card-content>
-                <p *ngIf="transfer_ambulance?.payment_type === 'online'">
+              <ion-card-content style="margin-left: 1rem;">
+                <p class="ion-text-wrap" *ngIf="transfer_ambulance?.payment_type === 'online'">
                   {{ 'Por favor llegaremos en el horario solicitado.' | translate }}
                 </p>
-                <p *ngIf="transfer_ambulance?.payment_type === 'cash'">
+                <p class="ion-text-wrap" *ngIf="transfer_ambulance?.payment_type === 'cash'">
                   {{ 'Por favor, llegaremos en el horario solicitado, pague al doctor(a). Gracias.' | translate }}
                 </p>
               </ion-card-content>
@@ -230,8 +232,8 @@
               <ion-card-header>
                 <b>{{ 'Costo' | translate }}</b>
               </ion-card-header> 
-              <ion-card-content>
-                <p>{{ 'Total (inc. IGV):' | translate }} S/. {{ getFormatPrice (transfer_ambulance?.price) }}</p>
+              <ion-card-content style="margin-left: 1rem;">
+                <p class="ion-text-wrap">{{ 'Total (inc. IGV):' | translate }} S/. {{ getFormatPrice (transfer_ambulance?.price) }}</p>
               </ion-card-content>
             </ion-card>
 

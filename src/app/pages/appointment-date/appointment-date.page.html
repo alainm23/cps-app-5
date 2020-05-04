@@ -22,7 +22,7 @@
 
   <!--------------- Calendario ---------------->
 
-  <div *ngIf="citas?.length > 0" style="margin-left: 1rem; margin-right: 1rem;">
+  <div *ngIf="citas.length > 0" style="margin-left: 1rem; margin-right: 1rem;">
     <div class="ion-text-center">
       <h3 class="ion-margin-top title-label">{{ 'Elige una fecha' | translate }}:</h3>
     </div>
@@ -85,7 +85,7 @@
     </ion-item>
 
     <ion-grid *ngIf="check_1 === true" text-cente>
-      <div *ngIf="horas?.length > 0">
+      <div *ngIf="horas.length > 0">
         <div class="ion-text-center">
           <h3 margin-top class="title-label">{{ 'Elige una hora' | translate }}:</h3>
         </div>
@@ -169,7 +169,7 @@
     </div>
   </div>
 
-  <div *ngIf="!citas?.length > 0">
+  <div *ngIf="citas.length > 0 === false">
     <ion-item class="ion-padding-top ion-text-center" lines="none">
       <ion-label>
         <h2 class="ion-text-wrap">{{ 'En este momento no tenemos citas disponibles' | translate }}</h2>

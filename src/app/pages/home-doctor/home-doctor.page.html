@@ -38,12 +38,12 @@
               </ion-button>
             </div>
 
-            <ion-item lines="none">
+            <ion-item>
               <ion-label style="font-size: 18pt !important; font-weight: 500;" position="stacked">{{ 'Sintomas' | translate }}:</ion-label>
               <ion-textarea row="3" formControlName="note" placeholder="{{ 'Me siento' | translate }}"></ion-textarea>
             </ion-item>
 
-            <ion-item lines="none">
+            <ion-item>
               <ion-label class="header-text">{{ 'Fecha' | translate }}:</ion-label>
               <ion-datetime 
                 cancelText="Cancelar" doneText="Seleccionar"
@@ -57,7 +57,7 @@
             </small>
             </div>
 
-            <ion-item lines="none">
+            <ion-item>
               <ion-label class="header-text">{{ 'Horario de servicio' | translate }}:</ion-label>
               <ion-select class="card-md" block formControlName="hour">
                 <div *ngFor="let item of get_hours ()">
@@ -80,7 +80,7 @@
               </ion-label>
             </ion-item>
 
-            <ion-grid>
+            <ion-grid style="margin-bottom: -6px; margin-top: -12px;">
               <ion-row>              
                 <ion-col size="4" class="ion-align-self-end">
                   <ion-button size="small" expand="block" color="blue" (click)="select_code ()">

@@ -17,14 +17,14 @@
       <ion-label>
         <h1 class="title-label">{{ 'ambulancia_solicitada' | translate }}</h1>
         <br>
-        <p text-wrap>{{ 'Tu pedido está siendo atendido, por favor espere nuestra confirmación' | translate }}</p>
+        <p class="ion-text-wrap">{{ 'Tu pedido está siendo atendido, por favor espere nuestra confirmación' | translate }}</p>
       </ion-label>
     </ion-item>
     
     <ion-item class="ion-text-center height-70" lines="none">
       <ion-label>
         <ion-icon class="icon-wait" name="time"></ion-icon>
-        <p class="ion-margin-top">{{ 'Gracias por su paciencia' | translate }}</p>
+        <p class="ion-text-wrap ion-margin-top">{{ 'Gracias por su paciencia' | translate }}</p>
       </ion-label>
     </ion-item>
 
@@ -37,19 +37,21 @@
         <ion-item>{{ ambulance_object?.country_dial_code }} {{ ambulance_object?.phone_number }}</ion-item>
       </ion-list>
     </ion-card>
-  </div>
+  </div> 
   
   <div *ngIf="ambulance_object?.state === 'approved'">
     <ion-item class="ion-text-center" lines="none">
-      <h1 class="title-label">{{ 'Ambulancia aprobada' | translate }}</h1>
-      <br>
-      <p class="ion-text-wrap">{{ 'ambulance_approved' | translate }}</p>
+      <ion-label>
+        <h1 class="title-label">{{ 'Ambulancia aprobada' | translate }}</h1>
+        <br>
+        <p class="ion-text-wrap">{{ 'ambulance_approved' | translate }}</p>
+      </ion-label>
     </ion-item>
 
     <ion-item class="ion-text-center height-70" lines="none">
       <ion-label>
         <ion-icon class="icon-wait" name="time"></ion-icon>
-        <p class="ion-margin-top">{{ 'Gracias por su paciencia' | translate }}</p>
+        <p class="ion-margin-top ion-text-wrap">{{ 'Gracias por su paciencia' | translate }}</p>
       </ion-label>
     </ion-item>
 
@@ -69,7 +71,7 @@
       <ion-label>
         <h1 class="title-label">{{ '¡Ambulancia enviada!' | translate }}</h1>
         <br>
-        <h2>{{ '¡Por favor se paciente, estamos en camino!' | translate }}</h2>
+        <h2 class="ion-text-wrap">{{ '¡Por favor se paciente, estamos en camino!' | translate }}</h2>
       </ion-label>
     </ion-item>
     
