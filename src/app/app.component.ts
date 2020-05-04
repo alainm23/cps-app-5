@@ -534,7 +534,7 @@ export class AppComponent {
             this.storage.setValue ("i18n", data);
             moment.locale(data);
             this.lang = data;
-            // this.events.publish ('i18n_changed', data);
+            this.event.publishIdioma (data);
             this.translateService.getTranslation (data).subscribe ((i18n: any) => {
               this.i18n = i18n;
             });

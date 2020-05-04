@@ -5,6 +5,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 
 import { DatabaseService } from '../../providers/database.service';
 import { ApiService } from '../../providers/api.service';
+import { EventsService } from '../../providers/events.service';
 
 // import { Events } from 'ionic-angular';
 
@@ -52,7 +53,7 @@ export class AppointmentSpecialtyPage implements OnInit {
   constructor(public navCtrl: NavController, 
               private database: DatabaseService,
               public modalCtrl: ModalController,
-              // private events: Events,
+              private event: EventsService,
               private translateService: TranslateService,
               public loadingCtrl: LoadingController,
               private http: HttpClient,
@@ -68,47 +69,47 @@ export class AppointmentSpecialtyPage implements OnInit {
     this.is_services_loading = false;
     this.is_sintomas_loading = false;
 
-    // this.events.subscribe('i18n_changed', async (lang: string) => {
-    //   this.lang = lang;
+    this.event.getIdiomaObservable ().subscribe (async (lang: string) => {
+      this.lang = lang;
       
-    //   this.translateService.getTranslation (lang).subscribe ((i18n: any) => {
-    //     this.i18n = i18n;
-    //     this.text_changed = i18n.View_by_symptoms;
-    //   });
+      this.translateService.getTranslation (lang).subscribe ((i18n: any) => {
+        this.i18n = i18n;
+        this.text_changed = i18n.View_by_symptoms;
+      });
       
-    //   const loading = this.loadingCtrl.create ({
-    //     message: this.i18n.procesando_informacion
-    //   });
+      const loading = await this.loadingCtrl.create ({
+        message: this.i18n.procesando_informacion
+      });
 
-    //   loading.present ();
+      loading.present ();
       
-    //   this.unsubscribe_01 = await this.api.getEspecialidades (this.lang).timeout(1000 * 60).subscribe (data => {
-    //     this.especialidades = data;
+      this.unsubscribe_01 = this.api.getEspecialidades (this.lang).timeout(1000 * 60).subscribe (data => {
+        this.especialidades = data;
 
-    //     console.log (data);
-    //   }, error => {
-    //     console.log ('error', error);
-    //   });
+        console.log (data);
+      }, error => {
+        console.log ('error', error);
+      });
 
-    //   this.unsubscribe_02 = await this.api.getServices (this.lang).timeout(1000 * 60).subscribe (data => {
-    //     this.servicios = data;
-    //     this.is_services_loading = true;
-    //     console.log (data);
-    //   }, error => {
-    //     console.log (error);
-    //   });
+      this.unsubscribe_02 = this.api.getServices (this.lang).timeout(1000 * 60).subscribe (data => {
+        this.servicios = data;
+        this.is_services_loading = true;
+        console.log (data);
+      }, error => {
+        console.log (error);
+      });
 
-    //   this.unsubscribe_03 = await this.api.getsintomas (this.lang).timeout(1000 * 60).subscribe (data => {
-    //     this.sintomas = data;
-    //     this.is_sintomas_loading = true;
-    //     console.log (data);
+      this.unsubscribe_03 = this.api.getsintomas (this.lang).timeout(1000 * 60).subscribe (data => {
+        this.sintomas = data;
+        this.is_sintomas_loading = true;
+        console.log (data);
         
-    //   }, error => {
-    //     console.log (error);
-    //   });
+      }, error => {
+        console.log (error);
+      });
 
-    //   await loading.dismiss ();
-    // });
+      await loading.dismiss ();
+    });
   }
 
   async load () {
