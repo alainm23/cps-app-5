@@ -48,9 +48,9 @@ export class AppComponent {
   }
 
   initializeApp () {
-    this.platform.ready().then(() => {
-      this.statusBar.styleDefault();
-      this.splashScreen.hide();
+    this.platform.ready().then (() => {
+      this.statusBar.styleDefault ();
+      this.splashScreen.hide ();
 
       if (this.platform.is('cordova')) {
         this.initNotifications ();

@@ -435,6 +435,7 @@ export class HomeInjectionPage implements OnInit {
           country_name: this.pais_selected.name,
           country_dial_code: this.pais_selected.dial_code,
           country_code: this.pais_selected.code,
+          solicitante: 'usuario'
         };
 
         if (this.route.snapshot.paramMap.get ('edit') === 'true') {
