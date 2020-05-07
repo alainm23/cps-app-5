@@ -425,7 +425,7 @@ export class AuthService {
 
   async appleLogin () {
     try {
-      const appleCredential: AppleSignInResponse = await SignInWithApple.signin({
+      const appleCredential: AppleSignInResponse = await SignInWithApple.signin ({
         requestedScopes: [
           ASAuthorizationAppleIDRequest.ASAuthorizationScopeFullName,
           ASAuthorizationAppleIDRequest.ASAuthorizationScopeEmail
