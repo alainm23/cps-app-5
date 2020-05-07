@@ -162,7 +162,7 @@ export class ApiService {
   }
 
   pushNotification (data: any) {
-    // data.tipo = 'admin';
+    data.tipo = 'admin';
 
     let url = this.API + '/send-notification';
     return this.http.post (url, data);

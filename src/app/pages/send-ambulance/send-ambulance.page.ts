@@ -167,7 +167,7 @@ export class SendAmbulancePage implements OnInit {
       await loading.present ().then (() => {
         this.database.addSendAmbulance (data, data.id, save_number).then ((response: any) => {
           let push_data = {
-            titulo: 'Emergencia en progreso',
+            titulo: 'Emergencia',
             detalle: 'Una solicitud de ambulancia fue creada',
             destino: 'ambulance-check',
             mode: 'tags',
