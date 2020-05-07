@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, LoadingController, AlertController } from '@ionic/angular';
+import { Platform, NavController, LoadingController, AlertController } from '@ionic/angular';
 
 import { FormControl, FormGroup, Validators} from "@angular/forms";
 import { StorageService } from '../../providers/storage.service';
@@ -24,6 +24,7 @@ export class LoginPage implements OnInit {
               private storage: StorageService,
               private loadingCtrl: LoadingController,
               private database: DatabaseService,
+              public platform: Platform,
               private auth: AuthService) {
   }
 
@@ -187,5 +188,9 @@ export class LoginPage implements OnInit {
     });
 
     alert.present();
+  }
+
+  apple () {
+    this.auth.appleLogin ();
   }
 }

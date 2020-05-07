@@ -23,6 +23,9 @@ import { first, map } from 'rxjs/operators';
 import * as firebase from 'firebase/app';
 import { async } from '@angular/core/testing';
 
+// Apple
+import { SignInWithApple, AppleSignInResponse, AppleSignInErrorResponse, ASAuthorizationAppleIDRequest } from '@ionic-native/sign-in-with-apple';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -184,81 +187,6 @@ export class AuthService {
       console.log ('googlePlus', err);
       loading.dismiss ();
     });
-
-    // const loading = await this.loadingCtrl.create ({
-    //   message: 'Procesando...'
-    // });
-
-    // await loading.present ();
-
-    // this.googlePlus.login({
-    //   'webClientId': '727960214488-rjv4mrhf0fnre8oprpogcqiv5g2e4l32.apps.googleusercontent.com',
-    //   'offline': true
-    // }).then (async (res: any) => {
-    //   this.afAuth.auth.signInAndRetrieveDataWithCredential (firebase.auth.GoogleAuthProvider.credential (res.idToken))
-    //     .then ((credential: any) => {
-    //       this.database.isUser (credential.user.uid).pipe (first ()).toPromise ().then (async (response: any) => {
-    //         if (response === undefined) {
-    //           let user: any = {
-    //             id: credential.user.uid,
-    //             first_name: credential.user.displayName,
-    //             last_name: '',
-    //             email: credential.user.email,
-    //             phone_number: '', 
-    //             type: 'user',
-    //             is_free: false,
-    //             country_name: '',
-    //             country_dial_code: '',
-    //             country_code: '',
-    //             token_id: '',
-    //             disabled: false
-    //           };
-    
-    //           this.database.addUser (credential.user.uid, user)
-    //             .then (() => {
-    //               loading.dismiss ();
-    //               this.navController.navigateRoot ('home');
-    //               this.api.enviarcorreologinapp (this.translateService.getDefaultLang (),
-    //                                             user.first_name + ' ' + user.last_name,
-    //                                             user.email);
-    //             })
-    //             .catch ((error: any) => {
-    //               loading.dismiss ();
-    //               console.log ("Error login", error);
-    //             });
-    //         } else {
-    //           loading.dismiss ();
-    
-    //           if (response.disabled) {
-    //             const alert = await this.alertCtrl.create({
-    //               header: 'Usuario bloqueado',
-    //               subHeader: 'Su usuario ha sido bloqueado, contacte al administrador',
-    //               buttons: ['OK']
-    //             });
-
-    //             await alert.present();
-      
-    //             this.signOut ();
-    //           } else {
-    //             this.navController.navigateRoot ('home');
-    //           }
-    //         }
-    //       }, error => {
-    //         loading.dismiss ();
-    //         console.log (error);
-    //         alert ('googlePlus.login' + JSON.stringify (error));
-    //       });
-    //     })
-    //     .catch ((error: any) => {
-    //       loading.dismiss ();
-    //       console.log (error);
-    //       alert ('signInAndRetrieveDataWithCredential' + JSON.stringify (error));
-    //     });
-    // }).catch ((error: any) => {
-    //   loading.dismiss ();
-    //   console.log (error);
-    //   alert ('googlePlus.login' + JSON.stringify (error));
-    // });
   }
   
   async webGoogleLogin () {
@@ -493,5 +421,82 @@ export class AuthService {
         loading.dismiss ();
         console.log ("Error login", error);
       });
+  }
+
+  async appleLogin () {
+    try {
+      const appleCredential: AppleSignInResponse = await SignInWithApple.signin({
+        requestedScopes: [
+          ASAuthorizationAppleIDRequest.ASAuthorizationScopeFullName,
+          ASAuthorizationAppleIDRequest.ASAuthorizationScopeEmail
+        ]
+      });
+      const credential = new firebase.auth.OAuthProvider ('apple.com').credential (
+        appleCredential.identityToken
+      );
+
+      this.afAuth.auth.signInWithCredential (credential)
+        .then (async (credential) => {
+          const loading = await this.loadingCtrl.create ({
+            message: 'Procesando...'
+          });
+      
+          await loading.present ();
+
+          this.database.isUser (credential.user.uid).pipe (first ()).toPromise ().then (async (data: any) => {
+            if (data === undefined || data === null) {
+              // Si el usuario no exixte, creamos uno nuevo en la basde de datos 
+              let user: any = {
+                id: credential.user.uid,
+                first_name: credential.user.displayName,
+                last_name: '',
+                email: credential.user.email,
+                phone_number: '', 
+                type: 'user',
+                is_free: false,
+                country_name: '',
+                country_dial_code: '',
+                country_code: '',
+                token_id: '',
+                disabled: false
+              };
+      
+              this.database.addUser (credential.user.uid, user)
+                .then (() => {
+                  loading.dismiss ();
+                  this.navController.navigateRoot ('home');
+                  this.api.enviarcorreologinapp (this.translateService.getDefaultLang (),
+                                                  user.first_name + ' ' + user.last_name,
+                                                  user.email);
+                })
+                .catch ((error: any) => {
+                  loading.dismiss ();
+                  console.log ("Error login", error);
+                });
+            } else {
+              loading.dismiss ();
+      
+              if (data.disabled) {
+                const alert = await this.alertCtrl.create({
+                  header: 'Usuario bloqueado',
+                  subHeader: 'Su usuario ha sido bloqueado, contacte al administrador',
+                  buttons: ['OK']
+                });
+      
+                await alert.present ();
+      
+                this.signOut ();
+              } else {
+                this.navController.navigateRoot ('home');
+              }
+            }
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } catch (error) {
+      console.log(error);
+    }
   }
 }

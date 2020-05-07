@@ -52,6 +52,12 @@
                 <ion-icon slot="icon-only" name="logo-facebook"></ion-icon>
               </ion-button>
             </ion-col>
+
+            <ion-col *ngIf="platform.is ('ios')" class="ion-no-padding ion-padding-left" with-50>
+              <ion-button class="button-height" expand="block" size="small" color="apple" (click)="apple ()">
+                <ion-icon slot="icon-only" name="logo-apple"></ion-icon>
+              </ion-button>
+            </ion-col>
           </ion-row>
 
           <div class="ion-text-center ion-padding">

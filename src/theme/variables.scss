@@ -121,6 +121,16 @@
   --ion-color-tint: #40bc5f;
 }
 
+.ion-color-apple {
+  --ion-color-base: #333333;
+  --ion-color-base-rgb: 51, 51, 51;
+  --ion-color-contrast: #fff;
+  --ion-color-contrast-rgb: 255, 255, 255;
+  --ion-color-shade: #2d2d2d;
+  --ion-color-tint: #474747;
+}
+  
+
 @media (prefers-color-scheme: dark) {
   /*
    * Dark Colors
