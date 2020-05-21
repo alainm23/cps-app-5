@@ -1,16 +1,25 @@
 .icon-wait {
-    font-size: 64px;
-    color: gray;
-  }
+  font-size: 64px;
+  color: gray;
+}
 
-  .line-bottom {
-    font-size: 1.7rem !important;
-    border-bottom: 0.5px solid #c5bbbb !important;
-    padding-bottom: 1rem !important;
-  }
+.icon-observed {
+  font-size: 64px;
+  color: #eb445a;
+}
 
-  b {
-    font-size: 18px;
-    font-weight: bold;
-    margin-left: 1rem;
+.icon-approved {
+  font-size: 64px;
+  color: #2dd36f;
+}
+
+.line-bottom {
+  font-size: 1.7rem !important;
+  border-bottom: 0.5px solid #c5bbbb !important;
+  padding-bottom: 1rem !important;
+}
+
+b {
+  font-size: 18px;
+  font-weight: bold;
 }

@@ -4,7 +4,8 @@ import { NavController, LoadingController, Platform, ModalController, AlertContr
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 
 import { Geolocation } from '@ionic-native/geolocation/ngx';  
-    
+import { BackgroundGeolocation, BackgroundGeolocationConfig, BackgroundGeolocationEvents, BackgroundGeolocationResponse } from '@ionic-native/background-geolocation/ngx';
+
 import { DatabaseService } from '../../providers/database.service';
 import { AuthService } from '../../providers/auth.service';
 import { StorageService } from '../../providers/storage.service';
@@ -49,6 +50,7 @@ export class SendAmbulancePage implements OnInit {
               private storage: StorageService,
               public loadingCtrl: LoadingController, 
               private geolocation: Geolocation,
+              private backgroundGeolocation: BackgroundGeolocation,
               private api: ApiService) {
   }
 
@@ -68,7 +70,9 @@ export class SendAmbulancePage implements OnInit {
 
     this.form = new FormGroup({
       phone_number: new FormControl (phone_number, [Validators.required]),
-      address: new FormControl ("", [Validators.required])
+      address: new FormControl ("", [Validators.required]),
+      latitude: new FormControl ("", [Validators.required]),
+      longitude: new FormControl ("", [Validators.required])
     });
 
     this.storage.getValue ("uid").then (id => {
@@ -81,38 +85,7 @@ export class SendAmbulancePage implements OnInit {
   ngOnDestroy () {
 
   }
-
-  async ionViewDidLoad () {
-    const loading = await this.loadingCtrl.create ({
-      message: '...'
-    });
-
-    await loading.present ().then (() => {
-      this.geolocation.getCurrentPosition().then((resp) => {
-        loading.dismiss ();
-
-        this.latitude = resp.coords.latitude;
-        this.longitude = resp.coords.longitude;
-      }, error  => {
-        console.log ("error", error);
-        loading.dismiss ();
-      });
-    });
-
-    /*
-    this.locationAccuracy.canRequest().then((canRequest: boolean) => {
-      if (canRequest) {
-        // the accuracy option will be ignored by iOS
-        this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY)
-        .then(() => {console.log('Request successful')},
-        error => {
-          console.log('Error requesting location permissions', error);
-        });
-      }
-    });
-    */
-  }
-
+  
   async goConfirmAmbulance () {
     const loading = await this.loadingCtrl.create ({
       message: '...'
@@ -168,7 +141,7 @@ export class SendAmbulancePage implements OnInit {
         this.database.addSendAmbulance (data, data.id, save_number).then ((response: any) => {
           let push_data = {
             titulo: 'Emergencia',
-            detalle: 'Una solicitud de ambulancia fue creada',
+            detalle: 'Se solicito una ambulancia',
             destino: 'ambulance-check',
             mode: 'tags',
             clave: data.id,
@@ -226,9 +199,11 @@ export class SendAmbulancePage implements OnInit {
       if (response.role === 'ok') {
         this.latitude = response.data.latitude;
         this.longitude = response.data.longitude;
-
+        
         this.editar_1 = "(Editar)";
 
+        this.form.controls ['latitude'].setValue (response.data.latitude);
+        this.form.controls ['longitude'].setValue (response.data.longitude);
         this.form.controls ["address"].setValue (response.data.address);
       }
     });

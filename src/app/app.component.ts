@@ -13,9 +13,10 @@ import { AuthService } from './providers/auth.service';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { AppVersion } from '@ionic-native/app-version/ngx';
 import { Device } from '@ionic-native/device/ngx';
-import { OneSignal } from '@ionic-native/onesignal/ngx';
+import { OneSignal, OSNotificationOpenedResult, OSNotification } from '@ionic-native/onesignal/ngx';
 import { ToastController } from '@ionic/angular';
 import { DatabaseService } from './providers/database.service';
+import { BackgroundGeolocation, BackgroundGeolocationConfig, BackgroundGeolocationEvents, BackgroundGeolocationResponse } from '@ionic-native/background-geolocation/ngx';
 
 @Component({
   selector: 'app-root',
@@ -42,7 +43,8 @@ export class AppComponent {
     private device: Device,
     private oneSignal: OneSignal,
     public toastController: ToastController,
-    public database: DatabaseService
+    public database: DatabaseService,
+    private backgroundGeolocation: BackgroundGeolocation,
   ) {
     this.initializeApp ();
   }
@@ -52,7 +54,7 @@ export class AppComponent {
       this.statusBar.styleDefault ();
       this.splashScreen.hide ();
 
-      if (this.platform.is('cordova')) {
+      if (this.platform.is ('cordova')) {
         this.initNotifications ();
       }
 
@@ -60,6 +62,16 @@ export class AppComponent {
         this.statusBar.overlaysWebView (false);
         this.statusBar.backgroundColorByHexString ('#000000');
       }
+
+      this.platform.pause.subscribe ((res: any) => {
+        this.backgroundGeolocation.finish (); // FOR IOS ONLY
+        this.backgroundGeolocation.stop ();
+      });
+
+      // this.platform.resume.subscribe ((res: any) => {
+      //   this.backgroundGeolocation.finish (); // FOR IOS ONLY
+      //   this.backgroundGeolocation.stop ();
+      // });
 
       this.storage.getValue ('i18n').then ((response: string) => {
         let lang: string = response;
@@ -92,19 +104,19 @@ export class AppComponent {
   initNotifications () {
     this.oneSignal.startInit('f62ec6a9-740d-4840-9149-bf759347ce60', '727960214488');
     this.oneSignal.inFocusDisplaying (this.oneSignal.OSInFocusDisplayOption.Notification);
-    this.oneSignal.handleNotificationOpened ().subscribe(async (jsonData: any) => {
+    this.oneSignal.handleNotificationOpened ().subscribe (async (jsonData: OSNotificationOpenedResult) => {
       const clave = jsonData.notification.payload.additionalData.clave;
       const destino: any = JSON.parse (jsonData.notification.payload.additionalData.destino);
 
       if (destino.page === 'ambulancia') {
         if (destino.state === 'canceled') {
           let alert = await this.alertCtrl.create ({
-            header: jsonData.notification.payload.header,
-            message: jsonData.notification.payload.body,
+            header: jsonData.notification.payload.title,
+            message: destino.motivo,
             buttons: ['OK']
           });
           
-          await alert.present();
+          await alert.present ();
         } else {
           this.navCtrl.navigateForward (['confirm-ambulance', clave]);
         }
@@ -153,7 +165,8 @@ export class AppComponent {
       } 
     });
 
-    this.oneSignal.handleNotificationReceived().subscribe(async (jsonData: any) => {
+    this.oneSignal.handleNotificationReceived ().subscribe (async (jsonData: OSNotification) => {
+      // Notificacion cuando la aplicacion esta abierta
       const clave = jsonData.payload.additionalData.clave;
       const destino: any = JSON.parse (jsonData.payload.additionalData.destino);
 
@@ -161,14 +174,22 @@ export class AppComponent {
         if (destino.state === 'canceled') {
           let alert = await this.alertCtrl.create ({
             header: 'Solicitud de ambulancia cancelada',
-            message: jsonData.payload.body,
-            buttons: ['OK']
+            message: destino.motivo,
+            buttons: [{
+              text: 'Atras',
+              role: 'cancel',
+            }, {
+              text: 'Ver detalles',
+              handler: () => {
+                this.navCtrl.navigateForward (['confirm-ambulance', clave]);
+              }
+            }]
           });
           
           alert.present();
         } else {
           let toast = await this.toastController.create({
-            message: jsonData.payload.body,
+            message: 'Solicitud de ambulancia cancelada',
             duration: 5 * 1000,
             position: 'top',
             buttons: [
@@ -185,9 +206,32 @@ export class AppComponent {
           toast.present();
         }
       } else if (destino.page === 'farmacia') {
-        if (destino.state === 'approved' || destino.state === 'observed') {
+        if (destino.state === 'canceled') {
+          let alert = await this.alertCtrl.create ({
+            header: 'La solicitud de farmacia fue cancelada',
+            message: destino.motivo,
+            buttons: [{
+              text: 'Atras',
+              role: 'cancel',
+            }, {
+              text: 'Ver detalles',
+              handler: () => {
+                this.navCtrl.navigateForward (['pharmacy-delivery-check', clave, destino.state]);
+              }
+            }]
+          });
+          
+          alert.present();
+        } else {
+          let message = '';
+          if (destino.state === 'approved') {
+            message = 'Su solicitud de farmacia fue aprobado';
+          } else if (destino.state === 'observed') {
+            message = 'Su solicitud de farmacia fue observado';
+          }
+
           let toast = await this.toastController.create({
-            message: jsonData.payload.body,
+            message: message,
             duration: 5 * 1000,
             position: 'top',
             buttons: [
@@ -195,50 +239,41 @@ export class AppComponent {
                 text: 'Ver',
                 role: 'cancel',
                 handler: () => {
-                  this.navCtrl.navigateForward (['pharmacy-delivery-check', clave]);
+                  this.navCtrl.navigateForward (['pharmacy-delivery-check', clave, destino.state]);
                 }
               }
             ]
           });
           
           toast.present();
-        } else {
-          let toast = await this.toastController.create({
-            message: jsonData.payload.body,
-            duration: 5 * 1000,
-            position: 'top',
-            buttons: [
-              {
-                text: 'Ver',
-                role: 'cancel',
-                handler: () => {
-                  this.navCtrl.navigateForward (['pharmacy-delivery-check', destino.state]);
-                }
-              }
-            ]
-          });
         }
       } else if (destino.page === 'inyeccion') {
-        if (destino.state === 'approved' || destino.state === 'observed') {
-          let toast = await this.toastController.create({
-            message: jsonData.payload.body,
-            duration: 5 * 1000,
-            position: 'top',
-            buttons: [
-              {
-                text: 'Ver',
-                role: 'cancel',
-                handler: () => {
-                  this.navCtrl.navigateForward (['home-injection-check', clave]);
-                }
+        if (destino.state === 'canceled') {
+          let alert = await this.alertCtrl.create ({
+            header: 'La solicitud de inyección fue cancelada',
+            message: destino.motivo,
+            buttons: [{
+              text: 'Atras',
+              role: 'cancel',
+            }, {
+              text: 'Ver detalles',
+              handler: () => {
+                this.navCtrl.navigateForward (['home-injection-check', clave, destino.state]);
               }
-            ]
+            }]
           });
           
-          toast.present();
+          alert.present();
         } else {
+          let message = '';
+          if (destino.state === 'approved') {
+            message = 'Su solicitud de inyección fue aprobado';
+          } else if (destino.state === 'observed') {
+            message = 'Su solicitud de inyección fue observado';
+          }
+
           let toast = await this.toastController.create({
-            message: jsonData.payload.body,
+            message: message,
             duration: 5 * 1000,
             position: 'top',
             buttons: [
@@ -246,7 +281,7 @@ export class AppComponent {
                 text: 'Ver',
                 role: 'cancel',
                 handler: () => {
-                  this.navCtrl.navigateForward (['home-injection-check', destino.state]);
+                  this.navCtrl.navigateForward (['home-injection-check', clave, destino.state]);
                 }
               }
             ]
@@ -255,26 +290,32 @@ export class AppComponent {
           toast.present();
         }
       } else if (destino.page === 'traslado') {
-        if (destino.state === 'approved' || destino.state === 'observed') {
-          let toast = await this.toastController.create({
-            message: jsonData.payload.body,
-            duration: 5 * 1000,
-            position: 'top',
-            buttons: [
-              {
-                text: 'Ver',
+        if (destino.state === 'canceled') {
+          let alert = await this.alertCtrl.create ({
+            header: 'La solicitud de traslado fue cancelada',
+            message: destino.motivo,
+            buttons: [{
+                text: 'Atras',
                 role: 'cancel',
+              }, {
+                text: 'Ver detalles',
                 handler: () => {
-                  this.navCtrl.navigateForward (['home-injection-check', clave]);
+                  this.navCtrl.navigateForward (['transfer-ambulance-check', clave, destino.state]);
                 }
-              }
-            ]
+            }]
           });
           
-          toast.present();
+          alert.present();
         } else {
+          let message = '';
+          if (destino.state === 'approved') {
+            message = 'Su solicitud de traslado fue aprobado';
+          } else if (destino.state === 'observed') {
+            message = 'Su solicitud de traslado fue observado';
+          }
+
           let toast = await this.toastController.create({
-            message: jsonData.payload.body,
+            message: message,
             duration: 5 * 1000,
             position: 'top',
             buttons: [
@@ -282,7 +323,7 @@ export class AppComponent {
                 text: 'Ver',
                 role: 'cancel',
                 handler: () => {
-                  this.navCtrl.navigateForward (['transfer-ambulance-check', destino.state]);
+                  this.navCtrl.navigateForward (['transfer-ambulance-check', clave, destino.state]);
                 }
               }
             ]
@@ -291,26 +332,32 @@ export class AppComponent {
           toast.present();
         }
       } else if (destino.page === 'escolta') {
-        if (destino.state === 'approved' || destino.state === 'observed') {
-          let toast = await this.toastController.create({
-            message: jsonData.payload.body,
-            duration: 5 * 1000,
-            position: 'top',
-            buttons: [
-              {
-                text: 'Ver',
-                role: 'cancel',
-                handler: () => {
-                  this.navCtrl.navigateForward (['medical-escort-check', clave]);
-                }
+        if (destino.state === 'canceled') {
+          let alert = await this.alertCtrl.create ({
+            header: 'La solicitud de escolta medica fue cancelada',
+            message: destino.motivo,
+            buttons: [{
+              text: 'Atras',
+              role: 'cancel',
+            }, {
+              text: 'Ver detalles',
+              handler: () => {
+                this.navCtrl.navigateForward (['medical-escort-check', clave, destino.state]);
               }
-            ]
+            }]
           });
           
-          toast.present();
+          alert.present();
         } else {
+          let message = '';
+          if (destino.state === 'approved') {
+            message = 'Su solicitud de escolta medica fue aprobado';
+          } else if (destino.state === 'observed') {
+            message = 'Su solicitud de escolta medica fue observado';
+          }
+
           let toast = await this.toastController.create({
-            message: jsonData.payload.body,
+            message: message,
             duration: 5 * 1000,
             position: 'top',
             buttons: [
@@ -318,7 +365,7 @@ export class AppComponent {
                 text: 'Ver',
                 role: 'cancel',
                 handler: () => {
-                  this.navCtrl.navigateForward (['medical-escort-check', destino.state]);
+                  this.navCtrl.navigateForward (['medical-escort-check', clave, destino.state]);
                 }
               }
             ]
@@ -327,26 +374,32 @@ export class AppComponent {
           toast.present();
         }
       } else if (destino.page === 'presion') {
-        if (destino.state === 'approved' || destino.state === 'observed') {
-          let toast = await this.toastController.create({
-            message: jsonData.payload.body,
-            duration: 5 * 1000,
-            position: 'top',
-            buttons: [
-              {
-                text: 'Ver',
-                role: 'cancel',
-                handler: () => {
-                  this.navCtrl.navigateForward (['home-nurse-check', clave]);
-                }
+        if (destino.state === 'canceled') {
+          let alert = await this.alertCtrl.create ({
+            header: 'La solicitud de enfermera a domicilio fue cancelada',
+            message: destino.motivo,
+            buttons: [{
+              text: 'Atras',
+              role: 'cancel',
+            }, {
+              text: 'Ver detalles',
+              handler: () => {
+                this.navCtrl.navigateForward (['home-nurse-check', clave, destino.state]);
               }
-            ]
+            }]
           });
           
-          toast.present();
+          alert.present();
         } else {
+          let message = '';
+          if (destino.state === 'approved') {
+            message = 'Su solicitud de enfermera a domicilio fue aprobado';
+          } else if (destino.state === 'observed') {
+            message = 'Su solicitud de enfermera a domicilio fue observado';
+          }
+
           let toast = await this.toastController.create({
-            message: jsonData.payload.body,
+            message: message,
             duration: 5 * 1000,
             position: 'top',
             buttons: [
@@ -354,7 +407,7 @@ export class AppComponent {
                 text: 'Ver',
                 role: 'cancel',
                 handler: () => {
-                  this.navCtrl.navigateForward (['home-nurse-check', destino.state]);
+                  this.navCtrl.navigateForward (['home-nurse-check', clave, destino.state]);
                 }
               }
             ]
@@ -363,26 +416,32 @@ export class AppComponent {
           toast.present();
         }
       } else if (destino.page === 'doctor') {
-        if (destino.state === 'approved' || destino.state === 'observed') {
-          let toast = await this.toastController.create({
-            message: jsonData.payload.body,
-            duration: 5 * 1000,
-            position: 'top',
-            buttons: [
-              {
-                text: 'Ver',
-                role: 'cancel',
-                handler: () => {
-                  this.navCtrl.navigateForward (['home-doctor-check', clave]);
-                }
+        if (destino.state === 'canceled') {
+          let alert = await this.alertCtrl.create ({
+            header: 'La solicitud de doctor a domicilio fue cancelada',
+            message: destino.motivo,
+            buttons: [{
+              text: 'Atras',
+              role: 'cancel',
+            }, {
+              text: 'Ver detalles',
+              handler: () => {
+                this.navCtrl.navigateForward (['home-doctor-check', clave, destino.state]);
               }
-            ]
+            }]
           });
           
-          toast.present();
+          alert.present();
         } else {
-          let toast = await this.toastController.create({
-            message: jsonData.payload.body,
+          let message = '';
+          if (destino.state === 'approved') {
+            message = 'Su solicitud de doctór a domicilio fue aprobado';
+          } else if (destino.state === 'observed') {
+            message = 'Su solicitud de doctór a domicilio fue observado';
+          }
+ 
+          let toast = await this.toastController.create ({
+            message: message,
             duration: 5 * 1000,
             position: 'top',
             buttons: [
@@ -390,7 +449,7 @@ export class AppComponent {
                 text: 'Ver',
                 role: 'cancel',
                 handler: () => {
-                  this.navCtrl.navigateForward (['home-doctor-check', destino.state]);
+                  this.navCtrl.navigateForward (['home-doctor-check', clave, destino.state]);
                 }
               }
             ]
@@ -399,26 +458,32 @@ export class AppComponent {
           toast.present();
         }
       } else if (destino.page === 'resultados') {
-        if (destino.state === 'approved' || destino.state === 'observed') {
-          let toast = await this.toastController.create({
-            message: jsonData.payload.body,
-            duration: 5 * 1000,
-            position: 'top',
-            buttons: [
-              {
-                text: 'Ver',
-                role: 'cancel',
-                handler: () => {
-                  this.navCtrl.navigateForward (['request-results-check', clave]);
-                }
+        if (destino.state === 'canceled') {
+          let alert = await this.alertCtrl.create ({
+            header: 'La solicitud de resultados fue cancelada',
+            message: destino.motivo,
+            buttons: [{
+              text: 'Atras',
+              role: 'cancel',
+            }, {
+              text: 'Ver detalles',
+              handler: () => {
+                this.navCtrl.navigateForward (['request-results-check', clave, destino.state]);
               }
-            ]
+            }]
           });
           
-          toast.present();
+          alert.present();
         } else {
+          let message = '';
+          if (destino.state === 'approved') {
+            message = 'Su solicitud de resultados fue aprobado';
+          } else if (destino.state === 'observed') {
+            message = 'Su solicitud de resultados fue observado';
+          }
+          
           let toast = await this.toastController.create({
-            message: jsonData.payload.body,
+            message: message,
             duration: 5 * 1000,
             position: 'top',
             buttons: [
@@ -426,7 +491,7 @@ export class AppComponent {
                 text: 'Ver',
                 role: 'cancel',
                 handler: () => {
-                  this.navCtrl.navigateForward (['request-results-check', destino.state]);
+                  this.navCtrl.navigateForward (['request-results-check', clave, destino.state]);
                 }
               }
             ]
@@ -434,7 +499,7 @@ export class AppComponent {
           
           toast.present();
         }
-      } 
+      }
     });
 
     this.oneSignal.endInit();

@@ -4,7 +4,7 @@
       <ion-back-button></ion-back-button>
     </ion-buttons>
 
-    <ion-title><img class="logotio" src="assets/imgs/logotio.png"></ion-title>
+    <ion-title (click)="goHome ()"><img class="logotio" src="assets/imgs/logotio.png"></ion-title>
     <ion-buttons slot="end">
       <ion-menu-button autoHide="false"></ion-menu-button>
     </ion-buttons>
@@ -20,7 +20,7 @@
           <ion-item class="ion-text-center" lines="none">
             <ion-label>
               <h1 class="title-label">{{ 'enviar una ambulancia' | translate }}</h1>
-              <p text-wrap>{{ 'Con medico' | translate }}</p>
+              <p style="line-height: 1; margin-top: 0.7rem; margin-bottom: 0.5rem;" class="ion-text-wrap">{{ 'Con medico' | translate }}</p>
             </ion-label>
           </ion-item>
           
@@ -48,14 +48,14 @@
       </ion-col>
       <ion-col size="12" size-sm="12" size-md="6"  size-lg="6" size-xl="6">
         <ion-list>
-          <ion-item>
-            <ion-label style="font-size: 23px !important;" position="stacked">{{ 'Dirección' | translate }}:</ion-label>
-            <ion-input class="entry" formControlName="address" placeholder="{{ 'Ingrese su direccion' | translate }}"></ion-input>
-          </ion-item>
-          
           <ion-button class="buuu" expand="block" size="small" color="white" (click)="selectOrigen ()">
             {{ 'Marcar en mapa' | translate }} {{ editar_1 }}
           </ion-button>
+
+          <ion-item *ngIf="form.value.address !== ''">
+            <ion-label style="font-size: 23px !important;" position="stacked">{{ 'Dirección' | translate }}:</ion-label>
+            <ion-input class="entry" formControlName="address" placeholder="{{ 'Ingrese su direccion' | translate }}"></ion-input>
+          </ion-item>
 
           <!--ion-item>
             <ion-card margin class="map-class">

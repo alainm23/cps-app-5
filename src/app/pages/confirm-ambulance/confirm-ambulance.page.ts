@@ -3,6 +3,7 @@ import { LoadingController, NavController, AlertController } from '@ionic/angula
 
 import { DatabaseService } from '../../providers/database.service';
 import { CallNumber } from '@ionic-native/call-number/ngx';
+import { ApiService } from '../../providers/api.service';
 
 declare var google: any;
 
@@ -10,6 +11,7 @@ declare var google: any;
 import { TranslateService } from '@ngx-translate/core';
 import { StorageService } from '../../providers/storage.service';
 import { ActivatedRoute } from '@angular/router';
+
 
 @Component({
   selector: 'app-confirm-ambulance',
@@ -37,6 +39,7 @@ export class ConfirmAmbulancePage implements OnInit {
               private route: ActivatedRoute,
               private translateService: TranslateService,
               private storage: StorageService, 
+              private api: ApiService,
               public loadingCtrl: LoadingController) {
   }
 
@@ -160,17 +163,37 @@ export class ConfirmAmbulancePage implements OnInit {
         {
           text: this.i18n.OK,
           handler: async (data) => {
-            this.loading = await this.loadingCtrl.create ({
+            let loading = await this.loadingCtrl.create ({
               message: this.i18n.procesando_informacion
             });
-           
-            this.loading.present ().then (() => {
+            
+            await loading.present ();
+
             this.database.cancelSendAmbulance (this.ambulance_object, data.message)
-                .then (() => {
-                  this.loading.dismiss ();
+              .then (() => {
+                let push_data = {
+                  titulo: 'Solicitud de ambulancia cancelada',
+                  detalle: 'El usuario cancelo su solicitud',
+                  destino: '',
+                  mode: 'tags',
+                  clave: '',
+                  tokens: 'Administrador'
+                };
+      
+                this.api.pushNotification (push_data).subscribe (response => {
+                  console.log ("Notificacion Enviada...", response);
+                  loading.dismiss ();
+                  this.goHome ();
+                }, error => {
+                  console.log ("Notificacion Error...", error);
+                  loading.dismiss ();
                   this.goHome ();
                 });
-            });
+              })
+              .catch (() => {
+                loading.dismiss ();
+                this.goHome ();
+              });
           }
         }
       ]

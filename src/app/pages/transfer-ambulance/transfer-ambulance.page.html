@@ -4,7 +4,7 @@
       <ion-back-button></ion-back-button>
     </ion-buttons>
 
-    <ion-title><img class="logotio" src="assets/imgs/logotio.png"></ion-title>
+    <ion-title (click)="goHome ()"><img class="logotio" src="assets/imgs/logotio.png"></ion-title>
     <ion-buttons slot="end">
       <ion-menu-button autoHide="false"></ion-menu-button>
     </ion-buttons>
@@ -35,6 +35,16 @@
               <ion-label style="font-size: 18pt !important;" class="header-text" position="stacked">
                 {{ 'Origen' | translate }}:
               </ion-label>
+            </ion-item>
+
+            <ion-button style="margin-left: 1rem; margin-right: 0.2rem; margin-top: 1rem;" expand="block" class="card-md" color="white" (click)="selectOrigen ()">
+              {{ 'Marcar en mapa 2' | translate }} {{ editar_1 }}
+            </ion-button>
+
+            <ion-item *ngIf="form.value.location_ori_lat !== null">
+              <ion-label style="font-size: 18pt !important;" class="header-text" position="stacked">
+                {{ 'Direccion de origen' | translate }}:
+              </ion-label>
               <ion-input type="text" formControlName="address_ori" placeholder="{{ 'Direccion de origen' | translate }}"></ion-input>
             </ion-item>
 
@@ -51,13 +61,19 @@
               </small>
             </div>
 
-            <ion-button style="margin-left: 1rem; margin-right: 0.2rem;" expand="block" class="card-md" color="white" (click)="selectOrigen ()">
-              {{ 'Marcar en mapa' | translate }} {{ editar_1 }}
-            </ion-button>
-
             <ion-item>
               <ion-label style="font-size: 18pt !important;" class="header-text" position="stacked">
                 {{ 'Destino' | translate }}:
+              </ion-label>
+            </ion-item>
+
+            <ion-button style="margin-left: 1rem; margin-right: 0.2rem; margin-top: 1rem;" expand="full" class="card-md" color="white" (click)="selectDestino ()">
+              {{ 'Marcar en mapa 2' | translate }} {{ editar_2 }}
+            </ion-button>
+
+            <ion-item *ngIf="form.value.location_des_lat !== null">
+              <ion-label style="font-size: 18pt !important;" class="header-text" position="stacked">
+                {{ 'Direccion de destino' | translate }}:
               </ion-label>
               <ion-input type="text" formControlName="address_des" placeholder="{{ 'Direccion de destino' | translate }}"></ion-input>
             </ion-item>
@@ -75,10 +91,6 @@
               </small>
             </div>
 
-            <ion-button style="margin-left: 1rem; margin-right: 0.2rem;" expand="full" class="card-md" color="white" (click)="selectDestino ()">
-              {{ 'Marcar en mapa' | translate }} {{ editar_2 }}
-            </ion-button>
-
             <ion-item>
               <ion-label style="font-size: 18pt !important;" class="header-text" position="stacked">
                 {{ 'Numero de teléfono' | translate }}:
@@ -95,7 +107,7 @@
                 </ion-col>
                 <ion-col size="8">
                   <ion-item>
-                    <ion-input type="tel" formControlName="phone_number" placeholder="985 858 787"></ion-input>
+                    <ion-input style="--padding-top: 17px !important;" type="tel" formControlName="phone_number" placeholder="985 858 787"></ion-input>
                   </ion-item>
                 </ion-col>
               </ion-row>
@@ -203,7 +215,7 @@
             <ion-row>
               <ion-col *ngIf="!is_edit" size="8" offset="2">
                 <ion-button class="no-border" expand="block" color="blue" [disabled]="!form.valid" (click)="submit ()">
-                  {{ 'Pedir' | translate }}
+                  {{ 'Ordenar' | translate }}
                 </ion-button>
               </ion-col>
 

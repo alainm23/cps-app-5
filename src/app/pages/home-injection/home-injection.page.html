@@ -4,7 +4,7 @@
       <ion-back-button></ion-back-button>
     </ion-buttons>
 
-    <ion-title><img class="logotio" src="assets/imgs/logotio.png"></ion-title>
+    <ion-title (click)="goHome ()"><img class="logotio" src="assets/imgs/logotio.png"></ion-title>
     <ion-buttons slot="end">
       <ion-menu-button autoHide="false"></ion-menu-button>
     </ion-buttons>
@@ -33,9 +33,9 @@
             </ion-item>  
   
             <ion-item class="ion-text-wrap">
-              <ion-label class="header-text" position="stacked">
+              <div class="ion-text-wrap" style="font-size: 13pt; font-weight: 500;">
                 {{ 'Adjuntar imagen de indicación medica' | translate }}:
-              </ion-label>
+              </div>
             </ion-item>
             
             <div style="margin-left: 1rem;" class="ion-margin-left">
@@ -93,7 +93,7 @@
                 </ion-col>
                 <ion-col col-8>
                   <ion-item>
-                    <ion-input type="tel" formControlName="phone_number" placeholder="+51 985 858 787"></ion-input>
+                    <ion-input style="--padding-top: 17px !important;" type="tel" formControlName="phone_number" placeholder="+51 985 858 787"></ion-input>
                   </ion-item>
                 </ion-col>
               </ion-row>
@@ -110,18 +110,18 @@
             </ion-item>
 
             <ion-item class="ion-text-wrap" lines="none">
-              <ion-label class="label-nm">{{ 'Requiero los insumos' | translate }}</ion-label>
-              <ion-checkbox color="blue" formControlName="need_supplies" (ionChange)="change2 ()"></ion-checkbox>
+              <ion-label class="ion-text-wrap label-nm">{{ 'Requiero los insumos' | translate }}</ion-label>
+              <ion-checkbox slot="start" color="blue" formControlName="need_supplies" (ionChange)="change2 ()"></ion-checkbox>
             </ion-item>
 
             <ion-item lines="none" class="ion-text-wrap">
-              <ion-label class="label-nm">{{ 'Requiero la medicina' | translate }}</ion-label>
-              <ion-checkbox color="blue" formControlName="need_medicine" (ionChange)="change2 ()"></ion-checkbox>
+              <ion-label class="ion-text-wrap label-nm">{{ 'Requiero la medicina' | translate }}</ion-label>
+              <ion-checkbox slot="start" color="blue" formControlName="need_medicine" (ionChange)="change2 ()"></ion-checkbox>
             </ion-item>
             
             <ion-item lines="none" class="ion-text-wrap">
-              <ion-label class="label-nm">{{ 'Cuanto con todo lo necesario' | translate }}</ion-label>
-              <ion-checkbox color="blue" formControlName="has_all" (ionChange)="change ()"></ion-checkbox>
+              <ion-label class="ion-text-wrap label-nm">{{ 'Cuanto con todo lo necesario' | translate }}</ion-label>
+              <ion-checkbox slot="start" color="blue" formControlName="has_all" (ionChange)="change ()"></ion-checkbox>
             </ion-item>
 
             <ion-item>
@@ -129,7 +129,7 @@
             </ion-item>
             
             <ion-item>
-              <ion-textarea row="3" formControlName="note" placeholder="..."></ion-textarea>
+              <ion-textarea row="3" formControlName="note" placeholder="{{ 'notas_placeholder' | translate }}"></ion-textarea>
             </ion-item>
             
             <ion-item>
@@ -236,7 +236,7 @@
             <ion-row>
               <ion-col *ngIf="!is_edit" size="8" offset="2">
                 <ion-button class="no-border" expand="block" ion-button color="blue" [disabled]="!form.valid" (click)="submit ()">
-                  {{ 'Pedir' | translate }}
+                  {{ 'Ordenar' | translate }}
                 </ion-button>
               </ion-col>
 

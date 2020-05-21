@@ -4,7 +4,7 @@
       <ion-back-button></ion-back-button>
     </ion-buttons>
 
-    <ion-title><img class="logotio" src="assets/imgs/logotio.png"></ion-title>
+    <ion-title (click)="goHome ()"><img class="logotio" src="assets/imgs/logotio.png"></ion-title>
     <ion-buttons slot="end">
       <ion-menu-button autoHide="false"></ion-menu-button>
     </ion-buttons>
@@ -100,7 +100,7 @@
                   </ion-label>
                 </ion-item>
                 <div *ngFor="let hora of horas">
-                  <ion-card style="padding: 12px;" [id]="'h-' + hora.id_con" *ngIf="isMorning (hora.hor_con)" (click)="selectHour (hora)">
+                  <ion-card style="padding: 6px;" [id]="'h-' + hora.id_con" *ngIf="isMorning (hora.hor_con)" (click)="selectHour (hora)">
                     {{ hora.hor_con }}
                   </ion-card>
                 </div>
@@ -118,7 +118,7 @@
                   </ion-label>
                 </ion-item>
                 <div *ngFor="let hora of horas">
-                  <ion-card style="padding: 12px;" [id]="'h-' + hora.id_con" *ngIf="isAfternoon (hora.hor_con)" (click)="selectHour (hora)">
+                  <ion-card style="padding: 6px;" [id]="'h-' + hora.id_con" *ngIf="isAfternoon (hora.hor_con)" (click)="selectHour (hora)">
                     {{ hora.hor_con }}
                   </ion-card>
                 </div>
@@ -136,7 +136,7 @@
                   </ion-label>
                 </ion-item>
                 <div *ngFor="let hora of horas">
-                  <ion-card style="padding: 12px;" [id]="'h-' + hora.id_con" *ngIf="isEvening (hora.hor_con)" (click)="selectHour (hora)">
+                  <ion-card style="padding: 6px;" [id]="'h-' + hora.id_con" *ngIf="isEvening (hora.hor_con)" (click)="selectHour (hora)">
                     {{ hora.hor_con }}
                   </ion-card>
                 </div>

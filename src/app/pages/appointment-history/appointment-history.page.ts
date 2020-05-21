@@ -16,7 +16,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class AppointmentHistoryPage implements OnInit {
   loading: any;
-  appointments: any;
+  appointments: any [] = [];
 
   constructor(public navCtrl: NavController, 
               public loadingCtrl: LoadingController,

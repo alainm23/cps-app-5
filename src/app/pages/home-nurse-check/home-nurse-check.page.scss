@@ -1,39 +1,43 @@
 .item.item-md .checkbox-md {
-    position: static;
-    display: block;
-    margin: 0px 12px 0px 0px;
-  }
-  
-  .label-nm {
-    margin: 0px 8px 0px 0px !important;
-  }
+  position: static;
+  display: block;
+  margin: 0px 12px 0px 0px;
+}
 
-  .text {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-  }
+.label-nm {
+  margin: 0px 8px 0px 0px !important;
+}
 
-  .margin-left {
-    margin-left: 1rem;
-  }
+.text {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
 
-  textarea {
-    height: 12rem !important;
-    border: 1px solid #00004f !important;
-  }
+.margin-left {
+  margin-left: 1rem;
+}
 
-  .icon-wait {
+.icon-wait {
+  font-size: 64px;
+  color: gray;
+}
+
+.icon-observed {
     font-size: 64px;
-    color: gray;
-  }
+    color: #eb445a;
+}
 
-  .line-bottom {
+.icon-approved {
+    font-size: 64px;
+    color: #2dd36f;
+}
+
+.line-bottom {
     font-size: 1.7rem !important;
     border-bottom: 0.5px solid #c5bbbb !important;
     padding-bottom: 1rem !important;
-  }
+}
 
-  b {
+b {
     font-size: 18px;
     font-weight: bold;
-    margin-left: 1rem;
 }

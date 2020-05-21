@@ -66,12 +66,12 @@ export class EmergencyPage implements OnInit {
     // this.navCtrl.setRoot ("HomePage", {}, {animate: true, direction: "back"});  
   }
 
-  submit () {
-    this.loading = this.loadingCtrl.create({
+  async submit () {
+    let loading = await this.loadingCtrl.create({
       message: this.i18n.procesando_informacion,
     });
 
-    this.loading.present ();
+    loading.present ();
 
     const value = this.form.value;
 
@@ -107,9 +107,9 @@ export class EmergencyPage implements OnInit {
         await alert.present ();
       }
 
-      this.loading.dismiss ();
+      loading.dismiss ();
     }, error => {
-      this.loading.dismiss ();
+      loading.dismiss ();
       console.log (error)
     });
   }
@@ -131,8 +131,7 @@ export class EmergencyPage implements OnInit {
   }
 
   async sendSMS () {
-    let message;
-
+    let message: string = '';
     const loading = await this.loadingCtrl.create({
       message: this.i18n.procesando_informacion
     });

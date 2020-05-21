@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button block (click)="closeModal ()">
+        <ion-icon mode="ios" class="icon-arrow" name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons> 
+
+    <ion-title><img class="logotio" src="assets/imgs/logotio.png"></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="ion-margin">
+    <h3 class="ion-padding-left">{{ 'Atencion al cliente' | translate }}</h3>
+    <div class="icon-size">
+      <ion-icon name="star" class="ion-padding" *ngFor="let num of [1, 2, 3, 4, 5]" 
+        (click)="rate (num)" [ngStyle]="{'color': getColor (num)}"> 
+      </ion-icon>
+    </div>
+
+    <h3 class="ion-padding-left">{{ 'Comentario' | translate }}</h3>
+    <ion-textarea placeholder="Ingrese un comentario" row="3" [(ngModel)]="comment"></ion-textarea>
+    
+    <ion-button expand="block" color="blue" [disabled]="comment === ''" (click)="onSubmit ()">
+      {{ 'Enviar' | translate }}
+    </ion-button>
+  </div>
+</ion-content>

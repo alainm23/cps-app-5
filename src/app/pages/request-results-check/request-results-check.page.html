@@ -4,7 +4,7 @@
       <ion-back-button></ion-back-button>
     </ion-buttons>
 
-    <ion-title><img class="logotio" src="assets/imgs/logotio.png"></ion-title>
+    <ion-title (click)="goHome ()"><img class="logotio" src="assets/imgs/logotio.png"></ion-title>
     <ion-buttons slot="end">
       <ion-menu-button autoHide="false"></ion-menu-button>
     </ion-buttons>
@@ -26,96 +26,108 @@
 
           <ion-item class="ion-text-center height-70" lines="none">
             <ion-label>
-              <ion-icon class="icon-wait" name="time"></ion-icon>
+              <ion-icon class="icon-wait" name="time-outline"></ion-icon>
               <p class="ion-margin-top ion-text-wrap">{{ 'Gracias por su paciencia' | translate }}</p>
             </ion-label>
           </ion-item>
 
           <ion-card>
-            <ion-list lines="none">
-              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
-                <b>{{ 'Cliente' | translate }}:</b>
-              </ion-label>
-              <ion-item lines="none">
-                {{ auth.user?.first_name }}
+            <ion-list>
+              <ion-list-header>
+                {{ 'Detalles de la solicitud' | translate }}
+              </ion-list-header>
+
+              <ion-item>
+                <ion-label>
+                  <b>{{ 'Cliente' | translate }}:</b>
+                  <br>
+                  {{ home_injection?.user_fullname }}
+                </ion-label>
               </ion-item>
 
-              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
-                <b>{{ 'Fecha' | translate }}:</b>
-              </ion-label>
-              <ion-item lines="none">
-                {{ getFormatDate (home_injection?.date) }}
+              <ion-item>
+                <ion-label>
+                  <b>{{ 'Fecha' | translate }}:</b>
+                  <br>
+                  {{ getFormatDate (home_injection?.date) }}
+                </ion-label>
               </ion-item>
 
-              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
-                <b>{{ 'Correo electrónico' | translate }}:</b>
-              </ion-label>
-              <ion-item lines="none">
-                {{ home_injection?.user_email }}
+              <ion-item>
+                <ion-label>
+                  <b>{{ 'Tipo de entrega' | translate }}:</b>
+                  <br>
+                  <span *ngIf="home_injection?.tipo_entrega === 'recojo'">
+                    {{ 'Recojo' | translate }}
+                  </span>
+                  <span *ngIf="home_injection?.tipo_entrega !== 'recojo'">
+                    {{ 'Por correo' | translate }}
+                  </span>
+                </ion-label>
+              </ion-item>
+              
+              <ion-item *ngIf="home_injection?.user_email !== ''">
+                <ion-label>
+                  <b>{{ 'Correo electrónico' | translate }}:</b>
+                  <br>
+                  {{ home_injection?.user_email }}
+                </ion-label>
               </ion-item>
 
-              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
-                <b>{{ 'Numero de teléfono' | translate }}:</b>
-              </ion-label>
-              <ion-item lines="none">
-                {{ home_injection?.user_phone_number }}
+              <ion-item>
+                <ion-label>
+                  <b>{{ 'Numero de teléfono' | translate }}:</b>
+                  <br>
+                  {{ home_injection?.user_phone_number }}
+                </ion-label>
+              </ion-item>
+              
+              <ion-item>
+                <ion-label>
+                  <b>{{ 'Mensaje' | translate }}:</b>
+                  <br>
+                  <p class="detalle">{{ home_injection?.message }}</p>
+                </ion-label>
               </ion-item>
 
-              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
-                <b>{{ 'Tipo de entrega' | translate }}:</b>
-              </ion-label>
-              <ion-item lines="none">
-                <span *ngIf="home_injection?.tipo_entrega === 'recojo'">
-                  {{ 'Recojo' | translate }}
-                </span>
-                <span *ngIf="home_injection?.tipo_entrega !== 'recojo'">
-                  {{ 'Por correo' | translate }}
-                </span>
-              </ion-item>
+              <ion-item>
+                <ion-label>
+                  <b>{{ 'Detalles' | translate }}:</b>
+                  <br>
+                  <span *ngIf="home_injection?.s_1" style="display: block;">
+                    - {{ 'Resultados de laboratorio' | translate }}
+                  </span>
 
-              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
-                <b>{{ 'Mensaje' | translate }}:</b>
-              </ion-label>
-              <ion-item lines="none" class="ion-text-wrap">
-                <p class="detalle">{{ home_injection?.message }}</p>
-              </ion-item>
+                  <span *ngIf="home_injection?.s_2" style="display: block;">
+                    - {{ 'Informe radiologico de rayos X' | translate }}
+                  </span>
 
-              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
-                <b>{{ 'Detalles' | translate }}:</b>
-              </ion-label>
+                  <span *ngIf="home_injection?.s_3" style="display: block;">
+                    - {{ 'Informe radiologico de tomografia' | translate }}
+                  </span>
 
-              <ion-item *ngIf="s_1">
-                - {{ 'Resultados de laboratorio' | translate }}
-              </ion-item>
+                  <span *ngIf="home_injection?.s_4" style="display: block;">
+                    - {{ 'Informe radiologico de resonancia magnetica' | translate }}
+                  </span>
 
-              <ion-item *ngIf="s_2">
-                - {{ 'Informe radiologico de rayos X' | translate }}
-              </ion-item>
+                  <span *ngIf="home_injection?.s_5" style="display: block;">
+                    - {{ 'Informe ecografico' | translate }}
+                  </span>
 
-              <ion-item *ngIf="s_3">
-                - {{ 'Informe radiologico de tomografia' | translate }}
-              </ion-item>
+                  <span *ngIf="home_injection?.s_6" style="display: block;">
+                    - {{ 'Certificado medico' | translate }}
+                  </span>
 
-              <ion-item *ngIf="s_4">
-                - {{ 'Informe radiologico de resonancia magnetica' | translate }}
-              </ion-item>
+                  <span *ngIf="home_injection?.s_7" style="display: block;">
+                    - {{ 'Informe medico de alta' | translate }}
+                  </span>
 
-              <ion-item *ngIf="s_5">
-                - {{ 'Informe ecografico' | translate }}
+                  <span *ngIf="home_injection?.s_8" style="display: block;">
+                    - {{ 'Copia certificada de historia clinica' | translate }}
+                  </span>
+                </ion-label>
               </ion-item>
-
-              <ion-item *ngIf="s_6">
-                - {{ 'Certificado medico' | translate }}
-              </ion-item>
-
-              <ion-item *ngIf="s_7">
-                - {{ 'Informe medico de alta' | translate }}
-              </ion-item>
-
-              <ion-item *ngIf="s_8">
-                - {{ 'Copia certificada de historia clinica' | translate }}
-              </ion-item>
-            </ion-list>    
+            </ion-list>     
           </ion-card>
           
           <ion-grid class="ion-padding">
@@ -126,9 +138,9 @@
                 </ion-button>
               </ion-col>
               <ion-col size="6">
-                <button class="no-border" expand="block" color="red" (click)="cancel ()">
+                <ion-button class="no-border" expand="block" color="red" (click)="cancel ()">
                   {{ 'Cancelar pedido' | translate }}
-                </button>
+                </ion-button>
               </ion-col>
             </ion-row>
           </ion-grid>
@@ -138,158 +150,193 @@
           <ion-item class="ion-text-center" lines="none">
             <ion-label>
               <h1 class="title-label">{{ 'REQUEST_RESULT' | translate }}</h1>
+              <p *ngIf="home_injection?.state == 'observed'" class="ion-text-wrap" style="padding-left: 0.5rem; padding-right: 0.5rem;">
+                <br>
+                {{ 'Su pedido a sido observado, por favor corrija lo siguiente.' | translate }}
+              </p>
+
+              <p *ngIf="home_injection?.state == 'approved'" class="ion-text-wrap" style="padding-left: 0.5rem; padding-right: 0.5rem;">
+                <br>
+                {{ 'Su solicitud a sido aprobada' | translate }}
+              </p>
+
+              <p *ngIf="home_injection?.state == 'completed'" class="ion-text-wrap" style="padding-left: 0.5rem; padding-right: 0.5rem;">
+                {{ 'El pasciente, nuestra prioridad' | translate }}
+              </p>
             </ion-label>
           </ion-item> 
              
-          <ion-card color="danger" *ngIf="home_injection?.state == 'observed' || home_injection?.state == 'canceled'">
-            <ion-card-header>
-              <b *ngIf="home_injection?.state == 'observed'">{{ 'Estado: Observado' | translate }}</b>
-              <b *ngIf="home_injection?.state == 'canceled'">{{ 'Estado: Cancelado' | translate }}</b>
-            </ion-card-header> 
-            <ion-card-content>
-              {{ home_injection?.last_message }}
-            </ion-card-content> 
-          </ion-card>
+          <ion-item class="ion-text-center height-70" lines="none" *ngIf="home_injection?.state == 'observed' || home_injection?.state == 'canceled'">
+            <ion-label *ngIf="home_injection?.state == 'observed'">
+              <ion-icon class="icon-observed" name="alert-circle-outline"></ion-icon>
+              <p class="ion-margin-top ion-text-wrap">{{ home_injection?.last_message }}</p>
+            </ion-label>
+          </ion-item>
 
-          <ion-card color="blue" *ngIf="home_injection?.state == 'approved'">
-            <ion-card-header>
-              <b>{{ 'Estado: Aprobado' | translate }}</b>
-            </ion-card-header> 
-            <ion-card-content>
-              {{ home_injection?.last_message }}
-            </ion-card-content>
-          </ion-card>
+          <ion-item class="ion-text-center height-70" lines="none" *ngIf="home_injection?.state == 'approved'">
+            <ion-label>
+              <ion-icon class="icon-approved" name="checkmark-circle-outline"></ion-icon>
+              <p class="ion-margin-top ion-text-wrap">{{ home_injection?.last_message }}</p>
+            </ion-label>
+          </ion-item>
           
-          <ion-card color="green" *ngIf="home_injection?.state === 'completed'">
-              <ion-card-header>
-                <b *ngIf="home_injection?.payment_type === 'online'">{{ 'Pagado' | translate }}</b>
-                <b *ngIf="home_injection?.payment_type === 'cash'">{{ 'Tipo de pago: contra entrega' | translate }}</b>
-              </ion-card-header> 
-              <ion-card-content>
-                <p class="ion-text-wrap" *ngIf="home_injection?.payment_type === 'online'">
-                  {{ 'Por favor llegaremos en el horario solicitado.' | translate }}
-                </p>
-                <p class="ion-text-wrap" *ngIf="home_injection?.payment_type === 'cash'">
-                  {{ 'Por favor, llegaremos en el horario solicitado, pague al doctor(a). Gracias.' | translate }}
-                </p>
-              </ion-card-content>
+          <ion-item class="ion-text-center height-70" lines="none" *ngIf="home_injection?.state === 'completed'">
+            <ion-label>
+              <ion-icon class="icon-approved" name="checkmark-circle-outline"></ion-icon>
+              <p class="ion-text-wrap" style="padding-left: 0.5rem; padding-right: 0.5rem;" *ngIf="home_injection?.payment_type === 'cash'">
+                {{ 'Un médico general lo visitará el' | translate }}
+                {{ getFormatDate (home_injection?.date) }}
+                {{ 'a las' | translate }}
+                {{ home_injection?.hour }}
+                {{ 'Hrs.' | translate }}
+                {{ 'El pago por el servicio deberá ser entregado a al doctor el día de la visita.' | translate }}
+              </p>
+              <p class="ion-text-wrap" style="padding-left: 0.5rem; padding-right: 0.5rem;" *ngIf="home_injection?.payment_type === 'online'">
+                {{ 'Un médico general lo visitará el' | translate }}
+                {{ getFormatDate (home_injection?.date) }}
+                {{ 'a las' | translate }}
+                {{ home_injection?.hour }}
+                {{ 'Hrs.' | translate }}
+              </p>
+            </ion-label>
+          </ion-item>
+
+          <ion-card *ngIf="home_injection?.state === 'approved'">
+            <ion-list>
+              <ion-item>
+                <ion-label>
+                  <b>{{ 'Costo' | translate }}</b>
+                  <br>
+                  {{ 'Total (inc. IGV):' | translate }}: {{ (home_injection?.price / 100) | currency:'S/. ' }}
+                </ion-label>
+              </ion-item>
+            </ion-list>
           </ion-card>
 
           <ion-card>
-            <ion-list lines="none">
-              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark"><b>{{ 'Cliente' | translate }}</b>
-              </ion-label>
-              <ion-item lines="none">
-                {{ auth.user?.first_name }}
+            <ion-list>
+              <ion-list-header>
+                {{ 'Detalles de la solicitud' | translate }}
+              </ion-list-header>
+
+              <ion-item>
+                <ion-label>
+                  <b>{{ 'Cliente' | translate }}:</b>
+                  <br>
+                  {{ home_injection?.user_fullname }}
+                </ion-label>
               </ion-item>
 
-              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark"><b>{{ 'Fecha' | translate }}</b>
-              </ion-label>
-              <ion-item lines="none">
-                {{ getFormatDate (home_injection?.date) }}
+              <ion-item>
+                <ion-label>
+                  <b>{{ 'Fecha' | translate }}:</b>
+                  <br>
+                  {{ getFormatDate (home_injection?.date) }}
+                </ion-label>
               </ion-item>
 
-              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
-                <b>{{ 'Correo electrónico' | translate }}</b>
-              </ion-label>
-              <ion-item lines="none">
-                {{ home_injection?.user_email }}
+              <ion-item>
+                <ion-label>
+                  <b>{{ 'Tipo de entrega' | translate }}:</b>
+                  <br>
+                  <span *ngIf="home_injection?.tipo_entrega === 'recojo'">
+                    {{ 'Recojo' | translate }}
+                  </span>
+                  <span *ngIf="home_injection?.tipo_entrega !== 'recojo'">
+                    {{ 'Por correo' | translate }}
+                  </span>
+                </ion-label>
+              </ion-item>
+              
+              <ion-item *ngIf="home_injection?.user_email !== ''">
+                <ion-label>
+                  <b>{{ 'Correo electrónico' | translate }}:</b>
+                  <br>
+                  {{ home_injection?.user_email }}
+                </ion-label>
               </ion-item>
 
-              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
-                <b>{{ 'Numero de teléfono' | translate }}</b>
-              </ion-label>
-              <ion-item lines="none">
-                {{ home_injection?.user_phone_number }}
+              <ion-item>
+                <ion-label>
+                  <b>{{ 'Numero de teléfono' | translate }}:</b>
+                  <br>
+                  {{ home_injection?.user_phone_number }}
+                </ion-label>
+              </ion-item>
+              
+              <ion-item>
+                <ion-label>
+                  <b>{{ 'Mensaje' | translate }}:</b>
+                  <br>
+                  <p class="detalle">{{ home_injection?.message }}</p>
+                </ion-label>
               </ion-item>
 
-              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
-                <b>{{ 'Tipo de entrega' | translate }}</b>
-              </ion-label>
-              <ion-item lines="none">
-                <span *ngIf="home_injection?.tipo_entrega === 'recojo'">
-                  {{ 'Recojo' | translate }}
-                </span>
-                <span *ngIf="home_injection?.tipo_entrega !== 'recojo'">
-                  {{ 'Por correo' | translate }}
-                </span>
-              </ion-item>
+              <ion-item>
+                <ion-label>
+                  <b>{{ 'Detalles' | translate }}:</b>
+                  <br>
+                  <span *ngIf="home_injection?.s_1" style="display: block;">
+                    - {{ 'Resultados de laboratorio' | translate }}
+                  </span>
 
-              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
-                <b>{{ 'Mensaje' | translate }}</b>
-              </ion-label>
-              <ion-item lines="none" class="ion-text-wrap">
-                {{ home_injection?.message }}
-              </ion-item>
+                  <span *ngIf="home_injection?.s_2" style="display: block;">
+                    - {{ 'Informe radiologico de rayos X' | translate }}
+                  </span>
 
-              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
-                <b>{{ 'Detalles' | translate }}</b>
-              </ion-label>
+                  <span *ngIf="home_injection?.s_3" style="display: block;">
+                    - {{ 'Informe radiologico de tomografia' | translate }}
+                  </span>
 
-              <ion-item *ngIf="s_1">
-                - {{ 'Resultados de laboratorio' | translate }}
-              </ion-item>
+                  <span *ngIf="home_injection?.s_4" style="display: block;">
+                    - {{ 'Informe radiologico de resonancia magnetica' | translate }}
+                  </span>
 
-              <ion-item *ngIf="s_2">
-                - {{ 'Informe radiologico de rayos X' | translate }}
-              </ion-item>
+                  <span *ngIf="home_injection?.s_5" style="display: block;">
+                    - {{ 'Informe ecografico' | translate }}
+                  </span>
 
-              <ion-item *ngIf="s_3">
-                - {{ 'Informe radiologico de tomografia' | translate }}
-              </ion-item>
+                  <span *ngIf="home_injection?.s_6" style="display: block;">
+                    - {{ 'Certificado medico' | translate }}
+                  </span>
 
-              <ion-item *ngIf="s_4">
-                - {{ 'Informe radiologico de resonancia magnetica' | translate }}
-              </ion-item>
+                  <span *ngIf="home_injection?.s_7" style="display: block;">
+                    - {{ 'Informe medico de alta' | translate }}
+                  </span>
 
-              <ion-item *ngIf="s_5">
-                - {{ 'Informe ecografico' | translate }}
+                  <span *ngIf="home_injection?.s_8" style="display: block;">
+                    - {{ 'Copia certificada de historia clinica' | translate }}
+                  </span>
+                </ion-label>
               </ion-item>
-
-              <ion-item *ngIf="s_6">
-                - {{ 'Certificado medico' | translate }}
-              </ion-item>
-
-              <ion-item *ngIf="s_7">
-                - {{ 'Informe medico de alta' | translate }}
-              </ion-item>
-
-              <ion-item *ngIf="s_8">
-                - {{ 'Copia certificada de historia clinica' | translate }}
-              </ion-item>
-            </ion-list>    
+            </ion-list>  
           </ion-card>
 
           <div class="ion-text-center" *ngIf="home_injection?.state == 'observed'">
             <ion-row>
-              <ion-col size="12" size-sm="6">
-                <ion-button class="no-border" color="blue" (click)="edit (home_injection?.id)">
+              <ion-col size="6">
+                <ion-button expand="block" class="no-border" color="blue" (click)="edit ()">
                   {{ 'Correguir' | translate }}
                 </ion-button>
               </ion-col>
 
-              <ion-col size="12" size-sm="6">
-                <button class="no-border" color="red" (click)="cancel (home_injection?.id)">
+              <ion-col size="6">
+                <ion-button expand="block" class="no-border" color="red" (click)="cancel ()">
                   {{ 'CANCEL' | translate }}
-                </button>
+                </ion-button>
               </ion-col>
             </ion-row>
           </div>
 
           <div *ngIf="home_injection?.state === 'approved'">
-            <ion-card>
-              <ion-card-header>
-                <b>{{ 'Costo' | translate }}</b>
-              </ion-card-header> 
-              <ion-card-content>
-                <p class="ion-text-wrap">{{ 'Total (inc. IGV):' | translate }} S/. {{ getFormatPrice (home_injection?.price) }}</p>
-              </ion-card-content>
-            </ion-card>
-
             <div class="ion-text-center ion-padding">
-              <ion-button class="no-border" color="blue" (click)="presentActionSheet (home_injection?.price + home_injection?.delivery_price)">
-                {{ 'Pedir' | translate }}
-              </ion-button>
+              <ion-row>
+                <ion-col size="6" offset="3">
+                  <ion-button class="no-border" expand="block" color="blue" (click)="presentActionSheet (home_injection?.price + home_injection?.delivery_price)">
+                    {{ 'Pedir' | translate }}
+                  </ion-button>
+                </ion-col>
+              </ion-row>
             </div>
           </div>
         </div>

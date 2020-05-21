@@ -1259,7 +1259,7 @@ export class PaisesCodsPage implements OnInit {
     this.viewCtrl.dismiss (null, 'close');
   }
 
-  getItems(event: any) {
+  getItems (event: any) {
     var q = event.srcElement.value;
     this.countryArray = this.countryArray_backup;
 

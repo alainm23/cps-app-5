@@ -15,6 +15,7 @@ import { DatabaseService } from '../../providers/database.service';
 import { StorageService } from '../../providers/storage.service';
 import { ApiService } from '../../providers/api.service';
 import { TranslateService } from '@ngx-translate/core';
+import { BackgroundGeolocation, BackgroundGeolocationConfig, BackgroundGeolocationEvents, BackgroundGeolocationResponse } from '@ionic-native/background-geolocation/ngx';
 
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
@@ -62,6 +63,7 @@ export class HomeNursePage implements OnInit {
               // public imageViewerCtrl: ImageViewerController,
               private geolocation: Geolocation,
               private api: ApiService,
+              private backgroundGeolocation: BackgroundGeolocation,
               public loadingCtrl: LoadingController,
               private platform: Platform,
               public modalController: ModalController) {
@@ -96,7 +98,7 @@ export class HomeNursePage implements OnInit {
       note: new FormControl (""),
       date: new FormControl (new Date ().toISOString (), [Validators.required]),
       phone_number: new FormControl (phone_number, [Validators.required]),
-      tipo_comprobante: new FormControl (null, [Validators.required]),
+      tipo_comprobante: new FormControl ('boleta', [Validators.required]),
       ruc: new FormControl (""),
       razon_social: new FormControl (""),
       s_tipo: new FormControl ("", [Validators.required])
@@ -105,41 +107,41 @@ export class HomeNursePage implements OnInit {
     this.storage.getValue ('i18n').then (i18n => {
       this.translateService.getTranslation (i18n).subscribe (async (i18n: any) => {
         this.i18n = i18n;
-        
-        this.loading = await this.loadingCtrl.create ({
-          message: this.i18n.procesando_informacion,
-        });
-        
-        await this.loading.present ().then (() => {
-          if (this.route.snapshot.paramMap.get ('edit') === 'true') {
-            this.is_edit = true;
+
+        if (this.route.snapshot.paramMap.get ('edit') === 'true') {
+          let loading = await this.loadingCtrl.create ({
+            message: this.i18n.procesando_informacion,
+          });
+
+          this.is_edit = true;
+          
+          this.database.getHomePressureByKey (this.route.snapshot.paramMap.get ('id')).subscribe ((data: any) => {
+            loading.dismiss ();
+
+            this.form.controls ["address"].setValue (data.address);
+            this.form.controls ["hour"].setValue (data.hour);
+            this.form.controls ["note"].setValue (data.note);
+            this.form.controls ["date"].setValue (data.date);
+            this.form.controls ["tipo_comprobante"].setValue (data.tipo_comprobante);
+            this.form.controls ["ruc"].setValue (data.ruc);
             
-            this.database.getHomePressureByKey (this.route.snapshot.paramMap.get ('id')).subscribe ((data: any) => {
-              this.form.controls ["address"].setValue (data.address);
-              this.form.controls ["hour"].setValue (data.hour);
-              this.form.controls ["note"].setValue (data.note);
-              this.form.controls ["date"].setValue (data.date);
-              this.form.controls ["tipo_comprobante"].setValue (data.tipo_comprobante);
-              this.form.controls ["ruc"].setValue (data.ruc);
-              
-              this.form.controls ["razon_social"].setValue (data.razon_social);
-              this.form.controls ["s_tipo"].setValue (data.s_tipo);
+            this.form.controls ["razon_social"].setValue (data.razon_social);
+            this.form.controls ["s_tipo"].setValue (data.s_tipo);
 
-              this.comprobanteChange (data.tipo_comprobante);
+            this.comprobanteChange (data.tipo_comprobante);
 
-              this.latitude = data.latitude;
-              this.longitude = data.longitude;
+            this.latitude = data.latitude;
+            this.longitude = data.longitude;
 
-              this.InitMap (true, data.latitude, data.longitude);
-            });
+            this.InitMap (true, data.latitude, data.longitude);
+          });
+        } else {
+          if (this.platform.is ('cordova')) {
+            this.checkGPSPermission ();
           } else {
-            if (this.platform.is ('cordova')) {
-              this.checkGPSPermission ();
-            } else {
-              this.getLocationCoordinates ();
-            }
+            this.getLocationCoordinates ();
           }
-        });
+        }
       });
     });
   }
@@ -189,13 +191,6 @@ export class HomeNursePage implements OnInit {
     }
 
     this.map = await new google.maps.Map (this.mapRef.nativeElement, options);
-
-    if (this.map === null || this.map === undefined) {
-      console.log ('Error del puto GPS');
-      this.loading.dismiss ();  
-    } else {
-      this.loading.dismiss ();
-    } 
 
     google.maps.event.addListener(this.map, 'idle', () => {
       let location = this.map.getCenter ();
@@ -251,23 +246,16 @@ export class HomeNursePage implements OnInit {
     this.navCtrl.navigateRoot ('home'); 
   }
 
-  getCurrentLocation () {
-    this.loading = this.loadingCtrl.create ({
-      message: this.i18n.buscando_ubicacion
-    });
-    
-    this.loading.present ().then (() => {
-      this.geolocation.getCurrentPosition ().then (position => {
-        this.loading.dismiss().then(() => {
-          let lat = position.coords.latitude;
-          let lng = position.coords.longitude;
+  ionViewDidLeave () {
+    this.backgroundGeolocation.finish (); // FOR IOS ONLY
+    this.backgroundGeolocation.stop ();
+      
+    console.log ('Se cancelo el gps');
+  }
 
-          let location = new google.maps.LatLng (lat, lng);
-          this.map.setZoom (17);
-          this.map.panTo (location);
-        });
-      });
-    });
+  async getCurrentLocation () {
+    this.map.setZoom (17);
+    this.map.panTo (new google.maps.LatLng (this.latitude, this.longitude));
   }
 
   get_hours () {
@@ -371,8 +359,8 @@ export class HomeNursePage implements OnInit {
 
           this.database.updateHomePressure (this.route.snapshot.paramMap.get ('id'), data).then ((response) => {
             let push_data = {
-              titulo: 'Pedido de presión a domicilio',
-              detalle: 'Un pedido de presión a domicilio fue corregido',
+              titulo: 'Solicitud de enfermera a domicilio',
+              detalle: 'Una solicitud de presión a domicilio fue corregido',
               destino: 'presion',
               mode: 'tags',
               clave: uid,
@@ -381,11 +369,11 @@ export class HomeNursePage implements OnInit {
 
             this.api.pushNotification (push_data).subscribe (response => {
               console.log ("Notificacion Enviada...", response);
-              this.loading.dismiss ();
+              loading.dismiss ();
               this.goHome ();
             }, error => {
               console.log ("Notificacion Error...", error);
-              this.loading.dismiss ();
+              loading.dismiss ();
               this.goHome ();
             });
           });
@@ -402,11 +390,11 @@ export class HomeNursePage implements OnInit {
 
             this.api.pushNotification (push_data).subscribe (response => {
               console.log ("Notificacion Enviada...", response);
-              this.loading.dismiss ();
+              loading.dismiss ();
               this.goHome ();
             }, error => {
               console.log ("Notificacion Error...", error);
-              this.loading.dismiss ();
+              loading.dismiss ();
               this.goHome ();
             });
           });
@@ -532,7 +520,6 @@ export class HomeNursePage implements OnInit {
           .then(() => {
             this.askToTurnOnGPS ();
           }, error => {
-            this.loading.dismiss ();
             this.navCtrl.pop ();
             console.log ('requestPermission Error requesting location permissions ' + error)
           }
@@ -542,11 +529,56 @@ export class HomeNursePage implements OnInit {
   }
 
   async getLocationCoordinates () {
-    this.geolocation.getCurrentPosition().then((resp) => {
-      this.InitMap (false, resp.coords.latitude, resp.coords.longitude);
-    }).catch((error) => {
-      this.loading.dismiss ();
-      console.log ('Error getting location' + error);
+    let loading = await this.loadingCtrl.create ({
+      message: this.i18n.procesando_informacion
     });
+    
+    await loading.present ();
+
+    if (this.platform.is ('android')) {
+      const config: BackgroundGeolocationConfig = {
+        desiredAccuracy: 10,
+        stationaryRadius: 20,
+        distanceFilter: 30,
+        notificationsEnabled: false,
+        debug: false, //  enable this hear sounds for background-geolocation life-cycle.
+        stopOnTerminate: false, // enable this to clear background location settings when the app terminates
+      };
+  
+      this.backgroundGeolocation.configure (config)
+        .then(() => {
+          this.backgroundGeolocation.on (BackgroundGeolocationEvents.location).subscribe ((location: BackgroundGeolocationResponse) => {
+            console.log(location);
+  
+            loading.dismiss ();
+            this.latitude = location.latitude;
+            this.longitude = location.longitude;
+            this.InitMap (false, location.latitude, location.longitude);
+  
+            this.backgroundGeolocation.finish (); // FOR IOS ONLY
+          });
+        });
+  
+      this.backgroundGeolocation.start ();
+      this.backgroundGeolocation.stop ();
+    } else if (this.platform.is ('ios')) {
+      this.geolocation.getCurrentPosition ().then((resp) => {
+        loading.dismiss ();
+        this.InitMap (false, resp.coords.latitude, resp.coords.longitude);
+      }).catch ((error) => {
+        loading.dismiss ();
+        console.log ('Error getting location' + error);
+      });
+    }
+
+    // this.geolocation.getCurrentPosition ().then((resp) => {
+    //   loading.dismiss ();
+    //   this.latitude = resp.coords.latitude;
+    //   this.longitude = resp.coords.longitude;
+    //   this.InitMap (false, resp.coords.latitude, resp.coords.longitude);
+    // }).catch ((error) => {
+    //   loading.dismiss ();
+    //   console.log ('Error getting location' + error);
+    // });
   }
 }

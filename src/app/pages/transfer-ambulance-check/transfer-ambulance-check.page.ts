@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, LoadingController, AlertController, ActionSheetController, ModalController } from '@ionic/angular';
+import { NavController, LoadingController, AlertController, ActionSheetController, ModalController, ToastController } from '@ionic/angular';
 
 import { PagoService } from '../../providers/pago.service';
 import { DatabaseService } from '../../providers/database.service';
@@ -39,6 +39,7 @@ export class TransferAmbulanceCheckPage implements OnInit {
               public loadingCtrl: LoadingController,
               public actionSheetCtrl: ActionSheetController,
               public modalController: ModalController,
+              public toastController: ToastController,
               private pago: PagoService) {
   }
 
@@ -50,6 +51,8 @@ export class TransferAmbulanceCheckPage implements OnInit {
         const loading = await this.loadingCtrl.create ({
           message: this.i18n.procesando_informacion
         });
+
+        await loading.present ();
 
         if (this.route.snapshot.paramMap.get ('type') === 'canceled') {
           this.subscription_1 = this.database.getTransferAmbulanceCanceladoByKey (this.route.snapshot.paramMap.get ('id')).subscribe (data => {
@@ -65,6 +68,7 @@ export class TransferAmbulanceCheckPage implements OnInit {
           this.subscription_1 = this.database.getTransferAmbulanceByKey (this.route.snapshot.paramMap.get ('id')).subscribe ((data: any) => {
             this.transfer_ambulance = data;
             loading.dismiss ();
+            console.log (data);
           });
 
           this.subscription_2 = this.database.getTranferAmbulanceObservations (this.route.snapshot.paramMap.get ('id')).subscribe ((data: any) => {
@@ -105,14 +109,14 @@ export class TransferAmbulanceCheckPage implements OnInit {
     return n.toString ();
   }
 
-  edit (id: string) {
+  edit () {
     this.navCtrl.navigateForward (['transfer-ambulance', this.route.snapshot.paramMap.get ('id'), 'true']);
   }
 
-  async cancel (id: string) {
+  async cancel () {
     const confirm = await this.alertCtrl.create({
       header: this.i18n.estas_seguro_cancelar_pedido,
-      message: '',
+      message: this.i18n.llenar_motivo_cancelacion,
       inputs: [
         {
           name: 'message',
@@ -139,9 +143,33 @@ export class TransferAmbulanceCheckPage implements OnInit {
             this.transfer_ambulance.last_message = data.message;
             this.transfer_ambulance.canceled_date = new Date ().toISOString ();
 
-            this.database.updateTranferAmbulanceCanceled (this.transfer_ambulance.id, this.transfer_ambulance, this.observations ).then ((response) => {
+            this.database.updateTranferAmbulanceCanceled (this.transfer_ambulance.id, this.transfer_ambulance, this.observations ).then (async (response) => {
               loading.dismiss ();
               this.goHome ();
+
+              const toast = await this.toastController.create({
+                message: this.i18n.Tu_solicitud_fue_cancelada,
+                color: 'success',
+                position: 'top',
+                duration: 2000
+              });
+
+              toast.present ();
+                
+              let push_data = {
+                titulo: 'Solicitud cancelada',
+                detalle: 'El usuario cancelo su solicitud de transferencia en ambulancia',
+                destino: 'doctor',
+                mode: 'tags',
+                clave: 'clave',
+                tokens: 'Administrador'
+              };
+  
+              this.api.pushNotification (push_data).subscribe (async response => {
+                console.log ("Notificacion Enviada...", response);
+              }, error => {
+                console.log ("Notificacion Error...", error);
+              });
             });
           }
         }
@@ -172,18 +200,10 @@ export class TransferAmbulanceCheckPage implements OnInit {
 
         if (response.type === 'contra_entrega') {
           await this.database.updateTransferAmbulanceContraEntrega (this.transfer_ambulance.id);
-          loading.dismiss ();
-          const alert = await this.alertCtrl.create({
-            header: this.i18n.proceso_exitoso,
-            message: response.message,
-            buttons: [this.i18n.OK]
-          });
-
-          alert.present ();
 
           let push_data = {
-            titulo: 'Pedido de traslado en ambulancia',
-            detalle: 'Un pedido de traslado en ambulancia fue pagado',
+            titulo: 'Solicitud de traslado en ambulancia',
+            detalle: 'El usuario confirmó la solicitud con método de pago contraentrega',
             destino: 'traslado',
             mode: 'tags',
             clave: this.transfer_ambulance.id,
@@ -199,17 +219,19 @@ export class TransferAmbulanceCheckPage implements OnInit {
           await this.database.updateTransferAmbulanceOnlinePaid (this.transfer_ambulance.id, response.transaccion_id);
           loading.dismiss ();
 
-          const alert = await this.alertCtrl.create({
+          const toast = await this.toastController.create({
             header: this.i18n.proceso_exitoso,
             message: response.message,
-            buttons: [this.i18n.OK]
+            duration: 2000,
+            position: 'bottom',
+            color: 'success'
           });
-
-          alert.present ();
+          
+          toast.present();
 
           let push_data = {
-            titulo: 'Pedido de traslado en ambulancia',
-            detalle: 'Un pedido de traslado en ambulancia fue pagado',
+            titulo: 'Solicitud de traslado en ambulancia',
+            detalle: 'El usuario confirmó la solicitud con método de pago online',
             destino: 'traslado',
             mode: 'tags',
             clave: this.transfer_ambulance.id,

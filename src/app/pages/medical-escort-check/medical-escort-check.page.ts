@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, LoadingController, AlertController, ActionSheetController, ModalController } from '@ionic/angular';
+import { NavController, LoadingController, ToastController, AlertController, ActionSheetController, ModalController } from '@ionic/angular';
 
 import { PagoService } from '../../providers/pago.service';
 import { DatabaseService } from '../../providers/database.service';
@@ -39,6 +39,7 @@ export class MedicalEscortCheckPage implements OnInit {
               public loadingCtrl: LoadingController,
               public actionSheetCtrl: ActionSheetController,
               public modalController: ModalController,
+              public toastController: ToastController,
               private pago: PagoService) {
   }
 
@@ -107,14 +108,14 @@ export class MedicalEscortCheckPage implements OnInit {
     return n.toString ();
   }
 
-  edit (id: string) {
+  edit () {
     this.navCtrl.navigateForward (['medical-escort', this.route.snapshot.paramMap.get ('id'), 'true']);
   }
 
-  async cancel (id: string) {
+  async cancel () {
     const confirm = await this.alertCtrl.create({
       header: this.i18n.estas_seguro_cancelar_pedido,
-      message: '',
+      message: this.i18n.llenar_motivo_cancelacion,
       inputs: [
         {
           name: 'message',
@@ -141,9 +142,33 @@ export class MedicalEscortCheckPage implements OnInit {
             this.medical_escort.last_message = data.message;
             this.medical_escort.canceled_date = new Date ().toISOString ();
 
-            this.database.updateMedicalEscortsCanceled (this.medical_escort.id, this.medical_escort, this.observations ).then ((response) => {
+            this.database.updateMedicalEscortsCanceled (this.medical_escort.id, this.medical_escort, this.observations ).then (async (response) => {
               loading.dismiss ();
               this.goHome ();
+
+              const toast = await this.toastController.create({
+                message: this.i18n.Tu_solicitud_fue_cancelada,
+                color: 'success',
+                position: 'top',
+                duration: 2000
+              });
+
+              toast.present ();
+              
+              let push_data = {
+                titulo: 'Solicitud escolta médica',
+                detalle: 'El usuario cancelo su solicitud de escolta médica',
+                destino: 'doctor',
+                mode: 'tags',
+                clave: 'clave',
+                tokens: 'Administrador'
+              };
+  
+              this.api.pushNotification (push_data).subscribe (async response => {
+                console.log ("Notificacion Enviada...", response);
+              }, error => {
+                console.log ("Notificacion Error...", error);
+              });
             });
           }
         }
@@ -183,8 +208,8 @@ export class MedicalEscortCheckPage implements OnInit {
           alert.present ();
 
           let push_data = {
-            titulo: 'Pedido de escolta medica',
-            detalle: 'Un pedido de escolta medica fue pagado',
+            titulo: 'Solicitud escolta médica',
+            detalle: 'El usuario confirmó la solicitud con método de pago contraentrega',
             destino: 'escolta',
             mode: 'tags',
             clave: this.medical_escort.id,
@@ -200,17 +225,19 @@ export class MedicalEscortCheckPage implements OnInit {
           await this.database.updateMedicalEscortOnlinePaid (this.medical_escort.id, response.transaccion_id);
           loading.dismiss ();
 
-          const alert = await this.alertCtrl.create({
+          const toast = await this.toastController.create({
             header: this.i18n.proceso_exitoso,
             message: response.message,
-            buttons: [this.i18n.OK]
+            duration: 2000,
+            position: 'bottom',
+            color: 'success'
           });
-
-          alert.present();
+          
+          toast.present();
 
           let push_data = {
-            titulo: 'Pedido de escolta medica',
-            detalle: 'Un pedido de escolta medica fue pagado',
+            titulo: 'Solicitud escolta médica',
+            detalle: 'El usuario confirmó la solicitud con método de pago online',
             destino: 'escolta',
             mode: 'tags',
             clave: this.medical_escort.id,

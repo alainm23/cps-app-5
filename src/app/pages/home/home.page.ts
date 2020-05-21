@@ -17,6 +17,9 @@ import { EventsService } from '../../providers/events.service';
 import { TranslateService } from '@ngx-translate/core';
 import { first, map } from 'rxjs/operators';
 
+//Modals
+import { CalificacionPage } from '../../modals/calificacion/calificacion.page';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
@@ -37,15 +40,15 @@ export class HomePage implements OnInit {
 
   para_calificar: any [];
 
-  subscription_1: Subscription;
-  subscription_2: Subscription;
-  subscription_3: Subscription;
-  subscription_4: Subscription;
-  subscription_5: Subscription;
-  subscription_6: Subscription;
-  subscription_7: Subscription;
-  subscription_8: Subscription;
-  subscription_9: Subscription;
+  subscription_1: Subscription = null;
+  subscription_2: Subscription = null;
+  subscription_3: Subscription = null;
+  subscription_4: Subscription = null;
+  subscription_5: Subscription = null;
+  subscription_6: Subscription = null;
+  subscription_7: Subscription = null;
+  subscription_8: Subscription = null;
+  subscription_9: Subscription = null;
 
   i18n: any;
   
@@ -60,7 +63,7 @@ export class HomePage implements OnInit {
               private navCtrl: NavController,
               private storage: StorageService,
               private geolocation: Geolocation,
-              public modalCtrl: ModalController,
+              public modalController: ModalController,
               public loadingCtrl: LoadingController,
               private database: DatabaseService) {
   }
@@ -75,14 +78,14 @@ export class HomePage implements OnInit {
         lang = 'es';
       }
 
-      this.translateService.getTranslation (lang).subscribe ((i18n: any) => {
+      this.translateService.getTranslation (lang).subscribe (async (i18n: any) => {
         this.i18n = i18n;
-
-        console.log ('home', this.i18n);
-
-        const loading = this.loadingCtrl.create ({
+        
+        const loading = await this.loadingCtrl.create ({
           message: this.i18n.procesando_informacion
         });
+
+        loading.present ();
 
         this.auth.getUsuario ().subscribe (async (response: any) => {
           if (response) {
@@ -90,55 +93,62 @@ export class HomePage implements OnInit {
 
             this.subscription_1 = this.database.getSendAmbulance (response.uid).subscribe (data => {
               this.ambulance_object = data;
+              this.check_loading (loading);
             });
 
             this.subscription_2 = this.database.getDelivery (response.uid).subscribe (data => {
               this.delivery_object = data;
+              this.check_loading (loading);
             });
 
             this.subscription_3 = this.database.getHomeInjection (response.uid).subscribe (data => {
               this.injection_object = data;
+              this.check_loading (loading);
             });
 
             this.subscription_4 = this.database.getTransferAmbulanceByKey (response.uid).subscribe (data => {
               this.transfer_ambulance = data;
+              this.check_loading (loading);
             });
 
             this.subscription_5 = this.database.getMedicalEscortByKey (response.uid).subscribe (data => {
               this.medical = data;
+              this.check_loading (loading);
             });
 
             this.subscription_6 = this.database.getHomePressureByKey (response.uid).subscribe (data => {
               this.home_pressure = data;
+              this.check_loading (loading);
             });
 
             this.subscription_7 = this.database.getHomeDoctorByKey (response.uid).subscribe (data => {
               this.home_doctor = data;
+              this.check_loading (loading);
             });
 
             this.subscription_8 = this.database.getRequestByKey (response.uid).subscribe (data => {
               this.request = data;
+              this.check_loading (loading);
             });
 
             this.subscription_9 = this.database.getParaCalificar (response.uid).subscribe (data => {
               this.para_calificar = data;
-
-              console.log (data);
+              this.check_loading (loading);
             });
-            
-            (await loading).dismiss ();
           } else {
             try {
               this.database.getSendAmbulance (this.device.uuid).subscribe (async data => {
-                (await loading).dismiss ();
                 this.ambulance_object = data;
+                loading.dismiss ();
               });
             } catch (e) {
               console.log (e);
+              loading.dismiss ();
             }
           }
         }, error => {
-          
+          console.log (error);
+          loading.dismiss ();
         });
 
         this.events.getObservableDeslogeado ().subscribe (() => {
@@ -148,8 +158,16 @@ export class HomePage implements OnInit {
     });
   }
 
-  ngOnInit() {
+  ngOnInit () {
     
+  }
+
+  check_loading (loading: any) {
+    if (this.subscription_1 !== null && this.subscription_2 !== null && this.subscription_3 !== null && this.subscription_4 !== null &&
+      this.subscription_5 !== null && this.subscription_6 !== null && this.subscription_7 !== null && this.subscription_8 !== null &&
+      this.subscription_9 !== null) {
+        loading.dismiss ();
+      }
   }
 
   ionViewDidLeave () {
@@ -183,6 +201,10 @@ export class HomePage implements OnInit {
 
     if (this.subscription_8 != undefined && this.subscription_8 != null) {
       this.subscription_8.unsubscribe ();
+    }
+
+    if (this.subscription_9 != undefined && this.subscription_9 != null) {
+      this.subscription_9.unsubscribe ();
     }
   }
   clear_all () {
@@ -297,44 +319,43 @@ export class HomePage implements OnInit {
     });
   }
 
-  calificar (item: any) {
-    // console.log (item);
-    
-    // let myModal = this.modalCtrl.create("CalificacionPage");
+  async calificar (item: any) {
+    const modal = await this.modalController.create({
+      component:CalificacionPage,
+    });
 
-    // myModal.onDidDismiss (data => {
-    //   console.log (data);
-    //   if (data) { 
-    //     const loading = this.loadingCtrl.create ({
-    //       content: this.i18n.procesando_informacion
-    //     });
+    modal.onDidDismiss ().then (async (response: any) => {
+      if (response.role == 'ok') {
+        const loading = await this.loadingCtrl.create ({
+          message: this.i18n.procesando_informacion
+        });
 
-    //     loading.present ();
+        loading.present ();
 
-    //     this.database.addComentario (item, data, this.user_uid)
-    //       .then (() => {
-    //         loading.dismiss ();
-    //       }, error => {
+        this.database.addComentario (item, response.data, this.user_uid)
+          .then (() => {
+            loading.dismiss ();
+          }, error => {
 
-    //       }); 
-    //   }
-    // });
+          }); 
+      }
+    });
 
-    // myModal.present();
+    return await modal.present ();
   }
 
-  cancelCalificacion (item) {
-    // const loading = this.loadingCtrl.create ({
-    //   content: this.i18n.procesando_informacion
-    // });
+  async cancelCalificacion (item) {
+    const loading = await this.loadingCtrl.create ({
+      message: this.i18n.procesando_informacion
+    });
 
-    // loading.present ();
+    await loading.present ();
 
-    // this.database.cancelarComentario (item, this.user_uid)
-    //   .then (() => {
-    //     loading.dismiss ();
-    //   }, error => {
+    this.database.cancelarComentario (item, this.user_uid)
+      .then (() => {
+        loading.dismiss ();
+      }, error => {
 
-    //   });
+      });
   }
 }

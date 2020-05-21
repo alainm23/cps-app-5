@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, ModalController, LoadingController, AlertController } from '@ionic/angular';
+import { NavController, ModalController, LoadingController, AlertController, ToastController } from '@ionic/angular';
 
 import { FormControl, FormGroup, Validators} from "@angular/forms";
 
@@ -32,9 +32,10 @@ export class RequestResultsCheckPage implements OnInit {
     private route: ActivatedRoute, 
     private loadingCtrl: LoadingController,
     private database: DatabaseService,
-    private auth: AuthService,
+    public auth: AuthService,
     private api: ApiService,
     private storage: StorageService,
+    public toastController: ToastController,
     private alertCtrl: AlertController,
     private translateService: TranslateService,
     public modalController: ModalController) {
@@ -65,6 +66,7 @@ export class RequestResultsCheckPage implements OnInit {
           this.subscription_1 = this.database.getRequestByKey (this.route.snapshot.paramMap.get ("id")).subscribe ((data: any) => {
             this.home_injection = data;
             loading.dismiss ();
+            console.log (data);
           });
 
           this.subscription_2 = this.database.getRequestObservations (this.route.snapshot.paramMap.get ("id")).subscribe ((data: any) => {
@@ -77,7 +79,7 @@ export class RequestResultsCheckPage implements OnInit {
     });
   }
 
-  edit (id: string) {
+  edit () {
     this.navCtrl.navigateForward (['request-results', this.route.snapshot.paramMap.get ('id'), 'true']);
   }
 
@@ -88,7 +90,7 @@ export class RequestResultsCheckPage implements OnInit {
   async cancel () {
     const confirm = await this.alertCtrl.create({
       header: this.i18n.estas_seguro_cancelar_pedido,
-      message: '',
+      message: this.i18n.llenar_motivo_cancelacion,
       inputs: [
         {
           name: 'message',
@@ -115,9 +117,33 @@ export class RequestResultsCheckPage implements OnInit {
             this.home_injection.last_message = data.message;
             this.home_injection.canceled_date = new Date ().toISOString ();
 
-            this.database.updateRequestCanceled (this.home_injection.id, this.home_injection, this.observations ).then ((response) => {
+            this.database.updateRequestCanceled (this.home_injection.id, this.home_injection, this.observations ).then (async (response) => {
               loading.dismiss ();
               this.goHome ();
+
+              const toast = await this.toastController.create({
+                message: this.i18n.Tu_solicitud_fue_cancelada,
+                color: 'success',
+                position: 'top',
+                duration: 2000
+              });
+
+              toast.present ();
+
+              let push_data = {
+                titulo: 'Solicitud cancelada',
+                detalle: 'El usuario cancelo su solicitud de resultado',
+                destino: 'doctor',
+                mode: 'tags',
+                clave: 'clave',
+                tokens: 'Administrador'
+              };
+  
+              this.api.pushNotification (push_data).subscribe (async response => {
+                console.log ("Notificacion Enviada...", response);
+              }, error => {
+                console.log ("Notificacion Error...", error);
+              });
             });
           }
         }
@@ -164,17 +190,9 @@ export class RequestResultsCheckPage implements OnInit {
           await this.database.updateRequestContraEntrega (this.home_injection.id);
           loading.dismiss ();
 
-          const alert = await this.alertCtrl.create ({
-            header: this.i18n.proceso_exitoso,
-            message: response.message,
-            buttons: [this.i18n.OK]
-          });
-
-          alert.present();
-
           let push_data = {
-            titulo: 'Pedido de resultados',
-            detalle: 'Un pedido de resultados fue pagado',
+            titulo: 'Solicitud de resultados',
+            detalle: 'El usuario confirmó la solicitud con método de pago contraentrega',
             destino: 'resultados',
             mode: 'tags',
             clave: this.home_injection.id,
@@ -190,17 +208,19 @@ export class RequestResultsCheckPage implements OnInit {
           await this.database.updateRequestOnlinePaid (this.home_injection.id, response.transaccion_id);
           loading.dismiss ();
 
-          const alert = await this.alertCtrl.create({
+          const toast = await this.toastController.create({
             header: this.i18n.proceso_exitoso,
             message: response.message,
-            buttons: [this.i18n.OK]
+            duration: 2000,
+            position: 'bottom',
+            color: 'success'
           });
-
-          alert.present(); 
+          
+          toast.present();
 
           let push_data = {
-            titulo: 'Pedido de resultados',
-            detalle: 'Un pedido de resultados fue pagado',
+            titulo: 'Solicitud de resultados',
+            detalle: 'El usuario confirmó la solicitud con método de pago online',
             destino: 'resultados',
             mode: 'tags',
             clave: this.home_injection.id,

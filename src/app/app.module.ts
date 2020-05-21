@@ -35,6 +35,7 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 
 // Camara
+import { BackgroundGeolocation } from '@ionic-native/background-geolocation/ngx';
 import { Camera } from '@ionic-native/camera/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Device } from '@ionic-native/device/ngx';
@@ -55,13 +56,16 @@ import { MapSelectPageModule } from './modals/map-select/map-select.module';
 import { PaisesCodsPageModule } from './modals/paises-cods/paises-cods.module';
 import { PayPageModule } from './modals/pay/pay.module';
 import { CountrySelectPageModule } from './modals/country-select/country-select.module';
+import { CalificacionPageModule } from './modals/calificacion/calificacion.module';
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(),
+    IonicModule.forRoot({
+      mode: 'md'
+    }),
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
@@ -79,7 +83,8 @@ import { CountrySelectPageModule } from './modals/country-select/country-select.
     PaisesCodsPageModule,
     CustomFormsModule,
     PayPageModule,
-    CountrySelectPageModule
+    CountrySelectPageModule,
+    CalificacionPageModule
   ],
   providers: [
     StatusBar,
@@ -96,6 +101,7 @@ import { CountrySelectPageModule } from './modals/country-select/country-select.
     AppAvailability,
     OneSignal,
     AppVersion,
+    BackgroundGeolocation,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

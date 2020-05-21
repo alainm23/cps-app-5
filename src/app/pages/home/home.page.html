@@ -417,7 +417,7 @@
 
     <ion-item color="green" *ngIf="home_pressure?.state === 'completed'">
       <ion-avatar slot="start">
-        <img src="assets/imgs/iconos-10-symbolic.svg">
+        <img src="assets/imgs/iconos-10-symbolic.png">
       </ion-avatar>
 
       <ion-label style="margin-left: 1rem;">
@@ -542,9 +542,9 @@
 
       <ion-label style="margin-left: 1rem;">
         <h2 class="label-white"><b>{{ 'solicitud_de_resultados' | translate }}</b></h2>
-      <p class="ion-text-wrap">
-        {{ 'aun_por_confirmar' | translate }}
-      </p>
+        <p class="ion-text-wrap">
+          {{ 'aun_por_confirmar' | translate }}
+        </p>
       </ion-label>
 
       <ion-button slot="end" color="white" fill="clear">
@@ -620,21 +620,22 @@
         <img *ngIf="item.type === 'request'" src="assets/imgs/iconos-07-symbolic.png">
       </ion-avatar>
 
-      <h2 *ngIf="item.type === 'delivery'" class="label-white"><b>{{ 'Calificar: Médico a domicilio' | translate }}</b></h2>
-      <h2 *ngIf="item.type === 'injection'" class="label-white"><b>{{ 'Calificar: inyectable a casa' | translate }}</b></h2>
-      <h2 *ngIf="item.type === 'transfer'" class="label-white"><b>{{ 'Calificar: translado ambulancia' | translate }}</b></h2>
-      <h2 *ngIf="item.type === 'medical'" class="label-white"><b>{{ 'Calificar: escolta medica' | translate }}</b></h2>
-      <h2 *ngIf="item.type === 'home_pressure'" class="label-white"><b>{{ 'Calificar: Enfermera a domicilio' | translate }}</b></h2>
-      <h2 *ngIf="item.type === 'home_doctor'" class="label-white"><b>{{ 'Calificar: Doctor a domicilio' | translate }}</b></h2>
-      <h2 *ngIf="item.type === 'request'" class="label-white"><b>{{ 'Calificar: Solicitud de resultados' | translate }}</b></h2>
+      <ion-label>
+        <h2 *ngIf="item.type === 'delivery'" class="label-white"><b>{{ 'Calificar: Médico a domicilio' | translate }}</b></h2>
+        <h2 *ngIf="item.type === 'injection'" class="label-white"><b>{{ 'Calificar: inyectable a casa' | translate }}</b></h2>
+        <h2 *ngIf="item.type === 'transfer'" class="label-white"><b>{{ 'Calificar: translado ambulancia' | translate }}</b></h2>
+        <h2 *ngIf="item.type === 'medical'" class="label-white"><b>{{ 'Calificar: escolta medica' | translate }}</b></h2>
+        <h2 *ngIf="item.type === 'home_pressure'" class="label-white"><b>{{ 'Calificar: Enfermera a domicilio' | translate }}</b></h2>
+        <h2 *ngIf="item.type === 'home_doctor'" class="label-white"><b>{{ 'Calificar: Doctor a domicilio' | translate }}</b></h2>
+        <h2 *ngIf="item.type === 'request'" class="label-white"><b>{{ 'Calificar: Solicitud de resultados' | translate }}</b></h2>
+        <p class="ion-text-wrap">
+          {{ 'Por favor, califica nuestro servicio' | translate }}
+        </p>
+      </ion-label>
       
-      <p class="ion-text-wrap">
-        {{ 'Por favor, califica nuestro servicio' | translate }}
-      </p>
-
-      <button ion-button item-end outline clear icon-only>
-        <ion-icon color="light" name="arrow-round-forward"></ion-icon>
-      </button>
+      <ion-button slot="end" color="white" fill="clear">
+        <ion-icon slot="icon-only" name="arrow-forward-outline"></ion-icon>
+      </ion-button>
     </ion-item>
 
     <ion-item color="danger" (click)="cancelCalificacion (item)">
@@ -644,7 +645,7 @@
 
   <ion-item style="margin-top: 0.5rem;" lines="none" *ngIf="auth.is_logged" class="ion-text-center">
     <ion-label>
-      <h1 style="font-size: 1.6rem;" class="ion-text-wrap title-label">{{ 'HELLO' | translate }} {{ auth.user?.first_name }}</h1>
+      <h1 style="font-size: 22px !important;" class="ion-text-wrap title-label">{{ 'HELLO' | translate }} {{ auth.user?.first_name }}</h1>
     </ion-label>
   </ion-item>
 
@@ -653,6 +654,12 @@
       <h1 style="font-size: 1.6rem;" class="ion-text-wrap title-label">{{ 'WELCOME_TO_CPS' | translate }}</h1>
     </ion-label>
   </ion-item>
+
+  <!-- <ion-item class="ion-text-center">
+    <ion-label>
+      <ion-spinner color="blue"></ion-spinner>
+    </ion-label>
+  </ion-item> -->
 
   <ion-grid>
     <ion-row>
@@ -675,7 +682,6 @@
         <ion-card class="home-item ion-no-margin ion-no-padding" (click)="goPage ('pharmacy-delivery')">
           <img class="ion-padding-top logo-css" src="assets/imgs/iconos-03.jpg">
           <h3 class="ion-padding-top ion-text-wrap">{{ 'Pedido de farmacia' | translate }}</h3>
-          <small>{{ 'Vacunas' | translate }}</small>
         </ion-card>
       </ion-col>
 

@@ -143,7 +143,7 @@ export class PayPage implements OnInit {
       type: 'salir'
     };
 
-    this.viewCtrl.dismiss(item);
+    this.viewCtrl.dismiss (item, 'response');
   }
 
   async openCulqi () {
@@ -160,11 +160,27 @@ export class PayPage implements OnInit {
     })
   }
 
-  contraentrega () {
-    let item: any = {
-      type: 'contra_entrega'
-    };
+  async contraentrega () {
+    const alert = await this.alertCtrl.create({
+      header: 'Confirmación',
+      message: '¿Esta seguro que desea continuar con este metodo de pago?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+        }, {
+          text: 'Confirmar',
+          handler: () => {
+            let item: any = {
+              type: 'contra_entrega'
+            };
+        
+            this.viewCtrl.dismiss (item, 'response');
+          }
+        }
+      ]
+    });
 
-    this.viewCtrl.dismiss(item);
+    await alert.present();
   }
 }

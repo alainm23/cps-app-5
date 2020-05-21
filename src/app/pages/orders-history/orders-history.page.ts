@@ -80,62 +80,80 @@ export class OrdersHistoryPage implements OnInit {
         this.storage.getValue ("uid").then (async id => {
           this.subscription_1 = this.database.getFarmaciaCanceladoByUser (id).subscribe (data => {
             this.deliveries_cancelados = data;
+            this.check_loading (loading);
           });
 
           this.subscription_2 = this.database.getFarmaciaFinalizadosByUser (id).subscribe (data => {
             this.deliveries_finalizados = data;
             this.deliveries = data;
+            this.check_loading (loading);
           });
 
           this.subscription_3 = this.database.getHomeInjectionFinalizadosByUser (id).subscribe (data => {
             this.home_injections_finalizados = data;
             this.home_injections = data;
+            this.check_loading (loading);
           });
 
           this.subscription_4 = this.database.getHomeInjectionCanceladoByUser (id).subscribe (data => {
             this.home_injections_cancelados = data;
+            this.check_loading (loading);
           });
           
           this.subscription_5 = this.database.getTransferAmbulanceFinalizadosByUser (id).subscribe (data => {
             this.transf_ambulance_finalizados = data;
             this.transf_ambulance = data;
+            this.check_loading (loading);
           });
 
           this.subscription_6 = this.database.getTransferAmbulanceCanceladoByUser (id).subscribe (data => {
             this.transf_ambulance_cancelados = data;
+            this.check_loading (loading);
           });
 
           this.subscription_7 = this.database.getMedicalEscortsFinalizadosByUser (id).subscribe (data => {
             this.medical_finalizados = data;
             this.medical = data;
+            this.check_loading (loading);
           });
 
           this.subscription_8 = this.database.getMedicalEscortsCanceladoByUser (id).subscribe (data => {
             this.medical_cancelados = data;
+            this.check_loading (loading);
           });
 
           this.subscription_9 = this.database.getHomePressureFinalizadosByUser (id).subscribe (data => {
             this.home_pressure_finalizados = data;
             this.home_pressure = data;
+            this.check_loading (loading);
           });
 
           this.subscription_10 = this.database.getHomePressureCanceladoByUser (id).subscribe (data => {
             this.home_pressure_cancelados = data;
+            this.check_loading (loading);
           });
 
           this.subscription_11 = this.database.getHomeDoctorFinalizadosByUser (id).subscribe (data => {
             this.home_doctor_finalizados = data;
             this.home_doctor = data;
+            this.check_loading (loading);
           });
 
           this.subscription_12 = this.database.getHomeDoctorCanceladoByUser (id).subscribe (data => {
             this.home_doctor_cancelados = data;
+            this.check_loading (loading);
           });
-
-          loading.dismiss ();
         });
       });
     });
+  }
+
+  check_loading (loading: any) {
+    if (this.subscription_1 !== null && this.subscription_2 !== null && this.subscription_3 !== null && this.subscription_4 !== null &&
+      this.subscription_5 !== null && this.subscription_6 !== null && this.subscription_7 !== null && this.subscription_8 !== null &&
+      this.subscription_9 !== null && this.subscription_10 !== null && this.subscription_11 !== null && this.subscription_12 !== null) {
+        loading.dismiss ();
+      }
   }
 
   ngOnDestroy () {
@@ -245,7 +263,7 @@ export class OrdersHistoryPage implements OnInit {
   }
 
   getFormatDate (date: string) {
-    return moment(date).format('MMM Do YY')
+    return moment(date).format ('LLL');
   }
 
   seeHomeInjection (data: any) {

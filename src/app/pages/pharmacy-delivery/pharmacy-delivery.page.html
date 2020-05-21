@@ -4,7 +4,7 @@
       <ion-back-button></ion-back-button>
     </ion-buttons>
 
-    <ion-title><img class="logotio" src="assets/imgs/logotio.png"></ion-title>
+    <ion-title (click)="goHome ()"><img class="logotio" src="assets/imgs/logotio.png"></ion-title>
     <ion-buttons slot="end">
       <ion-menu-button autoHide="false"></ion-menu-button>
     </ion-buttons>
@@ -32,9 +32,9 @@
           </ion-item>
 
           <ion-item>
-            <ion-label class="header-text" position="stacked">
+            <div class="ion-text-wrap" style="font-size: 13pt; font-weight: 500;">
               {{ 'Adjuntar imagen de receta medica' | translate }}:
-            </ion-label>
+            </div>
           </ion-item>
 
           <div style="margin-left: 1rem;" clss="ion-margin-left">
@@ -101,7 +101,7 @@
               </ion-col>
               <ion-col size="8">
                 <ion-item>
-                  <ion-input type="tel" formControlName="phone_number" placeholder="955 552 121"></ion-input>
+                  <ion-input style="--padding-top: 17px !important;" type="tel" formControlName="phone_number" placeholder="955 552 121"></ion-input>
                 </ion-item>
               </ion-col>
             </ion-row>
@@ -115,7 +115,7 @@
 
           <!--Tipo de comprobante -->
           <ion-item>
-            <ion-label style="font-size: 13pt !important; font-weight: bold;">{{ 'Tipo de comprobante' | translate }}</ion-label>
+            <ion-label style="font-size: 13pt !important; font-weight: 500;">{{ 'Tipo de comprobante' | translate }}</ion-label>
             <ion-select interface="popover" formControlName="tipo_comprobante" (ionChange)="comprobanteChange ($event)">
               <ion-select-option value="factura">{{ 'Factura' | translate }}</ion-select-option>
               <ion-select-option value="boleta">{{ 'Boleta' | translate }}</ion-select-option>
@@ -185,7 +185,7 @@
             <ion-row>
               <ion-col *ngIf="!is_edit" size="8" offset="2">
                 <ion-button class="no-border" expand="block" color="blue" [disabled]="!form.valid" (click)="goOrder ()">
-                  {{ 'Pedir' | translate }}
+                  {{ 'Ordenar' | translate }}
                 </ion-button>
               </ion-col>
 

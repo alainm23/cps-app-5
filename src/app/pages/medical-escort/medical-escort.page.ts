@@ -107,7 +107,7 @@ export class MedicalEscortPage implements OnInit {
         Validators.pattern('true')
       ])),
       phone_number: new FormControl (phone_number, [Validators.required]),
-      tipo_comprobante: new FormControl (null, Validators.required),
+      tipo_comprobante: new FormControl ('boleta', Validators.required),
       ruc: new FormControl (""),
       razon_social: new FormControl ("")
     });
@@ -116,53 +116,53 @@ export class MedicalEscortPage implements OnInit {
       this.translateService.getTranslation (i18n).subscribe (async (i18n: any) => {
         this.i18n = i18n;
         
-        this.loading = await this.loadingCtrl.create ({
-          message: this.i18n.procesando_informacion
-        });
-        
-        await this.loading.present ().then (() => {
-          if (this.route.snapshot.paramMap.get ('edit') === 'true') {
-            this.is_edit = true;
+        if (this.route.snapshot.paramMap.get ('edit') === 'true') {
+          let loading = await this.loadingCtrl.create ({
+            message: this.i18n.procesando_informacion
+          });
+
+          loading.present ();
+
+          this.is_edit = true;
+          
+          this.database.getMedicalEscortByKey (this.route.snapshot.paramMap.get ('id')).subscribe ((data: any) => {
+            loading.dismiss ();
+
+            this.form.controls ["address_ori"].setValue (data.address_ori);
+            this.form.controls ["address_des"].setValue (data.address_des);
+            this.form.controls ["location_ori_lat"].setValue (data.location_ori_lat);
+            this.form.controls ["location_ori_lon"].setValue (data.location_ori_lon);
+            this.form.controls ["location_des_lat"].setValue (data.location_des_lat);
+            this.form.controls ["location_des_lon"].setValue (data.location_des_lon);
+            //this.form.controls ["date"].setValue (data.date);
+            //this.form.controls ["hour"].setValue (data.hour);
+            this.form.controls ["description"].setValue (data.description);
+            this.form.controls ["need_doctor"].setValue (data.need_doctor);
+            this.form.controls ["need_nurse"].setValue (data.need_nurse);
+
+            this.form.controls ["need_oxygen"].setValue (data.need_oxygen);
+            this.form.controls ["need_spanish"].setValue (data.need_spanish);
+            this.form.controls ["need_english"].setValue (data.need_english);
+            this.form.controls ["number_patients"].setValue (data.number_patients);
+            this.form.controls ["terms_conditions"].setValue (false);
+            this.form.controls ["tipo_comprobante"].setValue (data.tipo_comprobante);
+            this.form.controls ["ruc"].setValue (data.ruc);
+            this.form.controls ["razon_social"].setValue (data.razon_social);
+
+            this.form.controls ["need_paramedic"].setValue (data.need_paramedic);
+            this.form.controls ["number_days"].setValue (data.number_days);
+
+            this.comprobanteChange (data.tipo_comprobante);
             
-            this.database.getMedicalEscortByKey (this.route.snapshot.paramMap.get ('id')).subscribe ((data: any) => {
-              this.form.controls ["address_ori"].setValue (data.address_ori);
-              this.form.controls ["address_des"].setValue (data.address_des);
-              this.form.controls ["location_ori_lat"].setValue (data.location_ori_lat);
-              this.form.controls ["location_ori_lon"].setValue (data.location_ori_lon);
-              this.form.controls ["location_des_lat"].setValue (data.location_des_lat);
-              this.form.controls ["location_des_lon"].setValue (data.location_des_lon);
-              //this.form.controls ["date"].setValue (data.date);
-              //this.form.controls ["hour"].setValue (data.hour);
-              this.form.controls ["description"].setValue (data.description);
-              this.form.controls ["need_doctor"].setValue (data.need_doctor);
-              this.form.controls ["need_nurse"].setValue (data.need_nurse);
+            this.number_patients = data.number_patients;
 
-              this.form.controls ["need_oxygen"].setValue (data.need_oxygen);
-              this.form.controls ["need_spanish"].setValue (data.need_spanish);
-              this.form.controls ["need_english"].setValue (data.need_english);
-              this.form.controls ["number_patients"].setValue (data.number_patients);
-              this.form.controls ["terms_conditions"].setValue (false);
-              this.form.controls ["tipo_comprobante"].setValue (data.tipo_comprobante);
-              this.form.controls ["ruc"].setValue (data.ruc);
-              this.form.controls ["razon_social"].setValue (data.razon_social);
-
-              this.form.controls ["need_paramedic"].setValue (data.need_paramedic);
-              this.form.controls ["number_days"].setValue (data.number_days);
-
-              this.comprobanteChange (data.tipo_comprobante);
-              
-              this.number_patients = data.number_patients;
-
-              this.loading.dismiss ();
-            });
-          } else {
             this.loading.dismiss ();
-          }
-        });
+          });
+        }
       });
     });
   }
-
+  
   ngOnDestroy () {
   }
 
@@ -280,11 +280,11 @@ export class MedicalEscortPage implements OnInit {
   }
 
   async submit () {
-    this.loading = await this.loadingCtrl.create({
+    let loading = await this.loadingCtrl.create({
       message: this.i18n.procesando_informacion
     });
 
-    await this.loading.present ().then (() => {
+    await loading.present ().then (() => {
       this.storage.getValue ("uid").then ((id) => {
         this.storage.getValue ("token_id").then (token_id => {
           const value = this.form.value;
@@ -349,7 +349,7 @@ export class MedicalEscortPage implements OnInit {
             
             this.database.updateMedicalEscorts (this.route.snapshot.paramMap.get ('id'), data).then ((response) => {
               let push_data = {
-                titulo: 'Pedido de escolta medica',
+                titulo: 'Solicitud de escolta medica',
                 detalle: 'Un pedido de escolta medica fue corregido',
                 destino: 'escolta',
                 mode: 'tags',
@@ -359,19 +359,19 @@ export class MedicalEscortPage implements OnInit {
 
               this.api.pushNotification (push_data).subscribe (response => {
                 console.log ("Notificacion Enviada...", response);
-                this.loading.dismiss ();
+                loading.dismiss ();
                 this.goHome ();
               }, error => {
                 console.log ("Notificacion Error...", error);
-                this.loading.dismiss ();
+                loading.dismiss ();
                 this.goHome ();
               });
             });
           } else {
             this.database.addMedicalEscort (id, data, this.pais_selected).then ((response) => {
               let push_data = {
-                titulo: 'Pedido de escolta medica',
-                detalle: 'Un pedido de escolta medica fue solicitado',
+                titulo: 'Solicitud de escolta medica',
+                detalle: 'Una solicitud de escolta medica fue solicitada',
                 destino: 'escolta',
                 mode: 'tags',
                 clave: id,
@@ -380,11 +380,11 @@ export class MedicalEscortPage implements OnInit {
 
               this.api.pushNotification (push_data).subscribe (response => {
                 console.log ("Notificacion Enviada...", response);
-                this.loading.dismiss ();
+                loading.dismiss ();
                 this.goHome ();
               }, error => {
                 console.log ("Notificacion Error...", error);
-                this.loading.dismiss ();
+                loading.dismiss ();
                 this.goHome ();
               });
             });

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'; 
-import { NavController, LoadingController, AlertController, ActionSheetController, ModalController } from '@ionic/angular';
+import { NavController, ToastController, LoadingController, AlertController, ActionSheetController, ModalController } from '@ionic/angular';
 
 import { PagoService } from '../../providers/pago.service';
 import { DatabaseService } from '../../providers/database.service';
@@ -38,6 +38,7 @@ export class HomeDoctorCheckPage implements OnInit {
               public actionSheetCtrl: ActionSheetController,
               public modalController: ModalController,
               private route: ActivatedRoute,
+              public toastController: ToastController,
               private pago: PagoService) {
   }
 
@@ -65,6 +66,7 @@ export class HomeDoctorCheckPage implements OnInit {
         } else {
           this.subscription_1 = this.database.getHomeDoctorByKey (this.route.snapshot.paramMap.get ('id')).subscribe ((data: any) => {
             this.home_injection = data;
+            console.log (data);
             loading.dismiss ();
           });
 
@@ -114,6 +116,7 @@ export class HomeDoctorCheckPage implements OnInit {
   async cancel () {
     const confirm = await this.alertCtrl.create ({
       header: this.i18n.estas_seguro_cancelar_pedido,
+      message: this.i18n.llenar_motivo_cancelacion,
       inputs: [
         {
           name: 'message',
@@ -140,9 +143,33 @@ export class HomeDoctorCheckPage implements OnInit {
             this.home_injection.last_message = data.message;
             this.home_injection.canceled_date = new Date ().toISOString ();
 
-            this.database.updateHomeDoctorCanceled (this.home_injection.id, this.home_injection, this.observations ).then ((response) => {
+            this.database.updateHomeDoctorCanceled (this.home_injection.id, this.home_injection, this.observations ).then (async (response) => {
               loading.dismiss ();
               this.goHome ();
+
+              const toast = await this.toastController.create({
+                message: this.i18n.Tu_solicitud_fue_cancelada,
+                color: 'success',
+                position: 'top',
+                duration: 2000
+              });
+
+              toast.present ();
+
+              let push_data = {
+                titulo: 'Solicitud cancelada',
+                detalle: 'El usuario cancelo su solicitud de doctor a domicilio',
+                destino: 'doctor',
+                mode: 'tags',
+                clave: 'clave',
+                tokens: 'Administrador'
+              };
+  
+              this.api.pushNotification (push_data).subscribe (async response => {
+                console.log ("Notificacion Enviada...", response);
+              }, error => {
+                console.log ("Notificacion Error...", error);
+              });
             });
           }
         }
@@ -175,17 +202,9 @@ export class HomeDoctorCheckPage implements OnInit {
           await this.database.updateHomeDoctorContraEntrega (this.home_injection.id);
           loading.dismiss ();
 
-          const alert = await this.alertCtrl.create({
-            header: this.i18n.proceso_exitoso,
-            message: response.message,
-            buttons: [this.i18n.OK]
-          });
-
-          alert.present();
-
           let push_data = {
-            titulo: 'Pedido de doctor a domicilio',
-            detalle: 'Un pedido de doctor a domicilio fue pagado',
+            titulo: 'Solicitud de doctor a domicilio',
+            detalle: 'El usuario confirmó la solicitud con método de pago contraentrega',
             destino: 'doctor',
             mode: 'tags',
             clave: this.home_injection.id,
@@ -201,17 +220,19 @@ export class HomeDoctorCheckPage implements OnInit {
           await this.database.updateHomeDoctorOnlinePaid (this.home_injection.id, response.transaccion_id);
           loading.dismiss ();
 
-          const alert = await this.alertCtrl.create({
+          const toast = await this.toastController.create({
             header: this.i18n.proceso_exitoso,
             message: response.message,
-            buttons: [this.i18n.OK]
+            duration: 2000,
+            position: 'bottom',
+            color: 'success'
           });
-
-          alert.present();
+          
+          toast.present();
 
           let push_data = {
-            titulo: 'Pedido de doctor a domicilio',
-            detalle: 'Un pedido de doctor a domicilio fue pagado',
+            titulo: 'Solicitud de doctor a domicilio',
+            detalle: 'El usuario confirmó la solicitud con método de pago online',
             destino: 'doctor',
             mode: 'tags',
             clave: this.home_injection.id,

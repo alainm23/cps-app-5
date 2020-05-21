@@ -4,7 +4,7 @@
       <ion-back-button></ion-back-button>
     </ion-buttons>
 
-    <ion-title><img class="logotio" src="assets/imgs/logotio.png"></ion-title>
+    <ion-title (click)="goHome ()"><img class="logotio" src="assets/imgs/logotio.png"></ion-title>
     <ion-buttons slot="end">
       <ion-menu-button autoHide="false"></ion-menu-button>
     </ion-buttons>
@@ -84,7 +84,7 @@
           <form class="ion-padding" [formGroup]="form">
             <ion-list>
               <ion-item>
-                <ion-input class="border-bottom" type="text" formControlName="fullname" placeholder="{{ 'Nombre completo' | translate }}"></ion-input>
+                <ion-input type="text" formControlName="fullname" placeholder="{{ 'Nombre completo' | translate }}"></ion-input>
               </ion-item>
               
               <!-- <div class="padding-left-error" *ngIf="form.controls.fullname.errors?.required">
@@ -92,7 +92,7 @@
               </div> -->
 
               <ion-item>
-                <ion-input class="border-bottom" type="email" formControlName="email" placeholder="{{ 'Correo electrónico' | translate }}"></ion-input>
+                <ion-input type="email" formControlName="email" placeholder="{{ 'Correo electrónico' | translate }}"></ion-input>
               </ion-item>
               
               <!-- <div class="padding-left-error" *ngIf="form.controls.email.errors?.required">
@@ -104,7 +104,7 @@
               </div> -->
 
               <ion-item>
-                <ion-input class="border-bottom" type="number" formControlName="phone_number" maxlength="9" placeholder="{{ 'Numero de teléfono' | translate }}"></ion-input>
+                <ion-input type="number" formControlName="phone_number" maxlength="9" placeholder="{{ 'Numero de teléfono' | translate }}"></ion-input>
               </ion-item>
               
               <!-- <div class="padding-left-error" *ngIf="form.controls.phone_number.errors?.required">
@@ -112,7 +112,7 @@
               </div> -->
 
               <ion-item>
-                <ion-input class="border-bottom" type="text" formControlName="message" placeholder="{{ 'Mensaje' | translate }}"></ion-input>
+                <ion-input type="text" formControlName="message" placeholder="{{ 'Mensaje' | translate }}"></ion-input>
               </ion-item>
 
               <!-- <div class="padding-left-error" *ngIf="form.controls.message.errors?.required">

@@ -69,7 +69,7 @@ export class RequestResultsPage implements OnInit {
       message: new FormControl ("", [Validators.required]),
       fullname: new FormControl (this.auth.user.first_name + ' ' + this.auth.user.last_name, [Validators.required]),
       phone_number: new FormControl (phone_number, [Validators.required]),
-      tipo_comprobante: new FormControl (null, [Validators.required]),
+      tipo_comprobante: new FormControl ('boleta', [Validators.required]),
       ruc: new FormControl (''),
       razon_social: new FormControl (""),
       s_1: new FormControl (false, [Validators.required]),
@@ -85,42 +85,40 @@ export class RequestResultsPage implements OnInit {
     this.storage.getValue ('i18n').then (i18n => {
       this.translateService.getTranslation (i18n).subscribe (async (i18n: any) => {
         this.i18n = i18n;
-        
-        const loading = await this.loadingCtrl.create ({
-          message: this.i18n.procesando_informacion
-        });
-        
-        await loading.present ().then (() => {
-          if (this.route.snapshot.paramMap.get ('edit') === 'true') {
-            this.is_edit = true;
 
-            this.database.getRequestByKey (this.route.snapshot.paramMap.get ('id')).subscribe ((data: any) => {
-              loading.dismiss ();
-              
-              this.form.controls ["correo"].setValue (data.user_email);
-              this.form.controls ["fullname"].setValue (data.user_fullname);
-              this.form.controls ["phone_number"].setValue (data.user_phone_number);
-              this.form.controls ["tipo_entrega"].setValue (data.tipo_entrega);
-              this.form.controls ["tipo_comprobante"].setValue (data.tipo_comprobante);
-              this.form.controls ["ruc"].setValue (data.ruc);
-              this.form.controls ["razon_social"].setValue (data.razon_social);
-              this.form.controls ["message"].setValue (data.message);
-              this.form.controls ["s_1"].setValue (data.s_1);
-              this.form.controls ["s_2"].setValue (data.s_2);
-              this.form.controls ["s_3"].setValue (data.s_3);
-              this.form.controls ["s_4"].setValue (data.s_4);
-              this.form.controls ["s_5"].setValue (data.s_5);
-              this.form.controls ["s_6"].setValue (data.s_6);
-              this.form.controls ["s_7"].setValue (data.s_7);
-              this.form.controls ["s_8"].setValue (data.s_8);
-              
-              this.comprobanteChange (data.tipo_comprobante);
-              this.onSegmentChange (data.tipo_entrega);
-            });
-          } else {
+        if (this.route.snapshot.paramMap.get ('edit') === 'true') {
+          const loading = await this.loadingCtrl.create ({
+            message: this.i18n.procesando_informacion
+          });
+
+          loading.present ();
+
+          this.is_edit = true;
+
+          this.database.getRequestByKey (this.route.snapshot.paramMap.get ('id')).subscribe ((data: any) => {
             loading.dismiss ();
-          }
-        });
+            
+            this.form.controls ["correo"].setValue (data.user_email);
+            this.form.controls ["fullname"].setValue (data.user_fullname);
+            this.form.controls ["phone_number"].setValue (data.user_phone_number);
+            this.form.controls ["tipo_entrega"].setValue (data.tipo_entrega);
+            this.form.controls ["tipo_comprobante"].setValue (data.tipo_comprobante);
+            this.form.controls ["ruc"].setValue (data.ruc);
+            this.form.controls ["razon_social"].setValue (data.razon_social);
+            this.form.controls ["message"].setValue (data.message);
+            this.form.controls ["s_1"].setValue (data.s_1);
+            this.form.controls ["s_2"].setValue (data.s_2);
+            this.form.controls ["s_3"].setValue (data.s_3);
+            this.form.controls ["s_4"].setValue (data.s_4);
+            this.form.controls ["s_5"].setValue (data.s_5);
+            this.form.controls ["s_6"].setValue (data.s_6);
+            this.form.controls ["s_7"].setValue (data.s_7);
+            this.form.controls ["s_8"].setValue (data.s_8);
+            
+            this.comprobanteChange (data.tipo_comprobante);
+            this.onSegmentChange (data.tipo_entrega);
+          });
+        }
       });
     });
   }
@@ -202,8 +200,8 @@ export class RequestResultsPage implements OnInit {
             
             this.database.updateRequest (this.route.snapshot.paramMap.get ('id'), data).then ((response) => {
               let push_data = {
-              titulo: 'Pedido de resultados',
-              detalle: 'Un pedido de resultados fue corregido',
+              titulo: 'Solicitud de resultados',
+              detalle: 'Una solicitud de resultados fue corregido',
               destino: 'resultados',
               mode: 'tags',
               clave: uid,
@@ -223,8 +221,8 @@ export class RequestResultsPage implements OnInit {
          } else {
             this.database.addRequest (uid, data, this.pais_selected).then ((response) => {
               let push_data = {
-              titulo: 'Pedido de resultados',
-              detalle: 'Un pedido de resultados fue solicitado',
+              titulo: 'Solicitud de resultados',
+              detalle: 'Un solicitud de resultados fue solicitada',
               destino: 'resultados',
               mode: 'tags',
               clave: uid,

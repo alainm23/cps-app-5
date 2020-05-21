@@ -50,6 +50,8 @@ export class DatabaseService {
   
   async cancelSendAmbulance (data: any, message: string) {
     data.why_canceled = message;
+    data.who_canceled = 'user';
+    data.state = 'canceled';
 
     const codigo = this.afs.createId ();
 
@@ -203,9 +205,11 @@ export class DatabaseService {
 
     let step_1 = this.afs.collection ("Farmacia_Proceso").doc (id).ref;
 
-    batch.update (step_1, { 'is_paid': false, 
-                            'state': 'completed',
-                            'payment_type': 'cash' });
+    batch.update (step_1, {
+      is_paid: false, 
+      state: 'completed',
+      payment_type: 'cash' 
+    });
 
     return await batch.commit ();
   }

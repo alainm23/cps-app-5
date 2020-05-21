@@ -4,7 +4,7 @@
       <ion-back-button></ion-back-button>
     </ion-buttons>
 
-    <ion-title><img class="logotio" src="assets/imgs/logotio.png"></ion-title>
+    <ion-title (click)="goHome ()"><img class="logotio" src="assets/imgs/logotio.png"></ion-title>
     <ion-buttons slot="end">
       <ion-menu-button autoHide="false"></ion-menu-button>
     </ion-buttons>
@@ -27,68 +27,75 @@
 
           <ion-item class="ion-text-center height-70" lines="none">
             <ion-label>
-              <ion-icon class="icon-wait" name="time"></ion-icon>
+              <ion-icon class="icon-wait" name="time-outline"></ion-icon>
               <p class="ion-text-wrap ion-margin-top">{{ 'Gracias por su paciencia' | translate }}</p>
             </ion-label>
           </ion-item>
 
           <ion-card>
-            <ion-list lines="none">
-              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
-                <b>{{ 'Cliente' | translate }}:</b>
-              </ion-label>
-              <ion-item lines="none">
-                {{ auth.user?.first_name }}
+            <ion-list>
+              <ion-list-header>
+                {{ 'Detalles de la solicitud' | translate }}
+              </ion-list-header>
+
+              <ion-item>
+                <ion-label>
+                  <b>{{ 'Cliente' | translate }}:</b>
+                  <br>
+                  {{ transfer_ambulance?.user_fullname }}
+                </ion-label>
               </ion-item>
 
-              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
-                <b>{{ 'Fecha' | translate }}:</b>
-              </ion-label>
-              <ion-item lines="none">
-                {{ getFormatDate (transfer_ambulance?.date) }}
+              <ion-item>
+                <ion-label>
+                  <b>{{ 'Fecha' | translate }}:</b>
+                  <br>
+                  {{ getFormatDate (transfer_ambulance?.date) }}
+                </ion-label>
               </ion-item>
 
-               <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
-                <b>{{ 'Horario de servicio' | translate }}:</b>
-              </ion-label>
-              <ion-item lines="none">
-                {{ transfer_ambulance?.hour }}
+              <ion-item>
+                <ion-label>
+                  <b>{{ 'Origen' | translate }}:</b>
+                  <br>
+                  <span class="ion-text-wrap">
+                    {{ transfer_ambulance?.address_ori }}
+                  </span>
+                </ion-label>
               </ion-item>
 
-              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
-                <b>{{ 'Origen' | translate }}:</b>
-              </ion-label>
-              <ion-item lines="none" class="detalle">
-                {{ transfer_ambulance?.address_ori }}
+              <ion-item>
+                <ion-label>
+                  <b>{{ 'Destino' | translate }}:</b>
+                  <br>
+                  <span class="ion-text-wrap">
+                    {{ transfer_ambulance?.address_des }}
+                  </span>
+                </ion-label>
               </ion-item>
 
-              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
-                <b>{{ 'Destino' | translate }}:</b>
-              </ion-label>
-              <ion-item lines="none" class="detalle">
-                {{ transfer_ambulance?.address_des }}
+              <ion-item>
+                <ion-label>
+                  <b>{{ 'Horario de servicio' | translate }}:</b>
+                  <br>
+                  {{ transfer_ambulance?.hour }} Hrs.
+                </ion-label>
               </ion-item>
 
-              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
-                <b>{{ 'Horario de servicio' | translate }}:</b>
-              </ion-label>
-              <ion-item lines="none" class="detalle">
-                {{ transfer_ambulance?.address_des }}
-              </ion-item>
-
-              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
-                <b>{{ 'Tipo de ambulancia' | translate }}:</b>
-              </ion-label>
-              <ion-item lines="none">
-                <span *ngIf="transfer_ambulance?.tipo_ambulancia === 'ambulancia_1'">
-                  {{ 'Ambulancia 1' | translate }}
-                </span>
-                <span *ngIf="transfer_ambulance?.tipo_ambulancia === 'ambulancia_2'">
-                  {{ 'Ambulancia 2' | translate }}
-                </span>
-                <span *ngIf="transfer_ambulance?.tipo_ambulancia === 'ambulancia_3'">
-                  {{ 'Ambulancia 3' | translate }}
-                </span>
+              <ion-item>
+                <ion-label>
+                  <b>{{ 'Tipo de ambulancia' | translate }}:</b>
+                  <br>
+                  <span *ngIf="transfer_ambulance?.tipo_ambulancia === 'ambulancia_1'">
+                    {{ 'Ambulancia 1' | translate }}
+                  </span>
+                  <span *ngIf="transfer_ambulance?.tipo_ambulancia === 'ambulancia_2'">
+                    {{ 'Ambulancia 2' | translate }}
+                  </span>
+                  <span *ngIf="transfer_ambulance?.tipo_ambulancia === 'ambulancia_3'">
+                    {{ 'Ambulancia 3' | translate }}
+                  </span>
+                </ion-label>
               </ion-item>
             </ion-list>   
           </ion-card>
@@ -113,114 +120,143 @@
           <ion-item class="ion-text-center" lines="none"> 
             <ion-label>
               <h1 class="title-label">{{ 'TRANSFER_BY_AMBULANCE' | translate }}</h1>
+              <p *ngIf="home_injection?.state == 'observed'" class="ion-text-wrap" style="padding-left: 0.5rem; padding-right: 0.5rem;">
+                <br>
+                {{ 'Su pedido a sido observado, por favor corrija lo siguiente.' | translate }}
+              </p>
+
+              <p *ngIf="home_injection?.state == 'approved'" class="ion-text-wrap" style="padding-left: 0.5rem; padding-right: 0.5rem;">
+                <br>
+                {{ 'Su solicitud a sido aprobada' | translate }}
+              </p>
+
+              <p *ngIf="home_injection?.state == 'completed'" class="ion-text-wrap" style="padding-left: 0.5rem; padding-right: 0.5rem;">
+                {{ 'El pasciente, nuestra prioridad' | translate }}
+              </p>
             </ion-label>
           </ion-item>     
           
-          <ion-card color="danger" *ngIf="transfer_ambulance?.state == 'observed' || transfer_ambulance?.state == 'canceled'">
-            <ion-card-header>
-              <b *ngIf="transfer_ambulance?.state == 'observed'">{{ 'Estado: Observado' | translate }}</b>
-              <b *ngIf="transfer_ambulance?.state == 'canceled'">{{ 'Estado: Cancelado' | translate }}</b>
-            </ion-card-header> 
-            <ion-card-content style="margin-left: 1rem;">
-              {{ transfer_ambulance?.last_message }}
-            </ion-card-content> 
-          </ion-card>
+          <ion-item class="ion-text-center height-70" lines="none" *ngIf="transfer_ambulance?.state == 'observed' || transfer_ambulance?.state == 'canceled'">
+            <ion-label *ngIf="transfer_ambulance?.state == 'observed'">
+              <ion-icon class="icon-observed" name="alert-circle-outline"></ion-icon>
+              <p class="ion-margin-top ion-text-wrap">{{ transfer_ambulance?.last_message }}</p>
+            </ion-label>
+          </ion-item>
 
-          <ion-card color="blue" *ngIf="transfer_ambulance?.state == 'approved'">
-            <ion-card-header>
-              <b>{{ 'Estado: Aprobado' | translate }}</b>
-            </ion-card-header> 
-            <ion-card-content style="margin-left: 1rem;">
-              {{ transfer_ambulance?.last_message }}
-            </ion-card-content>
-          </ion-card>
+          <ion-item class="ion-text-center height-70" lines="none" *ngIf="transfer_ambulance?.state == 'approved'">
+            <ion-label>
+              <ion-icon class="icon-approved" name="checkmark-circle-outline"></ion-icon>
+              <p class="ion-margin-top ion-text-wrap">{{ transfer_ambulance?.last_message }}</p>
+            </ion-label>
+          </ion-item>
           
-          <ion-card color="green" *ngIf="transfer_ambulance?.state === 'completed'">
-              <ion-card-header>
-                <b *ngIf="transfer_ambulance?.payment_type === 'online'">{{ 'Pagado' | translate }}</b>
-                <b *ngIf="transfer_ambulance?.payment_type === 'cash'">{{ 'Tipo de pago: contra entrega' | translate }}</b>
-              </ion-card-header> 
-              <ion-card-content style="margin-left: 1rem;">
-                <p class="ion-text-wrap" *ngIf="transfer_ambulance?.payment_type === 'online'">
-                  {{ 'Por favor llegaremos en el horario solicitado.' | translate }}
-                </p>
-                <p class="ion-text-wrap" *ngIf="transfer_ambulance?.payment_type === 'cash'">
-                  {{ 'Por favor, llegaremos en el horario solicitado, pague al doctor(a). Gracias.' | translate }}
-                </p>
-              </ion-card-content>
+          <ion-item class="ion-text-center height-70" lines="none" *ngIf="transfer_ambulance?.state === 'completed'">
+            <ion-label>
+              <ion-icon class="icon-approved" name="checkmark-circle-outline"></ion-icon>
+              <p class="ion-text-wrap" style="padding-left: 0.5rem; padding-right: 0.5rem;" *ngIf="transfer_ambulance?.payment_type === 'cash'">
+                {{ 'Un médico general lo visitará el' | translate }}
+                {{ getFormatDate (transfer_ambulance?.date) }}
+                {{ 'a las' | translate }}
+                {{ transfer_ambulance?.hour }}
+                {{ 'Hrs.' | translate }}
+                {{ 'El pago por el servicio deberá ser entregado a al doctor el día de la visita.' | translate }}
+              </p>
+              <p class="ion-text-wrap" style="padding-left: 0.5rem; padding-right: 0.5rem;" *ngIf="transfer_ambulance?.payment_type === 'online'">
+                {{ 'Un médico general lo visitará el' | translate }}
+                {{ getFormatDate (transfer_ambulance?.date) }}
+                {{ 'a las' | translate }}
+                {{ transfer_ambulance?.hour }}
+                {{ 'Hrs.' | translate }}
+              </p>
+            </ion-label>
+          </ion-item>
+
+          <ion-card *ngIf="transfer_ambulance?.state === 'approved'">
+            <ion-list>
+              <ion-item>
+                <ion-label>
+                  <b>{{ 'Costo' | translate }}</b>
+                  <br>
+                  {{ 'Total (inc. IGV):' | translate }}: {{ (transfer_ambulance?.price / 100) | currency:'S/. ' }}
+                </ion-label>
+              </ion-item>
+            </ion-list>
           </ion-card>
 
           <ion-card>
-            <ion-list lines="none">
-              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
-                <b>{{ 'Cliente' | translate }}:</b>
-              </ion-label>
-              <ion-item lines="none">
-                {{ auth.user?.first_name }}
+            <ion-list>
+              <ion-list-header>
+                {{ 'Detalles de la solicitud' | translate }}
+              </ion-list-header>
+
+              <ion-item>
+                <ion-label>
+                  <b>{{ 'Cliente' | translate }}:</b>
+                  <br>
+                  {{ transfer_ambulance?.user_fullname }}
+                </ion-label>
               </ion-item>
 
-              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
-                <b>{{ 'Fecha' | translate }}:</b>
-              </ion-label>
-              <ion-item lines="none">
-                {{ getFormatDate (transfer_ambulance?.date) }}
+              <ion-item>
+                <ion-label>
+                  <b>{{ 'Fecha' | translate }}:</b>
+                  <br>
+                  {{ getFormatDate (transfer_ambulance?.date) }}
+                </ion-label>
               </ion-item>
 
-               <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
-                <b>{{ 'Horario de servicio' | translate }}:</b>
-              </ion-label>
-              <ion-item lines="none">
-                {{ transfer_ambulance?.hour }}
+              <ion-item>
+                <ion-label>
+                  <b>{{ 'Origen' | translate }}:</b>
+                  <br>
+                  {{ transfer_ambulance?.address_ori }}
+                </ion-label>
               </ion-item>
 
-              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
-                <b>{{ 'Origen' | translate }}:</b>
-              </ion-label>
-              <ion-item lines="none" class="detalle">
-                {{ transfer_ambulance?.address_ori }}
+              <ion-item>
+                <ion-label>
+                  <b>{{ 'Destino' | translate }}:</b>
+                  <br>
+                  {{ transfer_ambulance?.address_des }}
+                </ion-label>
               </ion-item>
 
-              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
-                <b>{{ 'Destino' | translate }}:</b>
-              </ion-label>
-              <ion-item lines="none" class="detalle">
-                {{ transfer_ambulance?.address_des }}
+              <ion-item>
+                <ion-label>
+                  <b>{{ 'Horario de servicio' | translate }}:</b>
+                  <br>
+                  {{ transfer_ambulance?.hour }} Hrs.
+                </ion-label>
               </ion-item>
 
-              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
-                <b>{{ 'Horario de servicio' | translate }}:</b>
-              </ion-label>
-              <ion-item lines="none" class="detalle">
-                {{ transfer_ambulance?.address_des }}
-              </ion-item>
-
-              <ion-label class="ion-margin-left ion-margin-top ion-margin-right line-bottom" color="dark">
-                <b>{{ 'Tipo de ambulancia' | translate }}:</b>
-              </ion-label>
-              <ion-item lines="none">
-                <span *ngIf="transfer_ambulance?.tipo_ambulancia === 'ambulancia_1'">
-                  {{ 'Ambulancia 1' | translate }}
-                </span>
-                <span *ngIf="transfer_ambulance?.tipo_ambulancia === 'ambulancia_2'">
-                  {{ 'Ambulancia 2' | translate }}
-                </span>
-                <span *ngIf="transfer_ambulance?.tipo_ambulancia === 'ambulancia_3'">
-                  {{ 'Ambulancia 3' | translate }}
-                </span>
+              <ion-item>
+                <ion-label>
+                  <b>{{ 'Tipo de ambulancia' | translate }}:</b>
+                  <br>
+                  <span *ngIf="transfer_ambulance?.tipo_ambulancia === 'ambulancia_1'">
+                    {{ 'Ambulancia 1' | translate }}
+                  </span>
+                  <span *ngIf="transfer_ambulance?.tipo_ambulancia === 'ambulancia_2'">
+                    {{ 'Ambulancia 2' | translate }}
+                  </span>
+                  <span *ngIf="transfer_ambulance?.tipo_ambulancia === 'ambulancia_3'">
+                    {{ 'Ambulancia 3' | translate }}
+                  </span>
+                </ion-label>
               </ion-item>
             </ion-list>   
           </ion-card>
 
           <div class="ion-text-center" *ngIf="transfer_ambulance?.state == 'observed'">
             <ion-row>
-              <ion-col size="12" size-sm="6">
-                <ion-button class="no-border" ion-button color="blue" (click)="edit (transfer_ambulance?.id)">
+              <ion-col size-sm="6">
+                <ion-button class="no-border" expand="block" ion-button color="blue" (click)="edit ()">
                   {{ 'Correguir' | translate }}
                 </ion-button>
               </ion-col>
 
-              <ion-col size="12" size-sm="6">
-                <ion-button class="no-border" ion-button color="red" (click)="cancel (transfer_ambulance?.id)">
+              <ion-col size-sm="6">
+                <ion-button class="no-border" expand="block" ion-button color="red" (click)="cancel ()">
                   {{ 'CANCEL' | translate }}
                 </ion-button>
               </ion-col>
@@ -228,19 +264,14 @@
           </div>
 
           <div *ngIf="transfer_ambulance?.state == 'approved'">
-            <ion-card>
-              <ion-card-header>
-                <b>{{ 'Costo' | translate }}</b>
-              </ion-card-header> 
-              <ion-card-content style="margin-left: 1rem;">
-                <p class="ion-text-wrap">{{ 'Total (inc. IGV):' | translate }} S/. {{ getFormatPrice (transfer_ambulance?.price) }}</p>
-              </ion-card-content>
-            </ion-card>
-
-            <div class="ion-text-center" padding>
-              <ion-button class="no-border" ion-button color="blue" (click)="presentActionSheet (transfer_ambulance?.price + transfer_ambulance?.delivery_price)">
-                {{ 'Pedir' | translate }}
-              </ion-button>
+            <div class="ion-text-center ion-padding">
+              <ion-row>
+                <ion-col size="6" offset="3">
+                  <ion-button class="no-border" expand="block" color="blue" (click)="presentActionSheet (transfer_ambulance?.price + transfer_ambulance?.delivery_price)">
+                    {{ 'Pedir' | translate }}
+                  </ion-button>
+                </ion-col>
+              </ion-row>
             </div>
           </div>
         </div>

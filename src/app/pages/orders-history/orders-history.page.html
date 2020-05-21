@@ -4,7 +4,7 @@
       <ion-back-button></ion-back-button>
     </ion-buttons>
 
-    <ion-title><img class="logotio" src="assets/imgs/logotio.png"></ion-title>
+    <ion-title (click)="goHome ()"><img class="logotio" src="assets/imgs/logotio.png"></ion-title>
     <ion-buttons slot="end">
       <ion-menu-button autoHide="false"></ion-menu-button>
     </ion-buttons>
@@ -21,9 +21,11 @@
       </ion-select>
     </ion-item>
 
-    <ion-item *ngFor="let item of deliveries" (tap)="goDeliveryCheck (item.dataGeneral)">
-      <h2>{{ 'Pedido:' | translate }} {{ getFormatDate (item.dataGeneral?.date) }}</h2>
-      <p>{{ item.dataGeneral?.address }}</p>
+    <ion-item *ngFor="let item of deliveries" (click)="goDeliveryCheck (item.dataGeneral)">
+      <ion-label>
+        <h2>{{ 'Pedido:' | translate }} {{ getFormatDate (item.dataGeneral?.date) }}</h2>
+        <p>{{ item.dataGeneral?.address }}</p>
+      </ion-label>
       
       <ion-badge slot="end" *ngIf="item.dataGeneral?.state === 'created'" color="blue">
         {{ 'Solicitado' | translate }}
@@ -60,9 +62,11 @@
       </ion-select>
     </ion-item>
 
-    <ion-item *ngFor="let item of home_injections" (tap)="goHomeIinjection (item.dataGeneral)">
-      <h2>{{ 'Pedido:' | translate }} {{ getFormatDate (item.dataGeneral?.date) }}</h2>
-      <p>{{ item.dataGeneral?.address }}</p>
+    <ion-item *ngFor="let item of home_injections" (click)="goHomeIinjection (item.dataGeneral)">
+      <ion-label>
+        <h2>{{ 'Pedido:' | translate }} {{ getFormatDate (item.dataGeneral?.date) }}</h2>
+        <p>{{ item.dataGeneral?.address }}</p>
+      </ion-label>
       
       <ion-badge slot="end" *ngIf="item.dataGeneral?.state === 'created'" color="blue">
         {{ 'Solicitado' | translate }}
@@ -99,9 +103,11 @@
       </ion-select>
     </ion-item>
 
-    <ion-item *ngFor="let item of transf_ambulance" (tap)="goTransferAmbulances (item.dataGeneral)">
-      <h2>{{ 'Pedido:' | translate }} {{ getFormatDate (item.dataGeneral?.date) }}</h2>
-      <p>{{ item.dataGeneral?.address }}</p>
+    <ion-item *ngFor="let item of transf_ambulance" (click)="goTransferAmbulances (item.dataGeneral)">
+      <ion-label>
+        <h2>{{ 'Pedido:' | translate }} {{ getFormatDate (item.dataGeneral?.date) }}</h2>
+        <p>{{ item.dataGeneral?.address }}</p>
+      </ion-label>
       
       <ion-badge slot="end" *ngIf="item.dataGeneral?.state === 'created'" color="blue">
         {{ 'Solicitado' | translate }}
@@ -138,9 +144,11 @@
       </ion-select>
     </ion-item>
 
-    <ion-item *ngFor="let item of medical" (tap)="goMedical (item.dataGeneral)">
-      <h2>Pedido: {{ getFormatDate (item.dataGeneral?.date) }}</h2>
-      <p>{{ item.dataGeneral?.address }}</p>
+    <ion-item *ngFor="let item of medical" (click)="goMedical (item.dataGeneral)">
+      <ion-label>
+        <h2>Pedido: {{ getFormatDate (item.dataGeneral?.date) }}</h2>
+        <p>{{ item.dataGeneral?.address }}</p>
+      </ion-label>
       
       <ion-badge slot="end" *ngIf="item.dataGeneral?.state === 'created'" color="blue">
         Solicitado
@@ -177,9 +185,11 @@
       </ion-select>
     </ion-item>
 
-    <ion-item *ngFor="let item of home_pressure" (tap)="goHomePressure (item.dataGeneral)">
-      <h2>{{ 'Pedido:' | translate }} {{ getFormatDate (item.dataGeneral?.date) }}</h2>
-      <p>{{ item.dataGeneral?.address }}</p>
+    <ion-item *ngFor="let item of home_pressure" (click)="goHomePressure (item.dataGeneral)">
+      <ion-label>
+        <h2>{{ 'Pedido:' | translate }} {{ getFormatDate (item.dataGeneral?.date) }}</h2>
+        <p>{{ item.dataGeneral?.address }}</p>
+      </ion-label>
       
       <ion-badge slot="end" *ngIf="item.dataGeneral?.state === 'created'" color="blue">
         {{ 'Solicitado' | translate }}
@@ -216,9 +226,11 @@
       </ion-select>
     </ion-item>
 
-    <ion-item *ngFor="let item of home_doctor" (tap)="goHomeDoctor (item.dataGeneral)">
-      <h2>{{ 'Pedido:' | translate }} {{ getFormatDate (item.dataGeneral?.date) }}</h2>
-      <p>{{ item.dataGeneral?.address }}</p>
+    <ion-item *ngFor="let item of home_doctor" (click)="goHomeDoctor (item.dataGeneral)">
+      <ion-label>
+        <h2>{{ 'Pedido:' | translate }} {{ getFormatDate (item.dataGeneral?.date) }}</h2>
+        <p>{{ item.dataGeneral?.address }}</p>
+      </ion-label>
       
       <ion-badge slot="end" *ngIf="item.dataGeneral?.state === 'created'" color="blue">
         {{ 'Solicitado' | translate }}

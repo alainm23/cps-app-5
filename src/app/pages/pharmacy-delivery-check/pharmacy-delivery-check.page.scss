@@ -1,7 +1,4 @@
-.icon-wait {
-font-size: 64px;
-color: gray;
-}
+
 
 .height-70 {
 height: 70% !important;
@@ -17,14 +14,28 @@ margin-left: 1.5rem;
 margin-right: 1.5rem;
 }
 
+.icon-wait {
+    font-size: 64px;
+    color: gray;
+}
+
+.icon-observed {
+    font-size: 64px;
+    color: #eb445a;
+}
+
+.icon-approved {
+    font-size: 64px;
+    color: #2dd36f;
+}
+
 .line-bottom {
-font-size: 1.7rem !important;
-border-bottom: 0.5px solid #c5bbbb !important;
-padding-bottom: 1rem !important;
+    font-size: 1.7rem !important;
+    border-bottom: 0.5px solid #c5bbbb !important;
+    padding-bottom: 1rem !important;
 }
 
 b {
     font-size: 18px;
     font-weight: bold;
-    margin-left: 1rem;
 }

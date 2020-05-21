@@ -4,7 +4,7 @@
       <ion-back-button></ion-back-button>
     </ion-buttons>
 
-    <ion-title><img class="logotio" src="assets/imgs/logotio.png"></ion-title>
+    <ion-title (click)="goHome ()"><img class="logotio" src="assets/imgs/logotio.png"></ion-title>
     <ion-buttons slot="end">
       <ion-menu-button autoHide="false"></ion-menu-button>
     </ion-buttons>
@@ -35,42 +35,42 @@
         <form [formGroup]="form">
           <ion-item>
             <ion-label class="ion-text-wrap">{{ 'Resultados de laboratorio' | translate }}</ion-label>
-            <ion-checkbox color="blue" formControlName="s_1"></ion-checkbox>
+            <ion-checkbox slot="start" color="blue" formControlName="s_1"></ion-checkbox>
           </ion-item>
 
           <ion-item class="ion-text-wrap">
             <ion-label class="ion-text-wrap">{{ 'Informe radiologico de rayos X' | translate }}</ion-label>
-            <ion-checkbox color="blue" formControlName="s_2"></ion-checkbox>
+            <ion-checkbox slot="start" color="blue" formControlName="s_2"></ion-checkbox>
           </ion-item>
 
           <ion-item class="ion-text-wrap">
             <ion-label class="ion-text-wrap">{{ 'Informe radiologico de tomografia' | translate }}</ion-label>
-            <ion-checkbox color="blue" formControlName="s_3"></ion-checkbox>
+            <ion-checkbox slot="start" color="blue" formControlName="s_3"></ion-checkbox>
           </ion-item>
 
           <ion-item class="ion-text-wrap">
             <ion-label class="ion-text-wrap">{{ 'Informe radiologico de resonancia magnetica' | translate }}</ion-label>
-            <ion-checkbox color="blue" formControlName="s_4"></ion-checkbox>
+            <ion-checkbox slot="start" color="blue" formControlName="s_4"></ion-checkbox>
           </ion-item>
 
           <ion-item class="ion-text-wrap">
             <ion-label class="ion-text-wrap">{{ 'Informe ecografico' | translate }}</ion-label>
-            <ion-checkbox color="blue" formControlName="s_5"></ion-checkbox>
+            <ion-checkbox slot="start" color="blue" formControlName="s_5"></ion-checkbox>
           </ion-item>
 
           <ion-item class="ion-text-wrap">
             <ion-label class="ion-text-wrap">{{ 'Certificado medico' | translate }}</ion-label>
-            <ion-checkbox color="blue" formControlName="s_6"></ion-checkbox>
+            <ion-checkbox slot="start" color="blue" formControlName="s_6"></ion-checkbox>
           </ion-item>
 
           <ion-item class="ion-text-wrap">
             <ion-label class="ion-text-wrap">{{ 'Informe medico de alta' | translate }}</ion-label>
-            <ion-checkbox color="blue" formControlName="s_7"></ion-checkbox>
+            <ion-checkbox slot="start" color="blue" formControlName="s_7"></ion-checkbox>
           </ion-item>
 
           <ion-item class="ion-text-wrap">
             <ion-label class="ion-text-wrap">{{ 'Copia certificada de historia clinica' | translate }}</ion-label>
-            <ion-checkbox color="blue" formControlName="s_8"></ion-checkbox>
+            <ion-checkbox slot="start" color="blue" formControlName="s_8"></ion-checkbox>
           </ion-item>
       
           <br>
@@ -156,7 +156,7 @@
                 </ion-col>
                 <ion-col size="8">
                   <ion-item>
-                    <ion-input type="tel" formControlName="phone_number" placeholder="985 858 787"></ion-input>
+                    <ion-input style="--padding-top: 17px !important;" type="tel" formControlName="phone_number" placeholder="985 858 787"></ion-input>
                   </ion-item>
                 </ion-col>
               </ion-row>
@@ -181,7 +181,7 @@
             <ion-row>
               <ion-col *ngIf="!is_edit" size="8" offset="2">
                 <ion-button class="no-border" expand="block" color="blue" [disabled]="!form.valid" (click)="submit ()">
-                  {{ 'Pedir' | translate }}
+                  {{ 'Ordenar' | translate }}
                 </ion-button>
               </ion-col>
 

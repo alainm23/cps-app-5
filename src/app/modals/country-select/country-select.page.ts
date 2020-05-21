@@ -7,6 +7,7 @@ import { NavController, ModalController, LoadingController } from '@ionic/angula
   styleUrls: ['./country-select.page.scss'],
 })
 export class CountrySelectPage implements OnInit {
+  search_text: string = "";
   country_list: any = [ 
     {"name": "Afghanistan", "code": "AF"}, 
     {"name": "land Islands", "code": "AX"}, 

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'; 
-import { NavController, LoadingController, AlertController, ActionSheetController, ModalController } from '@ionic/angular';
+import { NavController, ToastController, LoadingController, AlertController, ActionSheetController, ModalController } from '@ionic/angular';
 
 import { PagoService } from '../../providers/pago.service';
 import { DatabaseService } from '../../providers/database.service';
@@ -38,6 +38,7 @@ export class HomeInjectionCheckPage implements OnInit {
               public loadingCtrl: LoadingController,
               public actionSheetCtrl: ActionSheetController,
               public modalController: ModalController,
+              public toastController: ToastController,
               private pago: PagoService) {
   }
 
@@ -114,7 +115,7 @@ export class HomeInjectionCheckPage implements OnInit {
   async cancel () {
     const confirm = await this.alertCtrl.create({
       header: this.i18n.estas_seguro_cancelar_pedido,
-      message: '',
+      message: this.i18n.llenar_motivo_cancelacion,
       inputs: [
         {
           name: 'message',
@@ -141,9 +142,33 @@ export class HomeInjectionCheckPage implements OnInit {
             this.home_injection.last_message = data.message;
             this.home_injection.canceled_date = new Date ().toISOString ();
 
-            this.database.updateHomeInjectionCanceled (this.home_injection.id, this.home_injection, this.observations ).then ((response) => {
+            this.database.updateHomeInjectionCanceled (this.home_injection.id, this.home_injection, this.observations ).then (async (response) => {
               loading.dismiss ();
               this.goHome ();
+              
+              const toast = await this.toastController.create({
+                message: this.i18n.Tu_solicitud_fue_cancelada,
+                color: 'success',
+                position: 'top',
+                duration: 2000
+              });
+
+              toast.present ();
+
+              let push_data = {
+                titulo: 'Solicitud inyeccion a domicilio cancelada',
+                detalle: 'El usuario cancelo su solicitud',
+                destino: 'doctor',
+                mode: 'tags',
+                clave: 'clave',
+                tokens: 'Administrador'
+              };
+  
+              this.api.pushNotification (push_data).subscribe (async response => {
+                console.log ("Notificacion Enviada...", response);
+              }, error => {
+                console.log ("Notificacion Error...", error);
+              });
             });
           }
         }
@@ -177,17 +202,9 @@ export class HomeInjectionCheckPage implements OnInit {
           await this.database.updateHomeInjectionContraEntrega (this.home_injection.id);
           loading.dismiss ();
 
-          const alert = await this.alertCtrl.create({
-            header: this.i18n.proceso_exitoso,
-            message: response.message,
-            buttons: [this.i18n.OK]
-          });
-
-          alert.present();
-
           let push_data = {
-            titulo: 'Pedido de Inyeccion',
-            detalle: 'Un pedido de inyeccion fue pagado',
+            titulo: 'Solicitud de inyección a domicilio',
+            detalle: 'El usuario confirmó la solicitud con método de pago contraentrega',
             destino: 'farmacia',
             mode: 'tags',
             clave: this.home_injection.id,
@@ -203,17 +220,19 @@ export class HomeInjectionCheckPage implements OnInit {
           await this.database.updateHomeInjectionOnlinePaid (this.home_injection.id, response.transaccion_id);
           loading.dismiss ();
 
-          const alert = await this.alertCtrl.create({
+          const toast = await this.toastController.create({
             header: this.i18n.proceso_exitoso,
             message: response.message,
-            buttons: [this.i18n.OK]
+            duration: 2000,
+            position: 'bottom',
+            color: 'success'
           });
-
-          alert.present();
+          
+          toast.present();
 
           let push_data = {
-            titulo: 'Pedido de Inyeccion',
-            detalle: 'Un pedido de inyeccion fue pagado',
+            titulo: 'Solicitud de inyección a domicilio',
+            detalle: 'El usuario confirmó la solicitud con método de pago online',
             destino: 'inyeccion',
             mode: 'tags',
             clave: this.home_injection.id,

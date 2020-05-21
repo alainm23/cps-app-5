@@ -111,6 +111,10 @@ const routes: Routes = [
     path: 'confirm-ambulance/:id',
     loadChildren: () => import('./pages/confirm-ambulance/confirm-ambulance.module').then( m => m.ConfirmAmbulancePageModule)
   },
+  {
+    path: 'solicitud-rechazada-view',
+    loadChildren: () => import('./pages/solicitud-rechazada-view/solicitud-rechazada-view.module').then( m => m.SolicitudRechazadaViewPageModule)
+  }
 ];
 
 @NgModule({

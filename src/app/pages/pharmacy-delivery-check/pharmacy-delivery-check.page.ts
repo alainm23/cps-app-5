@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, LoadingController, AlertController, ActionSheetController, ModalController } from '@ionic/angular';
+import { NavController, LoadingController, ToastController, AlertController, ActionSheetController, ModalController } from '@ionic/angular';
 // import { Events } from 'ionic-angular';
 
 import { PagoService } from '../../providers/pago.service';
@@ -43,6 +43,7 @@ export class PharmacyDeliveryCheckPage implements OnInit {
               public loadingCtrl: LoadingController,
               public actionSheetCtrl: ActionSheetController,
               public modalController: ModalController,
+              public toastController: ToastController,
               private pago: PagoService) {
   }
 
@@ -60,20 +61,31 @@ export class PharmacyDeliveryCheckPage implements OnInit {
         if (this.route.snapshot.paramMap.get ('type') === 'canceled') {
           this.subscription_1 = this.database.getFarmaciaCanceladoByKey (this.route.snapshot.paramMap.get ('id')).subscribe (data => {
             this.delivery = data;
-
             this.loading.dismiss ();
+
+            if (data === undefined) {
+              this.navCtrl.navigateRoot ('home');
+            }
           });
         } else if (this.route.snapshot.paramMap.get ('type') === 'finalized') {
           this.subscription_1 = this.database.getFarmaciaFinalizadosByKey (this.route.snapshot.paramMap.get ('id')).subscribe (data => {
             this.delivery = data;
-
             this.loading.dismiss ();
+
+            if (data === undefined) {
+              this.navCtrl.navigateRoot ('home');
+            }
           });
         } else {
           this.subscription_1 = this.database.getDeliveryByKey (this.route.snapshot.paramMap.get ('id')).subscribe ((data: any) => {
             this.delivery = data;
-
             this.loading.dismiss ();
+
+            console.log (data);
+
+            if (data === undefined) {
+              this.navCtrl.navigateRoot ('home');
+            }
           });
 
           this.subscription_2 = this.database.getDeliveryObservations (this.route.snapshot.paramMap.get ('id')).subscribe ((data: any) => {
@@ -119,20 +131,13 @@ export class PharmacyDeliveryCheckPage implements OnInit {
         loading.present ();
 
         if (response.type === 'contra_entrega') {
+          console.log ('Contra entrega');
           await this.database.updateDeliveryContraEntrega (this.delivery.id);
           loading.dismiss ();
           
-          const alert = await this.alertCtrl.create({
-            header: this.i18n.proceso_exitoso,
-            message: response.message,
-            buttons: [this.i18n.OK]
-          });
-
-          alert.present();
-
           let push_data = {
-            titulo: 'Pedido de farmacia',
-            detalle: 'Un edido de farmacia fue pagado',
+            titulo: 'Solicitud de farmacia',
+            detalle: 'El usuario confirmó la solicitud con método de pago contraentrega',
             destino: 'farmacia',
             mode: 'tags',
             clave: this.delivery.id,
@@ -148,17 +153,19 @@ export class PharmacyDeliveryCheckPage implements OnInit {
           await this.database.updateDeliveryOnlinePaid (this.delivery.id, response.transaccion_id);
           loading.dismiss ();
           
-          const alert = await this.alertCtrl.create({
+          const toast = await this.toastController.create({
             header: this.i18n.proceso_exitoso,
             message: response.message,
-            buttons: [this.i18n.OK]
+            duration: 2000,
+            position: 'bottom',
+            color: 'success'
           });
 
-          alert.present();
+          toast.present();
 
           let push_data = {
-            titulo: 'Pedido de farmacia',
-            detalle: 'Un edido de farmacia fue pagado',
+            titulo: 'Solicitud de farmacia',
+            detalle: 'El usuario confirmó la solicitud con método de pago online',
             destino: 'farmacia',
             mode: 'tags',
             clave: this.delivery.id,
@@ -224,7 +231,7 @@ export class PharmacyDeliveryCheckPage implements OnInit {
   async cancelDelivery () {
     const confirm = await this.alertCtrl.create({
       header: this.i18n.estas_seguro_cancelar_pedido,
-      message: '',
+      message: this.i18n.llenar_motivo_cancelacion,
       inputs: [
         {
           name: 'message',
@@ -251,9 +258,33 @@ export class PharmacyDeliveryCheckPage implements OnInit {
             this.delivery.last_message = data.message;
             this.delivery.canceled_date = new Date ().toISOString ();
 
-            this.database.updateDeliveryCanceled (this.delivery.id, this.delivery, this.observations).then ((response) => {
+            this.database.updateDeliveryCanceled (this.delivery.id, this.delivery, this.observations).then (async (response) => {
               loading.dismiss ();
               this.goHome ();
+
+              const toast = await this.toastController.create({
+                message: this.i18n.Tu_solicitud_fue_cancelada,
+                color: 'success',
+                position: 'top',
+                duration: 2000
+              });
+
+              toast.present ();
+
+              let push_data = {
+                titulo: 'Solicitud cancelada',
+                detalle: 'El usuario cancelo su solicitud de farmacia',
+                destino: 'doctor',
+                mode: 'tags',
+                clave: 'clave',
+                tokens: 'Administrador'
+              };
+  
+              this.api.pushNotification (push_data).subscribe (async response => {
+                console.log ("Notificacion Enviada...", response);
+              }, error => {
+                console.log ("Notificacion Error...", error);
+              });
             });
           }
         }

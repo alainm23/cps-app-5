@@ -88,7 +88,7 @@ export class TransferAmbulancePage implements OnInit {
       tipo_ambulancia: new FormControl ("ambulancia_1", Validators.required),
       hour: new FormControl ('', Validators.required),
       phone_number: new FormControl (phone_number, [Validators.required]),
-      tipo_comprobante: new FormControl (null, Validators.required),
+      tipo_comprobante: new FormControl ('boleta', Validators.required),
       ruc: new FormControl (""),
       razon_social: new FormControl (""),
       terms_conditions: new FormControl (false, Validators.compose([ Validators.required, Validators.pattern('true')]))
@@ -100,36 +100,36 @@ export class TransferAmbulancePage implements OnInit {
       this.translateService.getTranslation (i18n).subscribe (async (i18n: any) => {
         this.i18n = i18n;
         this.ambulancia_des = i18n.a_tipo_I;
+  
+        if (this.route.snapshot.paramMap.get ('edit') === 'true') {
+          let loading = await this.loadingCtrl.create ({
+            message: this.i18n.procesando_informacion
+          });
 
-        this.loading = await this.loadingCtrl.create ({
-          message: this.i18n.procesando_informacion
-        });
-        
-        await this.loading.present ().then (() => {
-          if (this.route.snapshot.paramMap.get ('edit') === 'true') {
-            this.is_edit = true;
-            
-            this.database.getTransferAmbulanceByKey (this.route.snapshot.paramMap.get ('id')).subscribe ((data: any) => {
-              this.form.controls ["address_ori"].setValue (data.address_ori);
-              this.form.controls ["address_des"].setValue (data.address_des);
-              this.form.controls ["location_ori_lat"].setValue (data.location_ori_lat);
-              this.form.controls ["location_ori_lon"].setValue (data.location_ori_lon);
-              this.form.controls ["location_des_lat"].setValue (data.location_des_lat);
-              this.form.controls ["location_des_lon"].setValue (data.location_des_lon);
-              this.form.controls ["date"].setValue (data.date);
-              this.form.controls ["hour"].setValue (data.hour);
-              this.form.controls ["tipo_comprobante"].setValue (data.tipo_comprobante);
-              this.form.controls ["ruc"].setValue (data.ruc);
-              this.form.controls ["razon_social"].setValue (data.razon_social);
+          loading.present ();
 
-              this.comprobanteChange (data.tipo_comprobante);
+          this.is_edit = true;
+          
+          this.database.getTransferAmbulanceByKey (this.route.snapshot.paramMap.get ('id')).subscribe ((data: any) => {
+            loading.dismiss ();
 
-              this.loading.dismiss ();
-            });
-          } else {
+            this.form.controls ["address_ori"].setValue (data.address_ori);
+            this.form.controls ["address_des"].setValue (data.address_des);
+            this.form.controls ["location_ori_lat"].setValue (data.location_ori_lat);
+            this.form.controls ["location_ori_lon"].setValue (data.location_ori_lon);
+            this.form.controls ["location_des_lat"].setValue (data.location_des_lat);
+            this.form.controls ["location_des_lon"].setValue (data.location_des_lon);
+            this.form.controls ["date"].setValue (data.date);
+            this.form.controls ["hour"].setValue (data.hour);
+            this.form.controls ["tipo_comprobante"].setValue (data.tipo_comprobante);
+            this.form.controls ["ruc"].setValue (data.ruc);
+            this.form.controls ["razon_social"].setValue (data.razon_social);
+
+            this.comprobanteChange (data.tipo_comprobante);
+
             this.loading.dismiss ();
-          }
-        });
+          });
+        }
       });
     });
   }
@@ -248,11 +248,11 @@ export class TransferAmbulancePage implements OnInit {
   }
 
   async submit () {
-    this.loading = await this.loadingCtrl.create({
+    let loading = await this.loadingCtrl.create({
       message: this.i18n.procesando_informacion
     });
 
-    await this.loading.present ().then (() => {
+    await loading.present ().then (() => {
       const value = this.form.value;
 
       this.storage.getValue ("uid").then ((uid) => {
@@ -306,8 +306,8 @@ export class TransferAmbulancePage implements OnInit {
             
             this.database.updateTransferAmbulance (this.route.snapshot.paramMap.get ('id'), data).then ((response) => {
               let push_data = {
-                titulo: 'Pedido de traslado en ambulancia',
-                detalle: 'Un pedido de traslado en ambulancia fue corregido',
+                titulo: 'Solicitud de traslado en ambulancia',
+                detalle: 'La solicitud de traslado en ambulancia fue corregido',
                 destino: 'traslado',
                 mode: 'tags',
                 clave: uid,
@@ -316,19 +316,19 @@ export class TransferAmbulancePage implements OnInit {
 
               this.api.pushNotification (push_data).subscribe (response => {
                 console.log ("Notificacion Enviada...", response);
-                this.loading.dismiss ();
+                loading.dismiss ();
                 this.goHome ();
               }, error => {
                 console.log ("Notificacion Error...", error);
-                this.loading.dismiss ();
+                loading.dismiss ();
                 this.goHome ();
               });
             });
           } else {
             this.database.addTransferAmbulance (uid, data, this.pais_selected).then ((response) => {
               let push_data = {
-                titulo: 'Pedido de traslado en ambulancia',
-                detalle: 'Un pedido de traslado en ambulancia fue corregido',
+                titulo: 'Solicitud de traslado en ambulancia',
+                detalle: 'Un pedido de traslado en ambulancia fue solicitado',
                 destino: 'traslado',
                 mode: 'tags',
                 clave: uid,
@@ -337,11 +337,11 @@ export class TransferAmbulancePage implements OnInit {
 
               this.api.pushNotification (push_data).subscribe (response => {
                 console.log ("Notificacion Enviada...", response);
-                this.loading.dismiss ();
+                loading.dismiss ();
                 this.goHome ();
               }, error => {
                 console.log ("Notificacion Error...", error);
-                this.loading.dismiss ();
+                loading.dismiss ();
                 this.goHome ();
               });
             });

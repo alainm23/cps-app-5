@@ -4,7 +4,7 @@
       <ion-back-button></ion-back-button>
     </ion-buttons>
 
-    <ion-title><img class="logotio" src="assets/imgs/logotio.png"></ion-title>
+    <ion-title (click)="goHome ()"><img class="logotio" src="assets/imgs/logotio.png"></ion-title>
     <ion-buttons slot="end">
       <ion-menu-button autoHide="false"></ion-menu-button>
     </ion-buttons>
@@ -72,10 +72,10 @@
             </ion-list>
 
             <ion-item lines="none" *ngIf="form.controls?.s_tipo.value === 's_05'">
-              <ion-label class="header-text" position="stacked">
+              <ion-label style="font-size: 24px !important;" class="header-text" position="stacked">
                 {{ 'Detalle su solicitud' | translate }}:
               </ion-label>
-              <ion-textarea formControlName="note" placeholder="50mg de ..."></ion-textarea>
+              <ion-textarea formControlName="note" placeholder="{{ 'Detalle su solicitud' | translate }}"></ion-textarea>
             </ion-item>
 
             <div style="margin-left: 1rem;" class="ion-margin-left" *ngIf="form.controls.note.errors?.required">
@@ -131,7 +131,7 @@
                 </ion-col>
                 <ion-col size="8">
                   <ion-item>
-                    <ion-input type="tel" formControlName="phone_number" placeholder="+51 985 858 787"></ion-input>
+                    <ion-input style="--padding-top: 17px !important;" type="tel" formControlName="phone_number" placeholder="+51 985 858 787"></ion-input>
                   </ion-item>
                 </ion-col>
               </ion-row>
@@ -179,7 +179,7 @@
         <ion-col size="12" size-sm="12" size-md="6"  size-lg="6" size-xl="6">
           <ion-list>
             <ion-item>
-              <ion-label class="header-text" position="stacked">
+              <ion-label style="font-size: 24px !important;" class="header-text" position="stacked">
                 {{ 'Dirección' | translate }}:
               </ion-label>
               <ion-input type="text" formControlName="address" placeholder="Avenida los Incas, Cusco"></ion-input>
@@ -208,7 +208,7 @@
             <ion-row>
               <ion-col *ngIf="!is_edit" size="8" offset="2">
                 <ion-button class="no-border" expand="block" color="blue" [disabled]="!form.valid" (click)="submit ()">
-                  {{ 'Pedir' | translate }}
+                  {{ 'Ordenar' | translate }}
                 </ion-button>
               </ion-col>
 

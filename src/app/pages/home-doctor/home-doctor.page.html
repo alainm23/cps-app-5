@@ -4,7 +4,7 @@
       <ion-back-button></ion-back-button>
     </ion-buttons>
 
-    <ion-title><img class="logotio" src="assets/imgs/logotio.png"></ion-title>
+    <ion-title (click)="goHome ()"><img class="logotio" src="assets/imgs/logotio.png"></ion-title>
     <ion-buttons slot="end">
       <ion-menu-button autoHide="false"></ion-menu-button>
     </ion-buttons>
@@ -22,18 +22,18 @@
                 <h1 *ngIf="!is_edit" class="title-label">
                   {{ 'Medico a domicilio' | translate }}
                 </h1>
-                <p>{{ 'Medico general' | translate }}</p>
+                <p class="ion-text-wrap">{{ 'Medico general' | translate }}</p>
                 
                 <h1 *ngIf="is_edit" class="title-label">
                   {{ 'Editar medico a domicilio' | translate }}
                 </h1>
   
-                <p>{{ 'Luego de validar' | translate }}</p>
+                <p class="ion-text-wrap" style="line-height: 1;">{{ 'Luego de validar' | translate }}</p>
               </ion-label>
             </ion-item>
             
             <div class="ion-text-center">
-              <ion-button class="button" expand="block" size="small" color="red" class="round" (click)="goEmergency ()">
+              <ion-button expand="block" color="red" class="button round" (click)="goEmergency ()">
                 {{ 'Es una emergencia' | translate }}
               </ion-button>
             </div>
@@ -90,7 +90,7 @@
                 </ion-col>
                 <ion-col size="8">
                   <ion-item>
-                    <ion-input type="tel" formControlName="phone_number" placeholder="+51 985 858 787"></ion-input>
+                    <ion-input style="--padding-top: 17px !important;" type="tel" formControlName="phone_number" placeholder="+51 985 858 787"></ion-input>
                   </ion-item>
                 </ion-col>
               </ion-row>
@@ -149,7 +149,7 @@
             <ion-row>
               <ion-col *ngIf="!is_edit" size="8" offset="2">
                 <ion-button class="no-border" expand="block" color="blue" [disabled]="!form.valid" (click)="submit ()">
-                  {{ 'Pedir' | translate }}
+                  {{ 'Ordenar' | translate }}
                 </ion-button>
               </ion-col>
 

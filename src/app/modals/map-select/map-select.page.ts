@@ -7,6 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
+import { BackgroundGeolocation, BackgroundGeolocationConfig, BackgroundGeolocationEvents, BackgroundGeolocationResponse } from '@ionic-native/background-geolocation/ngx';
 
 declare var google: any;
 
@@ -26,6 +27,7 @@ export class MapSelectPage implements OnInit {
   @Input () latitude: number = 0;
   @Input () longitude: number = 0;
   @Input () search_text: string = "";
+  _search_text: string = '';
 
   directionsService: any = new google.maps.DirectionsService ();
   constructor(public navCtrl: NavController, 
@@ -36,6 +38,7 @@ export class MapSelectPage implements OnInit {
               private locationAccuracy: LocationAccuracy,
               private androidPermissions: AndroidPermissions,
               private platform: Platform,
+              private backgroundGeolocation: BackgroundGeolocation,
               public viewCtrl: ModalController) {
   }
 
@@ -44,23 +47,17 @@ export class MapSelectPage implements OnInit {
       this.translateService.getTranslation (i18n).subscribe (async (i18n: any) => {
         this.i18n = i18n;
         
-        this.loading = await this.loadingCtrl.create ({
-          message: this.i18n.procesando_informacion
-        });
-        
-        await this.loading.present ().then (() => {
-          if (((this.latitude === 0) || (this.latitude === undefined)) && ((this.longitude === 0) || (this.longitude == undefined))) {
-            if (this.platform.is ('cordova')) {
-              this.checkGPSPermission ();
-            } else {
-              this.getLocationCoordinates ();
-            }
+        if (((this.latitude === 0) || (this.latitude === undefined)) && ((this.longitude === 0) || (this.longitude == undefined))) {
+          if (this.platform.is ('cordova')) {
+            this.checkGPSPermission ();
           } else {
-            this.InitMap (true, this.latitude, this.longitude);
+            this.getLocationCoordinates ();
           }
+        } else {
+          this.InitMap (true, this.latitude, this.longitude);
+        }
 
-          this.initAutocomplete ();
-        });
+        this.initAutocomplete ();
       });
     });
   }
@@ -111,9 +108,7 @@ export class MapSelectPage implements OnInit {
 
     if (this.map === null || this.map === undefined) {
       console.log ('Error del puto GPS');
-      this.loading.dismiss ();  
     } else {
-      this.loading.dismiss ();
     } 
 
     google.maps.event.addListener(this.map, 'idle', () => {
@@ -130,32 +125,21 @@ export class MapSelectPage implements OnInit {
 
       this.directionsService.route(request, (result, status) => {
         if (status == google.maps.DirectionsStatus.OK) {
-          let d = result.routes [0].legs [0].start_address;
-          let d_list = d.split (" ");;
-              
-          let _direccion = "";
-          for (let letter of d_list) {
-            if (letter != "Cusco," && letter != "Perú" && letter != "Cusco" && letter != "08000" && letter != "08000,") {
-            _direccion = _direccion + letter + " ";
-            }
-          }
-
-          if (_direccion.charAt (_direccion.length - 2) == ",") {
-            this.search_text = _direccion.substring (0, _direccion.length - 2);
-          }
+          console.log ();
+          this._search_text = result.routes [0].legs [0].start_address.replace (', Peru', '').replace (', Cusco', '');
         }
       });
     });
   }
 
   async getCurrentLocation () {
-    this.loading = await this.loadingCtrl.create ({
+    let loading = await this.loadingCtrl.create ({
       message: this.i18n.buscando_ubicacion
     });
     
-    await this.loading.present ().then (() => {
+    await loading.present ().then (() => {
       this.geolocation.getCurrentPosition ().then (position => {
-        this.loading.dismiss().then(() => {
+        loading.dismiss().then(() => {
           let lat = position.coords.latitude;
           let lng = position.coords.longitude;
 
@@ -177,13 +161,13 @@ export class MapSelectPage implements OnInit {
     let autocomplete = new google.maps.places.Autocomplete (searchInput);
 
     google.maps.event.addListener (autocomplete, 'place_changed', async () => {
-      this.loading = await this.loadingCtrl.create({
+      let loading = await this.loadingCtrl.create({
         message: this.i18n.buscando_ubicacion
       });
 
-      await this.loading.present();
+      await loading.present();
       
-      await this.loading.dismiss ().then(() => {
+      await loading.dismiss ().then(() => {
         let place = autocomplete.getPlace ()
         this.search_text = place.formatted_address;
 
@@ -201,7 +185,7 @@ export class MapSelectPage implements OnInit {
     this.map.panTo (location);
   }
 
-  closeModal() {
+  closeModal () {
     this.viewCtrl.dismiss ();
   }
 
@@ -209,7 +193,7 @@ export class MapSelectPage implements OnInit {
     this.viewCtrl.dismiss ({
       latitude: this.latitude,
       longitude: this.longitude,
-      address: this.search_text
+      address: this._search_text
     }, 'ok');
   }
 
@@ -238,7 +222,6 @@ export class MapSelectPage implements OnInit {
       .then(() => {
         this.getLocationCoordinates ();
       }, error => {
-        this.loading.dismiss ();
         this.navCtrl.pop ();
         console.log ('Error requesting location permissions ' + JSON.stringify(error))
       });
@@ -253,7 +236,6 @@ export class MapSelectPage implements OnInit {
           .then(() => {
             this.askToTurnOnGPS ();
           }, error => {
-            this.loading.dismiss ();
             this.navCtrl.pop ();
             console.log ('requestPermission Error requesting location permissions ' + error)
           }
@@ -262,12 +244,60 @@ export class MapSelectPage implements OnInit {
     });
   }
 
+  ionViewDidLeave () {
+    this.backgroundGeolocation.finish (); // FOR IOS ONLY
+    this.backgroundGeolocation.stop ();
+      
+    console.log ('Se cancelo el gps');
+  }
+
   async getLocationCoordinates () {
-    this.geolocation.getCurrentPosition().then((resp) => {
-      this.InitMap (false, resp.coords.latitude, resp.coords.longitude);
-    }).catch((error) => {
-      this.loading.dismiss ();
-      console.log ('Error getting location' + error);
+    let loading = await this.loadingCtrl.create ({
+      message: this.i18n.procesando_informacion
     });
+    
+    await loading.present ();
+
+    if (this.platform.is ('android')) {
+      const config: BackgroundGeolocationConfig = {
+        desiredAccuracy: 10,
+        stationaryRadius: 20,
+        distanceFilter: 30,
+        notificationsEnabled: false,
+        debug: false, //  enable this hear sounds for background-geolocation life-cycle.
+        stopOnTerminate: false, // enable this to clear background location settings when the app terminates
+      };
+  
+      this.backgroundGeolocation.configure (config)
+        .then(() => {
+          this.backgroundGeolocation.on (BackgroundGeolocationEvents.location).subscribe ((location: BackgroundGeolocationResponse) => {
+            console.log(location);
+  
+            loading.dismiss ();
+            this.InitMap (false, location.latitude, location.longitude);
+  
+            this.backgroundGeolocation.finish (); // FOR IOS ONLY
+          });
+        });
+  
+      this.backgroundGeolocation.start ();
+      this.backgroundGeolocation.stop ();
+    } else if (this.platform.is ('ios')) {
+      this.geolocation.getCurrentPosition ().then((resp) => {
+        loading.dismiss ();
+        this.InitMap (false, resp.coords.latitude, resp.coords.longitude);
+      }).catch ((error) => {
+        loading.dismiss ();
+        console.log ('Error getting location' + error);
+      });
+    }
+
+    // this.geolocation.getCurrentPosition ().then((resp) => {
+    //   loading.dismiss ();
+    //   this.InitMap (false, resp.coords.latitude, resp.coords.longitude);
+    // }).catch ((error) => {
+    //   loading.dismiss ();
+    //   console.log ('Error getting location' + error);
+    // });
   }
 }
