@@ -4,7 +4,7 @@ import { NavController, LoadingController, Platform, ModalController, AlertContr
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 
 import { Geolocation } from '@ionic-native/geolocation/ngx';  
-import { BackgroundGeolocation, BackgroundGeolocationConfig, BackgroundGeolocationEvents, BackgroundGeolocationResponse } from '@ionic-native/background-geolocation/ngx';
+// import { BackgroundGeolocation, BackgroundGeolocationConfig, BackgroundGeolocationEvents, BackgroundGeolocationResponse } from '@ionic-native/background-geolocation/ngx';
 
 import { DatabaseService } from '../../providers/database.service';
 import { AuthService } from '../../providers/auth.service';
@@ -50,7 +50,7 @@ export class SendAmbulancePage implements OnInit {
               private storage: StorageService,
               public loadingCtrl: LoadingController, 
               private geolocation: Geolocation,
-              private backgroundGeolocation: BackgroundGeolocation,
+              // private backgroundGeolocation: BackgroundGeolocation,
               private api: ApiService) {
   }
 
@@ -166,6 +166,10 @@ export class SendAmbulancePage implements OnInit {
 
   getFlat () {
     return "https://www.countryflags.io/" + this.pais_selected.code + "/flat/24.png";
+  }
+
+  goHome () {
+    this.navCtrl.navigateRoot ('home');
   }
 
   async select_code () {

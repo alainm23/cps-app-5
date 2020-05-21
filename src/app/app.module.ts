@@ -35,7 +35,7 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 
 // Camara
-import { BackgroundGeolocation } from '@ionic-native/background-geolocation/ngx';
+// import { BackgroundGeolocation } from '@ionic-native/background-geolocation/ngx';
 import { Camera } from '@ionic-native/camera/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Device } from '@ionic-native/device/ngx';
@@ -101,7 +101,7 @@ import { CalificacionPageModule } from './modals/calificacion/calificacion.modul
     AppAvailability,
     OneSignal,
     AppVersion,
-    BackgroundGeolocation,
+    // BackgroundGeolocation,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

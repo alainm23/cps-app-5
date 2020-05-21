@@ -120,17 +120,17 @@
           <ion-item class="ion-text-center" lines="none"> 
             <ion-label>
               <h1 class="title-label">{{ 'TRANSFER_BY_AMBULANCE' | translate }}</h1>
-              <p *ngIf="home_injection?.state == 'observed'" class="ion-text-wrap" style="padding-left: 0.5rem; padding-right: 0.5rem;">
+              <p *ngIf="transfer_ambulance?.state == 'observed'" class="ion-text-wrap" style="padding-left: 0.5rem; padding-right: 0.5rem;">
                 <br>
                 {{ 'Su pedido a sido observado, por favor corrija lo siguiente.' | translate }}
               </p>
 
-              <p *ngIf="home_injection?.state == 'approved'" class="ion-text-wrap" style="padding-left: 0.5rem; padding-right: 0.5rem;">
+              <p *ngIf="transfer_ambulance?.state == 'approved'" class="ion-text-wrap" style="padding-left: 0.5rem; padding-right: 0.5rem;">
                 <br>
                 {{ 'Su solicitud a sido aprobada' | translate }}
               </p>
 
-              <p *ngIf="home_injection?.state == 'completed'" class="ion-text-wrap" style="padding-left: 0.5rem; padding-right: 0.5rem;">
+              <p *ngIf="transfer_ambulance?.state == 'completed'" class="ion-text-wrap" style="padding-left: 0.5rem; padding-right: 0.5rem;">
                 {{ 'El pasciente, nuestra prioridad' | translate }}
               </p>
             </ion-label>

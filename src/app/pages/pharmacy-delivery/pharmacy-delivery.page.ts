@@ -15,7 +15,7 @@ import { ApiService } from '../../providers/api.service';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
-import { BackgroundGeolocation, BackgroundGeolocationConfig, BackgroundGeolocationEvents, BackgroundGeolocationResponse } from '@ionic-native/background-geolocation/ngx';
+// import { BackgroundGeolocation, BackgroundGeolocationConfig, BackgroundGeolocationEvents, BackgroundGeolocationResponse } from '@ionic-native/background-geolocation/ngx';
 
 declare var google: any;
 import { TranslateService } from '@ngx-translate/core';
@@ -63,7 +63,7 @@ export class PharmacyDeliveryPage implements OnInit {
               private androidPermissions: AndroidPermissions,
               private alertCtrl: AlertController,
               // public imageViewerCtrl: ImageViewerController,
-              private backgroundGeolocation: BackgroundGeolocation,
+              // private backgroundGeolocation: BackgroundGeolocation,
               private actionSheetCtrl: ActionSheetController,
               public loadingCtrl: LoadingController) {
   }
@@ -417,10 +417,10 @@ export class PharmacyDeliveryPage implements OnInit {
   }
 
   ionViewDidLeave () {
-    this.backgroundGeolocation.finish (); // FOR IOS ONLY
-    this.backgroundGeolocation.stop ();
+    // this.backgroundGeolocation.finish (); // FOR IOS ONLY
+    // this.backgroundGeolocation.stop ();
       
-    console.log ('Se cancelo el gps');
+    // console.log ('Se cancelo el gps');
   }
 
   async getCurrentLocation () {
@@ -568,50 +568,50 @@ export class PharmacyDeliveryPage implements OnInit {
     
     await loading.present ();
 
-    if (this.platform.is ('android')) {
-      const config: BackgroundGeolocationConfig = {
-        desiredAccuracy: 10,
-        stationaryRadius: 20,
-        distanceFilter: 30,
-        notificationsEnabled: false,
-        debug: false, //  enable this hear sounds for background-geolocation life-cycle.
-        stopOnTerminate: false, // enable this to clear background location settings when the app terminates
-      };
+    // if (this.platform.is ('android')) {
+    //   const config: BackgroundGeolocationConfig = {
+    //     desiredAccuracy: 10,
+    //     stationaryRadius: 20,
+    //     distanceFilter: 30,
+    //     notificationsEnabled: false,
+    //     debug: false, //  enable this hear sounds for background-geolocation life-cycle.
+    //     stopOnTerminate: false, // enable this to clear background location settings when the app terminates
+    //   };
   
-      this.backgroundGeolocation.configure (config)
-        .then(() => {
-          this.backgroundGeolocation.on (BackgroundGeolocationEvents.location).subscribe ((location: BackgroundGeolocationResponse) => {
-            console.log(location);
+    //   this.backgroundGeolocation.configure (config)
+    //     .then(() => {
+    //       this.backgroundGeolocation.on (BackgroundGeolocationEvents.location).subscribe ((location: BackgroundGeolocationResponse) => {
+    //         console.log(location);
   
-            loading.dismiss ();
-            this.latitude = location.latitude;
-            this.longitude = location.longitude;
-            this.InitMap (false, location.latitude, location.longitude);
+    //         loading.dismiss ();
+    //         this.latitude = location.latitude;
+    //         this.longitude = location.longitude;
+    //         this.InitMap (false, location.latitude, location.longitude);
   
-            this.backgroundGeolocation.finish (); // FOR IOS ONLY
-          });
-        });
+    //         this.backgroundGeolocation.finish (); // FOR IOS ONLY
+    //       });
+    //     });
   
-      this.backgroundGeolocation.start ();
-      this.backgroundGeolocation.stop ();
-    } else if (this.platform.is ('ios')) {
-      this.geolocation.getCurrentPosition ().then((resp) => {
-        loading.dismiss ();
-        this.InitMap (false, resp.coords.latitude, resp.coords.longitude);
-      }).catch ((error) => {
-        loading.dismiss ();
-        console.log ('Error getting location' + error);
-      });
-    }
+    //   this.backgroundGeolocation.start ();
+    //   this.backgroundGeolocation.stop ();
+    // } else if (this.platform.is ('ios')) {
+    //   this.geolocation.getCurrentPosition ().then((resp) => {
+    //     loading.dismiss ();
+    //     this.InitMap (false, resp.coords.latitude, resp.coords.longitude);
+    //   }).catch ((error) => {
+    //     loading.dismiss ();
+    //     console.log ('Error getting location' + error);
+    //   });
+    // }
 
-    // this.geolocation.getCurrentPosition ().then((resp) => {
-    //   loading.dismiss ();
-    //   this.latitude = resp.coords.latitude;
-    //   this.longitude = resp.coords.longitude;
-    //   this.InitMap (false, resp.coords.latitude, resp.coords.longitude);
-    // }).catch ((error) => {
-    //   loading.dismiss ();
-    //   console.log ('Error getting location' + error);
-    // });
+    this.geolocation.getCurrentPosition ().then((resp) => {
+      loading.dismiss ();
+      this.latitude = resp.coords.latitude;
+      this.longitude = resp.coords.longitude;
+      this.InitMap (false, resp.coords.latitude, resp.coords.longitude);
+    }).catch ((error) => {
+      loading.dismiss ();
+      console.log ('Error getting location' + error);
+    });
   }
 }

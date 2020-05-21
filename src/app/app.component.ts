@@ -16,7 +16,7 @@ import { Device } from '@ionic-native/device/ngx';
 import { OneSignal, OSNotificationOpenedResult, OSNotification } from '@ionic-native/onesignal/ngx';
 import { ToastController } from '@ionic/angular';
 import { DatabaseService } from './providers/database.service';
-import { BackgroundGeolocation, BackgroundGeolocationConfig, BackgroundGeolocationEvents, BackgroundGeolocationResponse } from '@ionic-native/background-geolocation/ngx';
+// import { BackgroundGeolocation, BackgroundGeolocationConfig, BackgroundGeolocationEvents, BackgroundGeolocationResponse } from '@ionic-native/background-geolocation/ngx';
 
 @Component({
   selector: 'app-root',
@@ -44,7 +44,7 @@ export class AppComponent {
     private oneSignal: OneSignal,
     public toastController: ToastController,
     public database: DatabaseService,
-    private backgroundGeolocation: BackgroundGeolocation,
+    // private backgroundGeolocation: BackgroundGeolocation,
   ) {
     this.initializeApp ();
   }
@@ -64,8 +64,8 @@ export class AppComponent {
       }
 
       this.platform.pause.subscribe ((res: any) => {
-        this.backgroundGeolocation.finish (); // FOR IOS ONLY
-        this.backgroundGeolocation.stop ();
+        // this.backgroundGeolocation.finish (); // FOR IOS ONLY
+        // this.backgroundGeolocation.stop ();
       });
 
       // this.platform.resume.subscribe ((res: any) => {
