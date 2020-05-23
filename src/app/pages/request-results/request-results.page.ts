@@ -147,9 +147,15 @@ export class RequestResultsPage implements OnInit {
       loading.present ();
 
       this.storage.getValue ("uid").then (uid => {
-        this.storage.getValue ("token_id").then (token_id => {
+        this.storage.getValue ("token_id").then (async token_id => {
+          let lang: any = await this.storage.getValue ('i18n');
+          if (lang === null || lang === undefined) {
+            lang = 'es';
+          }
+
           let data: any = {
             id: uid,
+            lang: lang,
             token_id: token_id,
             date: new Date ().toISOString (),
             price: 0,

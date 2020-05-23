@@ -199,6 +199,8 @@ export class MedicalEscortCheckPage implements OnInit {
 
         if (response.type === 'contra_entrega') {
           await this.database.updateMedicalEscortContraEntrega (this.medical_escort.id);
+          await loading.dismiss ();
+
           const alert = await this.alertCtrl.create({
             header: this.i18n.proceso_exitoso,
             message: response.message,
@@ -223,7 +225,7 @@ export class MedicalEscortCheckPage implements OnInit {
           });
         } else if (response.type === 'venta_exitosa') {
           await this.database.updateMedicalEscortOnlinePaid (this.medical_escort.id, response.transaccion_id);
-          loading.dismiss ();
+          await loading.dismiss ();
 
           const toast = await this.toastController.create({
             header: this.i18n.proceso_exitoso,

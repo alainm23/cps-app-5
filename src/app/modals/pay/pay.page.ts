@@ -19,7 +19,8 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./pay.page.scss'],
 })
 export class PayPage implements OnInit {
-  @Input () mount: number;
+  @Input () mount: number = 0;
+  @Input () servicio: string = '';
   i18n: any;
   pago_subscribe: any;
   constructor(public navCtrl: NavController, 
@@ -37,6 +38,8 @@ export class PayPage implements OnInit {
   }
 
   ngOnInit () {
+    console.log (this.mount);
+    
     this.storage.getValue ('i18n').then (i18n => {
       this.translateService.getTranslation (i18n).subscribe (async (i18n: any) => {
         this.i18n = i18n;

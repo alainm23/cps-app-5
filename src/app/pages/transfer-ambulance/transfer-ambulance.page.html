@@ -41,7 +41,7 @@
               {{ 'Marcar en mapa 2' | translate }} {{ editar_1 }}
             </ion-button>
 
-            <ion-item *ngIf="form.value.location_ori_lat !== null">
+            <ion-item *ngIf="form.value.location_ori_lat !== 0">
               <ion-label style="font-size: 18pt !important;" class="header-text" position="stacked">
                 {{ 'Direccion de origen' | translate }}:
               </ion-label>
@@ -71,7 +71,7 @@
               {{ 'Marcar en mapa 2' | translate }} {{ editar_2 }}
             </ion-button>
 
-            <ion-item *ngIf="form.value.location_des_lat !== null">
+            <ion-item *ngIf="form.value.location_des_lat !== 0">
               <ion-label style="font-size: 18pt !important;" class="header-text" position="stacked">
                 {{ 'Direccion de destino' | translate }}:
               </ion-label>

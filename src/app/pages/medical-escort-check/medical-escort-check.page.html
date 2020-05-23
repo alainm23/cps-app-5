@@ -88,7 +88,7 @@
 
               <ion-item>
                 <ion-label>
-                  <b>{{ 'Numero de dias' | translate }}:</b>
+                  <b>{{ 'Numero de dias' | translate }}</b>
                   <br>
                   {{ medical_escort?.number_days }}
                 </ion-label>
@@ -189,7 +189,7 @@
             <ion-label>
               <ion-icon class="icon-approved" name="checkmark-circle-outline"></ion-icon>
               <p class="ion-text-wrap" style="padding-left: 0.5rem; padding-right: 0.5rem;" *ngIf="medical_escort?.payment_type === 'cash'">
-                {{ 'Un médico general lo visitará el' | translate }}
+                {{ 'Nuestro personal medico lo visitara el dia' | translate }}
                 {{ getFormatDate (medical_escort?.date) }}
                 {{ 'a las' | translate }}
                 {{ medical_escort?.hour }}
@@ -197,7 +197,7 @@
                 {{ 'El pago por el servicio deberá ser entregado a al doctor el día de la visita.' | translate }}
               </p>
               <p class="ion-text-wrap" style="padding-left: 0.5rem; padding-right: 0.5rem;" *ngIf="medical_escort?.payment_type === 'online'">
-                {{ 'Un médico general lo visitará el' | translate }}
+                {{ 'Nuestro personal medico lo visitara el dia' | translate }}
                 {{ getFormatDate (medical_escort?.date) }}
                 {{ 'a las' | translate }}
                 {{ medical_escort?.hour }}
@@ -263,7 +263,7 @@
 
               <ion-item>
                 <ion-label>
-                  <b>{{ 'Numero de dias' | translate }}:</b>
+                  <b>{{ 'Numero de dias' | translate }}</b>
                   <br>
                   {{ medical_escort?.number_days }}
                 </ion-label>

@@ -28,8 +28,8 @@
           </ion-label>
         </ion-item>
 
-        <ion-item>
-          <ion-label style="font-size: 18pt !important;" class="header-text" position="stacked">{{ 'Que resultados quisiera obtener' | translate }}:</ion-label>
+        <ion-item style="font-size: 18px; font-weight: 600;">
+          {{ 'Que resultados quisiera obtener' | translate }}
         </ion-item>
 
         <form [formGroup]="form">
@@ -169,7 +169,7 @@
             </div>
       
           <ion-item lines="none">
-            <ion-label style="font-size: 11t !important;" class="header-text" position="stacked">{{ 'Mensaje:' | translate }}</ion-label>
+            <ion-label style="font-size: 11t !important;" class="header-text" position="stacked">{{ 'Mensaje' | translate }}</ion-label>
             <ion-textarea formControlName="message" placeholder="{{ 'Necesito la una copia de mi receta ...' | translate }}"></ion-textarea>
           </ion-item>
 

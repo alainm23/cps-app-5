@@ -40,7 +40,7 @@
               {{ 'Marcar en mapa 2' | translate }} {{ editar_1 }}
             </ion-button>
 
-            <ion-item *ngIf="form.value.location_ori_lat !== null">
+            <ion-item *ngIf="form.value.location_ori_lat !== 0">
               <ion-label style="font-size: 18pt !important;" class="header-text" position="stacked">
                 {{ 'Direccion de origen' | translate }}:
               </ion-label>
@@ -70,7 +70,7 @@
               {{ 'Marcar en mapa 2' | translate }} {{ editar_2 }}
             </ion-button>
 
-            <ion-item *ngIf="form.value.location_des_lat !== null">
+            <ion-item *ngIf="form.value.location_des_lat !== 0">
               <ion-label style="font-size: 18pt !important;" class="header-text" position="stacked">
                 {{ 'Direccion de destino' | translate }}:
               </ion-label>
@@ -123,7 +123,7 @@
         <ion-col size="12" size-sm="12" size-md="6"  size-lg="6" size-xl="6">
           <ion-list>
             <ion-item>
-              <ion-label style="font-size: 18pt !important;" class="header-text" position="stacked">{{ 'Numero de dias' | translate }}</ion-label>
+              <ion-label style="font-size: 18pt !important;" class="header-text" position="stacked">{{ 'Numero de dias' | translate }}:</ion-label>
               <ion-input type="number" maxlength="11" placeholder="Numero de dias" formControlName="number_days"></ion-input>  
             </ion-item>
 
@@ -168,7 +168,7 @@
             </div-->
 
             <ion-item>
-              <ion-label class="header-text">{{ 'Tipo de comprobante' | translate }}</ion-label>
+              <ion-label class="header-text">{{ 'Tipo de comprobante' | translate }}:</ion-label>
               <ion-select interface="popover" formControlName="tipo_comprobante" (ionChange)="comprobanteChange ($event)">
                 <ion-select-option value="factura">{{ 'Factura' | translate }}</ion-select-option>
                 <ion-select-option value="boleta">{{ 'Boleta' | translate }}</ion-select-option>
@@ -238,7 +238,7 @@
             </ion-item>
 
             <ion-item lines="none">
-              <ion-label class="header-text">{{ 'Idioma' | translate }}</ion-label>
+              <ion-label class="header-text">{{ 'Idioma' | translate }}:</ion-label>
             </ion-item>
 
             <ion-item lines="none">

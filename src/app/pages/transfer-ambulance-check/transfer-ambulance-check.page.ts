@@ -200,7 +200,8 @@ export class TransferAmbulanceCheckPage implements OnInit {
 
         if (response.type === 'contra_entrega') {
           await this.database.updateTransferAmbulanceContraEntrega (this.transfer_ambulance.id);
-
+          loading.dismiss ();
+          
           let push_data = {
             titulo: 'Solicitud de traslado en ambulancia',
             detalle: 'El usuario confirmó la solicitud con método de pago contraentrega',

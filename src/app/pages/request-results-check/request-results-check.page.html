@@ -183,21 +183,25 @@
           <ion-item class="ion-text-center height-70" lines="none" *ngIf="home_injection?.state === 'completed'">
             <ion-label>
               <ion-icon class="icon-approved" name="checkmark-circle-outline"></ion-icon>
-              <p class="ion-text-wrap" style="padding-left: 0.5rem; padding-right: 0.5rem;" *ngIf="home_injection?.payment_type === 'cash'">
-                {{ 'Un médico general lo visitará el' | translate }}
-                {{ getFormatDate (home_injection?.date) }}
-                {{ 'a las' | translate }}
-                {{ home_injection?.hour }}
-                {{ 'Hrs.' | translate }}
-                {{ 'El pago por el servicio deberá ser entregado a al doctor el día de la visita.' | translate }}
-              </p>
-              <p class="ion-text-wrap" style="padding-left: 0.5rem; padding-right: 0.5rem;" *ngIf="home_injection?.payment_type === 'online'">
-                {{ 'Un médico general lo visitará el' | translate }}
-                {{ getFormatDate (home_injection?.date) }}
-                {{ 'a las' | translate }}
-                {{ home_injection?.hour }}
-                {{ 'Hrs.' | translate }}
-              </p>
+              <div *ngIf="home_injection?.payment_type === 'cash'" >
+                <p *ngIf="home_injection?.tipo_entrega === 'recojo'" class="ion-text-wrap" style="padding-left: 0.5rem; padding-right: 0.5rem;">
+                  {{ 'Por favor aproximese a nuestras instalaciones el dia' | translate }}
+                  {{ getFormatDateTime (home_injection?.deliver_date) }}
+                  {{ 'El pago por el servicio deberá ser entregado el día del recojo.' | translate }}
+                </p>
+              </div>
+
+              <div *ngIf="home_injection?.payment_type === 'online'">
+                <p *ngIf="home_injection?.tipo_entrega === 'recojo'" class="ion-text-wrap" style="padding-left: 0.5rem; padding-right: 0.5rem;">
+                  {{ 'Por favor aproximese a nuestras instalaciones el dia' | translate }}
+                  {{ getFormatDateTime (home_injection?.deliver_date) }}
+                </p>
+
+                <p *ngIf="home_injection?.tipo_entrega !== 'recojo'" class="ion-text-wrap" style="padding-left: 0.5rem; padding-right: 0.5rem;">
+                  {{ 'Le enviaremos sus resultados al correo indicado el dia' | translate }}
+                  {{ getFormatDateTime (home_injection?.deliver_date) }}
+                </p>
+              </div>
             </ion-label>
           </ion-item>
 
@@ -208,6 +212,12 @@
                   <b>{{ 'Costo' | translate }}</b>
                   <br>
                   {{ 'Total (inc. IGV):' | translate }}: {{ (home_injection?.price / 100) | currency:'S/. ' }}
+                  <br>
+                  <div style="display: grid;">
+                    <b *ngIf="home_injection?.tipo_entrega === 'recojo'">{{ 'Fecha de entrega' | translate }}</b>
+                    <b *ngIf="home_injection?.tipo_entrega !== 'recojo'">{{ 'Fecha de envio' | translate }}</b>
+                    {{ getFormatDateTime (home_injection?.deliver_date) }}
+                  </div>
                 </ion-label>
               </ion-item>
             </ion-list>
@@ -332,7 +342,7 @@
             <div class="ion-text-center ion-padding">
               <ion-row>
                 <ion-col size="6" offset="3">
-                  <ion-button class="no-border" expand="block" color="blue" (click)="presentActionSheet (home_injection?.price + home_injection?.delivery_price)">
+                  <ion-button class="no-border" expand="block" color="blue" (click)="presentActionSheet (home_injection?.price)">
                     {{ 'Pedir' | translate }}
                   </ion-button>
                 </ion-col>

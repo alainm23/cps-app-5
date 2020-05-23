@@ -68,6 +68,16 @@ export class DatabaseService {
 
     let step_4 = this.afs.collection ('Admin_Canceladas').doc ("Emergencias").collection (moment().format('YYYY[-]MM')).doc (codigo).ref;
     batch.set (step_4, { 'id': codigo });
+
+    if (data.driver_id !== '') {
+      let step_5 = this.afs.collection ('Users').doc (data.driver_id).ref;
+      batch.update (step_5, { 'is_free': true });
+    }
+
+    if (data.ambulance_id !== '') {
+      let step_6 = this.afs.collection ('Ambulances').doc (data.ambulance_id).ref;
+      batch.update (step_6, { 'is_free': true });
+    }
     
     return await batch.commit (); 
   }

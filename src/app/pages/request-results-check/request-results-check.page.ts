@@ -155,6 +155,10 @@ export class RequestResultsCheckPage implements OnInit {
   getFormatDate (date: string) {
     return moment (date).format('LL');
   }
+
+  getFormatDateTime (date: string) {
+    return moment (date).format('lll');
+  }
   
   getFormatPrice (price: number) {
     return (price / 100).toString (); 
@@ -167,10 +171,13 @@ export class RequestResultsCheckPage implements OnInit {
   }
 
   async presentActionSheet (mount: number) {
+    console.log (mount);
+
     const modal = await this.modalController.create({
       component: PayPage,
       componentProps: {
-        mount: mount
+        mount: mount,
+        servicio: 'resultados'
       }
     });
 

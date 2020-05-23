@@ -52,7 +52,7 @@
             {{ 'Marcar en mapa' | translate }} {{ editar_1 }}
           </ion-button>
 
-          <ion-item *ngIf="form.value.address !== ''">
+          <ion-item *ngIf="form.value.latitude !== 0">
             <ion-label style="font-size: 23px !important;" position="stacked">{{ 'Dirección' | translate }}:</ion-label>
             <ion-input class="entry" formControlName="address" placeholder="{{ 'Ingrese su direccion' | translate }}"></ion-input>
           </ion-item>

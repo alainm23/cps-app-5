@@ -80,10 +80,10 @@ export class TransferAmbulancePage implements OnInit {
     this.form = new FormGroup ({
       address_ori: new FormControl ('', Validators.required),
       address_des: new FormControl ('', Validators.required),
-      location_ori_lat: new FormControl (null, Validators.required),
-      location_ori_lon: new FormControl (null, Validators.required),
-      location_des_lat: new FormControl (null, Validators.required),
-      location_des_lon: new FormControl (null, Validators.required),
+      location_ori_lat: new FormControl (0, Validators.required),
+      location_ori_lon: new FormControl (0, Validators.required),
+      location_des_lat: new FormControl (0, Validators.required),
+      location_des_lon: new FormControl (0, Validators.required),
       date: new FormControl (new Date ().toISOString (), Validators.required),
       tipo_ambulancia: new FormControl ("ambulancia_1", Validators.required),
       hour: new FormControl ('', Validators.required),
@@ -256,9 +256,15 @@ export class TransferAmbulancePage implements OnInit {
       const value = this.form.value;
 
       this.storage.getValue ("uid").then ((uid) => {
-        this.storage.getValue ("token_id").then (token_id => {
+        this.storage.getValue ("token_id").then (async token_id => {
+          let lang: any = await this.storage.getValue ('i18n');
+          if (lang === null || lang === undefined) {
+            lang = 'es';
+          }
+
           let data: any = {
             id: uid,
+            lang: lang,
             token_id: token_id,
             address_ori: value.address_ori,
             address_des: value.address_des,

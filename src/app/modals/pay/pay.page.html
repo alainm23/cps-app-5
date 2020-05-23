@@ -16,7 +16,7 @@
         <ion-button expand="block" (click)="openCulqi ()">{{ 'Pago con Tarjeta Crédito' | translate }}</ion-button>
       </ion-col>
 
-      <ion-col size="12">
+      <ion-col size="12" *ngIf="servicio !== 'resultados'">
         <ion-button expand="block" (click)="contraentrega ()">{{ 'Pago contra entrega' | translate }}</ion-button>
       </ion-col>
     </ion-row>

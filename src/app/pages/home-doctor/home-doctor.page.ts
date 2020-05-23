@@ -313,13 +313,18 @@ export class HomeDoctorPage implements OnInit {
     const value = this.form.value;
 
     this.storage.getValue ("uid").then (uid => {
-      this.storage.getValue ("token_id").then (token_id => {
+      this.storage.getValue ("token_id").then (async token_id => {
+        let lang: any = await this.storage.getValue ('i18n');
+        if (lang === null || lang === undefined) {
+          lang = 'es';
+        }
+
         let data: any = {
           id: uid,
           token_id: token_id,
           address: value.address,
 
-          lang: value.lang,
+          lang: lang,
           
           hour: value.hour,
           note: value.note,
@@ -355,6 +360,8 @@ export class HomeDoctorPage implements OnInit {
           solicitante: 'usuario'
         };
 
+        console.log (data);
+          
         if (this.route.snapshot.paramMap.get ('edit') === 'true') {
           data.id = this.route.snapshot.paramMap.get ('id');
 

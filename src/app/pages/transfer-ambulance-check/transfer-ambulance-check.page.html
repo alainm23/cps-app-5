@@ -12,7 +12,7 @@
 </ion-header>
 
 
-<ion-content class="ion-padding">
+<ion-content>
   <ion-grid>
     <ion-row>
       <ion-col>
@@ -154,15 +154,15 @@
             <ion-label>
               <ion-icon class="icon-approved" name="checkmark-circle-outline"></ion-icon>
               <p class="ion-text-wrap" style="padding-left: 0.5rem; padding-right: 0.5rem;" *ngIf="transfer_ambulance?.payment_type === 'cash'">
-                {{ 'Un médico general lo visitará el' | translate }}
+                {{ 'El servicio de' | translate }} {{ 'TRANSFER_BY_AMBULANCE' | translate }} {{ 'para el dia' }}
                 {{ getFormatDate (transfer_ambulance?.date) }}
                 {{ 'a las' | translate }}
                 {{ transfer_ambulance?.hour }}
                 {{ 'Hrs.' | translate }}
-                {{ 'El pago por el servicio deberá ser entregado a al doctor el día de la visita.' | translate }}
+                {{ 'El pago por el servicio deberá ser entregado el día de la visita.' | translate }}
               </p>
               <p class="ion-text-wrap" style="padding-left: 0.5rem; padding-right: 0.5rem;" *ngIf="transfer_ambulance?.payment_type === 'online'">
-                {{ 'Un médico general lo visitará el' | translate }}
+                {{ 'El servicio de' | translate }} {{ 'TRANSFER_BY_AMBULANCE' | translate }} {{ 'en el dia' }}
                 {{ getFormatDate (transfer_ambulance?.date) }}
                 {{ 'a las' | translate }}
                 {{ transfer_ambulance?.hour }}

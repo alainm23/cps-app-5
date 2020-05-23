@@ -82,10 +82,10 @@ export class MedicalEscortPage implements OnInit {
     this.form = new FormGroup ({
       address_ori: new FormControl ('', Validators.required),
       address_des: new FormControl ('', Validators.required),
-      location_ori_lat: new FormControl (null, Validators.required),
-      location_ori_lon: new FormControl (null, Validators.required),
-      location_des_lat: new FormControl (null, Validators.required),
-      location_des_lon: new FormControl (null, Validators.required),
+      location_ori_lat: new FormControl (0, Validators.required),
+      location_ori_lon: new FormControl (0, Validators.required),
+      location_des_lat: new FormControl (0, Validators.required),
+      location_des_lon: new FormControl (0, Validators.required),
       //date: new FormControl (new Date ().toISOString (), Validators.required),
       //hour: new FormControl ('', Validators.required),
       description: new FormControl ('', Validators.required),
@@ -99,7 +99,6 @@ export class MedicalEscortPage implements OnInit {
       need_english: new FormControl (false, Validators.required),
       
       number_patients: new FormControl ('', Validators.required),
-      
       number_days: new FormControl ('', Validators.required),
       
       terms_conditions: new FormControl (false, Validators.compose([
@@ -286,11 +285,17 @@ export class MedicalEscortPage implements OnInit {
 
     await loading.present ().then (() => {
       this.storage.getValue ("uid").then ((id) => {
-        this.storage.getValue ("token_id").then (token_id => {
+        this.storage.getValue ("token_id").then (async token_id => {
           const value = this.form.value;
+          
+          let lang: any = await this.storage.getValue ('i18n');
+          if (lang === null || lang === undefined) {
+            lang = 'es';
+          }
 
           let data: any = {
             id: id,
+            lang: lang,
             token_id: token_id,
             address_ori: value.address_ori,
             address_des: value.address_des,

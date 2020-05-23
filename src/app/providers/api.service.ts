@@ -154,8 +154,8 @@ export class ApiService {
         console.log("Server-side error occured.");
       }
     });
-  }  
-
+  }
+  
   checkoutapp (data: any) {
     let url = this.API + '/checkoutapp';
     return this.http.post (url, data);

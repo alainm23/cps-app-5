@@ -71,8 +71,8 @@ export class SendAmbulancePage implements OnInit {
     this.form = new FormGroup({
       phone_number: new FormControl (phone_number, [Validators.required]),
       address: new FormControl ("", [Validators.required]),
-      latitude: new FormControl ("", [Validators.required]),
-      longitude: new FormControl ("", [Validators.required])
+      latitude: new FormControl (0, [Validators.required]),
+      longitude: new FormControl (0, [Validators.required])
     });
 
     this.storage.getValue ("uid").then (id => {
@@ -101,6 +101,11 @@ export class SendAmbulancePage implements OnInit {
     }
 
     this.storage.getValue ("token_id").then (async token_id => {
+      let lang: any = await this.storage.getValue ('i18n');
+      if (lang === null || lang === undefined) {
+        lang = 'es';
+      }
+
       let data: any = {
         id: id,
         token_id: token_id,
@@ -123,9 +128,12 @@ export class SendAmbulancePage implements OnInit {
         country_name: this.pais_selected.name,
         country_dial_code: this.pais_selected.dial_code,
         country_code: this.pais_selected.code,
-        solicitante: 'usuario'
-      };
-      
+        solicitante: 'usuario',
+        lang: lang
+      }
+
+      console.log (data);
+
       let save_number: boolean;
       if (this.auth.is_logged) {
         if (this.auth.user.phone_number !== value.phone_number) {

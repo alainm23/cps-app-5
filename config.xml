@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="pe.com.cps" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="pe.com.cps" version="1.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Clínica Peruano Suiza</name>
     <description>Clínica Peruano Suiza</description>
     <author email="administracion@cps.com.pe" href="https://cps.com.pe">Clínica Peruano Suiza</author>
@@ -110,15 +110,10 @@
         <variable name="FACEBOOK_HYBRID_APP_EVENTS" value="false" />
         <variable name="FACEBOOK_ANDROID_SDK_VERSION" value="5.5.2" />
     </plugin>
-    <plugin name="cordova-plugin-background-geolocation" spec="@mauron85/cordova-plugin-background-geolocation@~3.1.0">
-        <variable name="GOOGLE_PLAY_SERVICES_VERSION" value="11+" />
-        <variable name="ANDROID_SUPPORT_LIBRARY_VERSION" value="26+" />
-        <variable name="ICON" value="@mipmap/icon" />
-        <variable name="SMALL_ICON" value="@mipmap/icon" />
-        <variable name="ALWAYS_USAGE_DESCRIPTION" value="App requires background tracking " />
-        <variable name="MOTION_USAGE_DESCRIPTION" value="App requires motion detection" />
-    </plugin>
     <edit-config file="*-Info.plist" mode="merge" target="NSLocationWhenInUseUsageDescription">
+        <string>So we can get to you as fast as possible</string>
+    </edit-config>
+    <edit-config file="*-Info.plist" mode="merge" target="NSLocationAlwaysAndWhenInUseUsageDescription">
         <string>So we can get to you as fast as possible</string>
     </edit-config>
     <edit-config file="*-Info.plist" mode="merge" target="NSLocationAlwaysUsageDescription">
