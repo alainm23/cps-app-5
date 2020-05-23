@@ -75,16 +75,17 @@
                 {{ 'Por ser peruano' | translate }}
               </ion-item>
             </ion-card>
-            
-            <ion-row>
-              <ion-col size="2" class="ion-text-right">
-                <ion-checkbox color="blue" formControlName="terms_conditions"></ion-checkbox>
-              </ion-col>
 
-              <ion-col size="10">
-                {{ 'Acepto los' | translate }}<a href="http://www.cps.com.pe/terms"> {{ 'términos & condiciones' | translate }}</a>
-              </ion-col>
-            </ion-row>
+            <ion-grid>
+              <ion-row>
+                <ion-col size="12" size-md="8" offset-md="2" size-lg="6" offset-lg="3" size-xl="6" offset-xl="3">
+                  <div class="ion-text-center">
+                    <ion-checkbox style="margin-right: 0.5rem;" color="blue" formControlName="terms_conditions"></ion-checkbox>
+                    <span>{{ 'Acepto los' | translate }}&nbsp;<a href="http://www.cps.com.pe/terms"> {{ 'términos & condiciones' | translate }}</a></span>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
 
             <div class="ion-text-center ion-padding-top">
               <ion-button class="no-border" [disabled]="!form.valid" color="blue" (click)="openCheckout ()">

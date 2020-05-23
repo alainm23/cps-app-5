@@ -57,8 +57,8 @@
           </ion-list>
 
           <ion-item>
-            <ion-label>{{ 'No cuento con orden medica' | translate }}</ion-label>
-            <ion-checkbox color="blue" slot="start" formControlName="has_orden"></ion-checkbox>
+            <ion-checkbox color="blue" formControlName="has_orden"></ion-checkbox>
+            <ion-label style="margin-left: 0.5rem;">{{ 'No cuento con orden medica' | translate }}</ion-label>
           </ion-item>
 
           <ion-card *ngIf="form.controls?.has_orden.value" class="ion-text-wrap card-precio ion-text-center">

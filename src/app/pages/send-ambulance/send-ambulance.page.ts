@@ -67,7 +67,7 @@ export class SendAmbulancePage implements OnInit {
     } else {
       phone_number = "";
     }
-
+    
     this.form = new FormGroup({
       phone_number: new FormControl (phone_number, [Validators.required]),
       address: new FormControl ("", [Validators.required]),
