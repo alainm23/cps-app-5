@@ -20,8 +20,8 @@ export class PagoService {
 
   initCulqi () {
     // Ingresa tu "Puclic Key" que te da Culqi aqui
-    //Culqi.publicKey = 'pk_live_cfHayQoNWmCbKm6y';
-    Culqi.publicKey = 'pk_test_yycfYRkVXy5z38km';
+    Culqi.publicKey = 'pk_live_cfHayQoNWmCbKm6y';
+    //Culqi.publicKey = 'pk_test_yycfYRkVXy5z38km';
   }
 
   cfgFormulario (descripcion: string, cantidad: number) {
