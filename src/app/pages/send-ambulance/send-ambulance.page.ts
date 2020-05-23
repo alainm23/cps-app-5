@@ -43,7 +43,7 @@ export class SendAmbulancePage implements OnInit {
   constructor(public navCtrl: NavController, 
               private database: DatabaseService,
               private device: Device,
-              private platform: Platform, 
+              public platform: Platform, 
               public auth: AuthService,
               public modalController: ModalController,
               public alertCtrl: AlertController,
@@ -67,7 +67,7 @@ export class SendAmbulancePage implements OnInit {
     } else {
       phone_number = "";
     }
-    
+
     this.form = new FormGroup({
       phone_number: new FormControl (phone_number, [Validators.required]),
       address: new FormControl ("", [Validators.required]),
