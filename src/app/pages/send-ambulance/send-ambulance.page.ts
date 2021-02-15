@@ -208,6 +208,8 @@ export class SendAmbulancePage implements OnInit {
     });
 
     modal.onDidDismiss ().then ((response: any) => {
+      console.log (response);
+      
       if (response.role === 'ok') {
         this.latitude = response.data.latitude;
         this.longitude = response.data.longitude;

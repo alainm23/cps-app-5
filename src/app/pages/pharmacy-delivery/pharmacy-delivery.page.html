@@ -57,100 +57,124 @@
           </ion-list>
 
           <ion-item>
-            <ion-checkbox color="blue" formControlName="has_orden"></ion-checkbox>
+            <ion-checkbox color="blue" formControlName="has_orden" (ionChange)="change_event ()"></ion-checkbox>
             <ion-label style="margin-left: 0.5rem;">{{ 'No cuento con orden medica' | translate }}</ion-label>
           </ion-item>
 
           <ion-card *ngIf="form.controls?.has_orden.value" class="ion-text-wrap card-precio ion-text-center">
             <ion-label>
-              <p>
+              <p class="ion-padding">
                 {{ 'Si no cuenta con orden médica debe solicitar un médico a domicilio.' | translate }}
               </p>
             </ion-label>
           </ion-card>
 
-          <div class="ion-text-center" *ngIf="form.controls?.has_orden.value">
-            <ion-button color="blue" size="small" class="ion-margin-top" (click)="goMedicoDomicilio ()">
-              {{ 'Solicitar medico a domicilio' | translate }}
-            </ion-button>
-          </div>
-
-          <ion-item>
-            <ion-label class="header-text" position="stacked">{{ 'Detalle su pedido' | translate }}:</ion-label>
-          </ion-item>
-
-          <ion-item class="ion-no-margin ion-no-padding">
-            <ion-textarea class="margin-left-1" formControlName="medicines" placeholder="{{ '50 mg de' | translate }}">
-            </ion-textarea>
-          </ion-item>
-              
-          <!--Phone Number  -->
-          <ion-item lines="none">
-            <ion-label class="header-text" position="stacked">
-              {{ 'Numero de teléfono' | translate }}:
-            </ion-label>
-          </ion-item>
-
-          <ion-grid  style="margin-top: -10px; margin-bottom: -6px;">
-            <ion-row>              
-              <ion-col size="4" class="ion-align-self-end">
-                <ion-button size="small" expand="block" color="blue" (click)="select_code ()">
-                  <img [src]="getFlat ()">&nbsp;
-                  {{ pais_selected.dial_code }}
+          <ion-row *ngIf="form.controls?.has_orden.value">
+            <ion-col size="12">
+              <div class="ion-text-center">
+                <ion-button color="blue" class="ion-margin-top" (click)="goMedicoDomicilio ()">
+                  {{ 'Reservar una cita' | translate }}
                 </ion-button>
-              </ion-col>
-              <ion-col size="8">
-                <ion-item>
-                  <ion-input style="--padding-top: 17px !important;" type="tel" formControlName="phone_number" placeholder="955 552 121"></ion-input>
-                </ion-item>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
+              </div>
+            </ion-col>
+            
+            <ion-col size="12">
+              <div class="ion-text-center">
+                <ion-button color="blue" class="ion-margin-top" (click)="goMedicoDomicilio ()">
+                  {{ 'Solicitar medico a domicilio' | translate }}
+                </ion-button>
+              </div>
+            </ion-col>
+          </ion-row>
 
-          <div style="margin-left: 1rem;" class="ion-margin-left" *ngIf="form.controls.phone_number.errors?.required">
-            <small class="color-red">
-              {{ '* Campo obligatorio' | translate }}
-            </small>
-          </div>
-
-          <!--Tipo de comprobante -->
-          <ion-item>
-            <ion-label style="font-size: 13pt !important; font-weight: 500;">{{ 'Tipo de comprobante' | translate }}</ion-label>
-            <ion-select interface="popover" formControlName="tipo_comprobante" (ionChange)="comprobanteChange ($event)">
-              <ion-select-option value="factura">{{ 'Factura' | translate }}</ion-select-option>
-              <ion-select-option value="boleta">{{ 'Boleta' | translate }}</ion-select-option>
-            </ion-select>
-          </ion-item>
-
-          <div style="margin-left: 1rem;" class="ion-margin-left" *ngIf="form.controls.tipo_comprobante.errors?.required">
-            <small class="color-red">
-              {{ '* Campo obligatorio' | translate }}
-            </small>
-          </div>
-
-          <div *ngIf="form.controls?.tipo_comprobante.value === 'factura'">
+          <ng-container *ngIf="form.value.has_orden === false">
             <ion-item>
-              <ion-label class="header-text" position="stacked">RUC:</ion-label>
-              <ion-input type="tel" maxlength="11" placeholder="{{ 'Número de ruc' | translate }}" formControlName="ruc"></ion-input>  
+              <ion-label class="header-text" position="stacked">{{ 'Detalle su pedido' | translate }}:</ion-label>
             </ion-item>
-
-            <div style="margin-left: 1rem;" class="ion-margin-left" *ngIf="form.controls.ruc.errors?.required">
-              <small class="color-red">{{ '* Campo obligatorio' | translate }}</small>
+  
+            <ion-item class="ion-no-margin ion-no-padding">
+              <ion-textarea class="margin-left-1" formControlName="medicines" placeholder="{{ '50 mg de' | translate }}">
+              </ion-textarea>
+            </ion-item>
+                
+            <!--Phone Number  -->
+            <ion-item lines="none">
+              <ion-label class="header-text" position="stacked">
+                {{ 'Numero de teléfono' | translate }}:
+              </ion-label>
+            </ion-item>
+  
+            <ion-grid  style="margin-top: -10px; margin-bottom: -6px;">
+              <ion-row>              
+                <ion-col size="4" class="ion-align-self-end">
+                  <ion-button size="small" expand="block" color="blue" (click)="select_code ()">
+                    <img [src]="getFlat ()">&nbsp;
+                    {{ pais_selected.dial_code }}
+                  </ion-button>
+                </ion-col>
+                <ion-col size="8">
+                  <ion-item>
+                    <ion-input style="--padding-top: 17px !important;" type="tel" formControlName="phone_number" placeholder="955 552 121"></ion-input>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+  
+            <div style="margin-left: 1rem;" class="ion-margin-left" *ngIf="form.controls.phone_number.errors?.required">
+              <small class="color-red">
+                {{ '* Campo obligatorio' | translate }}
+              </small>
             </div>
-
+  
+            <!--Tipo de comprobante -->
             <ion-item>
-              <ion-label class="header-text" position="stacked">{{ 'Razón social' | translate }}:</ion-label>
-              <ion-input type="text" placeholder="{{ 'Nombre de la razón social' | translate }}" formControlName="razon_social">
-              </ion-input>
+              <ion-label style="font-size: 13pt !important; font-weight: 500;">{{ 'Tipo de comprobante' | translate }}</ion-label>
+              <ion-select interface="popover" formControlName="tipo_comprobante" (ionChange)="comprobanteChange ($event)">
+                <ion-select-option value="factura">{{ 'Factura' | translate }}</ion-select-option>
+                <ion-select-option value="boleta">{{ 'Boleta' | translate }}</ion-select-option>
+              </ion-select>
             </ion-item>
+  
+            <div style="margin-left: 1rem;" class="ion-margin-left" *ngIf="form.controls.tipo_comprobante.errors?.required">
+              <small class="color-red">
+                {{ '* Campo obligatorio' | translate }}
+              </small>
+            </div>
+  
+            <div *ngIf="form.controls?.tipo_comprobante.value === 'factura'">
+              <ion-item>
+                <ion-label class="header-text" position="stacked">RUC:</ion-label>
+                <ion-input type="tel" maxlength="11" placeholder="{{ 'Número de ruc' | translate }}" formControlName="ruc"></ion-input>  
+              </ion-item>
+  
+              <div style="margin-left: 1rem;" class="ion-margin-left" *ngIf="form.controls.ruc.errors?.required">
+                <small class="color-red">{{ '* Campo obligatorio' | translate }}</small>
+              </div>
+  
+              <ion-item>
+                <ion-label class="header-text" position="stacked">{{ 'Razón social' | translate }}:</ion-label>
+                <ion-input type="text" placeholder="{{ 'Nombre de la razón social' | translate }}" formControlName="razon_social">
+                </ion-input>
+              </ion-item>
+  
+              <div style="margin-left: 1rem;" class="ion-margin-left" *ngIf="form.controls.razon_social.errors?.required">
+                <small class="color-red">{{ '* Campo obligatorio' | translate }}</small>
+              </div>  
 
-            <div style="margin-left: 1rem;" class="ion-margin-left" *ngIf="form.controls.razon_social.errors?.required">
-              <small class="color-red">{{ '* Campo obligatorio' | translate }}</small>
-            </div>  
-          </div>
-          
+              <ion-item>
+                <ion-label class="header-text" position="stacked">{{ 'Direccion Razon Social' | translate }}:</ion-label>
+                <ion-input type="text" placeholder="{{ 'Direccion de la razón social' | translate }}" formControlName="direccion_ruc">
+                </ion-input>
+              </ion-item>
+  
+              <div style="margin-left: 1rem;" class="ion-margin-left" *ngIf="form.controls.direccion_ruc.errors?.required">
+                <small class="color-red">{{ '* Campo obligatorio' | translate }}</small>
+              </div>  
+            </div>
+          </ng-container>
         </ion-col>
-        <ion-col size="12" size-sm="12" size-md="6"  size-lg="6" size-xl="6">
+
+        <ion-col *ngIf="form.value.has_orden === false" size="12" size-sm="12" size-md="6"  size-lg="6" size-xl="6">
           <ion-item>
             <ion-label style="font-weight: bold;" class="header-text" position="stacked">
               {{ 'Dirección' | translate }}:
@@ -178,7 +202,7 @@
 
           <div class="conditions">
             <ion-checkbox color="blue" formControlName="terms_conditions"></ion-checkbox>
-            {{ 'Acepto los' | translate }} <a href="https://www.cps.com.pe/terms?item=farmacy-delivery">{{ 'términos & condiciones' | translate }}</a>
+            {{ 'Acepto los' | translate }} <a (click)="get_terminos_url ()">{{ 'términos & condiciones' | translate }}</a>
           </div>
 
           <ion-grid>

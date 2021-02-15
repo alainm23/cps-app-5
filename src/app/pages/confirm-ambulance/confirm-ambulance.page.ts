@@ -145,7 +145,7 @@ export class ConfirmAmbulancePage implements OnInit {
   
   async cancel () {
     const confirm = await this.alertCtrl.create({
-      header: this.i18n.cancelar_pedido,
+      header: this.i18n.cancelar_pedido, 
       message: this.i18n.estas_seguro_cancelar,
       inputs: [
         {
@@ -222,7 +222,7 @@ export class ConfirmAmbulancePage implements OnInit {
 
     this.directionsService.route (request, (response, status) => {
       if (status == 'OK') {
-        this.directionsDisplay.setDirections(response);
+        this.directionsDisplay.setDirections (response);
       }
     });
 
@@ -232,7 +232,7 @@ export class ConfirmAmbulancePage implements OnInit {
       icon: 'assets/ambulance.svg'
     });
 
-    this.marker_ambulance.setMap(this.map);
+    this.marker_ambulance.setMap (this.map);
   }
 
   updateMark (ambulance_lat: number, ambulance_lon: number) {

@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "727960214488",
+    "firebase_url": "https://cps-database.firebaseio.com",
+    "project_id": "cps-database",
+    "storage_bucket": "cps-database.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:727960214488:android:bead2917af6575a3",
+        "android_client_info": {
+          "package_name": "pe.com.cps"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "727960214488-nbolcqt5mq9nlkkpul8ecjd1a4mj3reo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pe.com.cps",
+            "certificate_hash": "34b66a2b07d20ce70bdd397978d5d8141189d24c"
+          }
+        },
+        {
+          "client_id": "727960214488-3khe4hl5i1kts99kd5m08mkajgt46dn5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pe.com.cps",
+            "certificate_hash": "cecbb669ff342c4c6f1402d7caed379e60c4742d"
+          }
+        },
+        {
+          "client_id": "727960214488-rjv4mrhf0fnre8oprpogcqiv5g2e4l32.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDifpz8PHx2NgzluTs8V2Mhj_qS34qjs4c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "727960214488-rjv4mrhf0fnre8oprpogcqiv5g2e4l32.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "727960214488-sk5c9a6r6a0807i0nit10cvs8c4pf952.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "pe.com.cps"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

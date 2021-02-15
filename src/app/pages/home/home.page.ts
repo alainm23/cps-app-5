@@ -312,9 +312,9 @@ export class HomePage implements OnInit {
   goBlogNews () {
     this.storage.getValue ("i18n").then ((lang) => {
       if (lang === 'es') {
-        window.open ("http://preview.cps.com.pe/es/articles", "_blank", "location=yes");
+        window.open ("https://cps.com.pe/es/articles", "_blank", "location=yes");
       } else {
-        window.open ("http://preview.cps.com.pe/articles", "_blank", "location=yes");
+        window.open ("https://cps.com.pe/articles", "_blank", "location=yes");
       }
     });
   }

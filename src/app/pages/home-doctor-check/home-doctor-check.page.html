@@ -81,11 +81,11 @@
                 <ion-label>
                   <b>{{ 'Idioma' | translate }}</b>
                   <br>
-                  <span *ngIf="home_injection?.lang === 'es'" class="detalle ion-text-wrap">
+                  <span *ngIf="home_injection?.idioma === 'es'" class="detalle ion-text-wrap">
                     - {{ 'Español' | translate }}
                   </span>
 
-                  <span *ngIf="home_injection?.lang === 'en'" class="detalle ion-text-wrap">
+                  <span *ngIf="home_injection?.idioma === 'en'" class="detalle ion-text-wrap">
                     - {{ 'Ingles' | translate }}
                   </span>
                 </ion-label>
@@ -225,11 +225,11 @@
                 <ion-label>
                   <b>{{ 'Idioma' | translate }}</b>
                   <br>
-                  <span *ngIf="home_injection?.lang === 'es'" class="detalle ion-text-wrap">
+                  <span *ngIf="home_injection?.idioma === 'es'" class="detalle ion-text-wrap">
                     - {{ 'Español' | translate }}
                   </span>
 
-                  <span *ngIf="home_injection?.lang === 'en'" class="detalle ion-text-wrap">
+                  <span *ngIf="home_injection?.idioma === 'en'" class="detalle ion-text-wrap">
                     - {{ 'Ingles' | translate }}
                   </span>
                 </ion-label>
@@ -237,7 +237,7 @@
 
               <ion-item *ngIf="home_injection?.payment_type !== ''">
                 <ion-label>
-                  <b>{{ 'Sintomas' | translate }}:</b>
+                  <b>{{ 'Estado' | translate }}:</b>
                   <br>
                   <span *ngIf="home_injection?.payment_type === 'online'">
                     {{ 'Pagado' | translate }}

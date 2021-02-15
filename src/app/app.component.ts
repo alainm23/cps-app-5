@@ -50,17 +50,17 @@ export class AppComponent {
   }
 
   initializeApp () {
-    this.platform.ready().then (() => {
+    this.platform.ready ().then (() => {
       this.statusBar.styleDefault ();
       this.splashScreen.hide ();
-
-      if (this.platform.is ('cordova')) {
-        this.initNotifications ();
-      }
 
       if (this.platform.is ('android')) {
         this.statusBar.overlaysWebView (false);
         this.statusBar.backgroundColorByHexString ('#000000');
+      }
+
+      if (this.platform.is ('cordova')) {
+        this.initNotifications ();
       }
 
       this.platform.pause.subscribe ((res: any) => {
@@ -113,7 +113,7 @@ export class AppComponent {
           let alert = await this.alertCtrl.create ({
             header: jsonData.notification.payload.title,
             message: destino.motivo,
-            buttons: ['OK']
+            buttons: ['Aceptar']
           });
           
           await alert.present ();
@@ -176,20 +176,15 @@ export class AppComponent {
             header: 'Solicitud de ambulancia cancelada',
             message: destino.motivo,
             buttons: [{
-              text: 'Atras',
+              text: 'Aceptar',
               role: 'cancel',
-            }, {
-              text: 'Ver detalles',
-              handler: () => {
-                this.navCtrl.navigateForward (['confirm-ambulance', clave]);
-              }
             }]
           });
           
           alert.present();
         } else {
           let toast = await this.toastController.create({
-            message: 'Solicitud de ambulancia cancelada',
+            message: 'Solicitud de ambulancia actualizada',
             duration: 5 * 1000,
             position: 'top',
             buttons: [
@@ -211,13 +206,8 @@ export class AppComponent {
             header: 'La solicitud de farmacia fue cancelada',
             message: destino.motivo,
             buttons: [{
-              text: 'Atras',
+              text: 'Aceptar',
               role: 'cancel',
-            }, {
-              text: 'Ver detalles',
-              handler: () => {
-                this.navCtrl.navigateForward (['pharmacy-delivery-check', clave, destino.state]);
-              }
             }]
           });
           
@@ -253,13 +243,8 @@ export class AppComponent {
             header: 'La solicitud de inyección fue cancelada',
             message: destino.motivo,
             buttons: [{
-              text: 'Atras',
+              text: 'Aceptar',
               role: 'cancel',
-            }, {
-              text: 'Ver detalles',
-              handler: () => {
-                this.navCtrl.navigateForward (['home-injection-check', clave, destino.state]);
-              }
             }]
           });
           
@@ -295,14 +280,9 @@ export class AppComponent {
             header: 'La solicitud de traslado fue cancelada',
             message: destino.motivo,
             buttons: [{
-                text: 'Atras',
+                text: 'Aceptar',
                 role: 'cancel',
-              }, {
-                text: 'Ver detalles',
-                handler: () => {
-                  this.navCtrl.navigateForward (['transfer-ambulance-check', clave, destino.state]);
-                }
-            }]
+              }]
           });
           
           alert.present();
@@ -337,13 +317,8 @@ export class AppComponent {
             header: 'La solicitud de escolta medica fue cancelada',
             message: destino.motivo,
             buttons: [{
-              text: 'Atras',
+              text: 'Aceptar',
               role: 'cancel',
-            }, {
-              text: 'Ver detalles',
-              handler: () => {
-                this.navCtrl.navigateForward (['medical-escort-check', clave, destino.state]);
-              }
             }]
           });
           
@@ -379,13 +354,8 @@ export class AppComponent {
             header: 'La solicitud de enfermera a domicilio fue cancelada',
             message: destino.motivo,
             buttons: [{
-              text: 'Atras',
+              text: 'Aceptar',
               role: 'cancel',
-            }, {
-              text: 'Ver detalles',
-              handler: () => {
-                this.navCtrl.navigateForward (['home-nurse-check', clave, destino.state]);
-              }
             }]
           });
           
@@ -421,13 +391,8 @@ export class AppComponent {
             header: 'La solicitud de doctor a domicilio fue cancelada',
             message: destino.motivo,
             buttons: [{
-              text: 'Atras',
+              text: 'Aceptar',
               role: 'cancel',
-            }, {
-              text: 'Ver detalles',
-              handler: () => {
-                this.navCtrl.navigateForward (['home-doctor-check', clave, destino.state]);
-              }
             }]
           });
           
@@ -463,13 +428,8 @@ export class AppComponent {
             header: 'La solicitud de resultados fue cancelada',
             message: destino.motivo,
             buttons: [{
-              text: 'Atras',
+              text: 'Aceptar',
               role: 'cancel',
-            }, {
-              text: 'Ver detalles',
-              handler: () => {
-                this.navCtrl.navigateForward (['request-results-check', clave, destino.state]);
-              }
             }]
           });
           
@@ -502,7 +462,7 @@ export class AppComponent {
       }
     });
 
-    this.oneSignal.endInit();
+    this.oneSignal.endInit ();
     
     this.auth.getUsuario ().subscribe (async (user: any) => {
       this.oneSignal.getIds ().then (oS => {
@@ -515,7 +475,7 @@ export class AppComponent {
     });
 
     this.oneSignal.getTags ().then (data => {
-      console.log (data);
+      
     });
 
     this.oneSignal.sendTag ("Usuarios", "true");
@@ -614,9 +574,9 @@ export class AppComponent {
   goWork () {
     this.storage.getValue ("i18n").then ((lang) => {
       if (lang === 'es') {
-        window.open ("http://preview.cps.com.pe/es/word-whitus", "_blank", "location=yes");
+        window.open ("https://cps.com.pe/es/word-whitus", "_blank", "location=yes");
       } else {
-        window.open ("http://preview.cps.com.pe/word-whitus", "_blank", "location=yes");
+        window.open ("https://cps.com.pe/word-whitus", "_blank", "location=yes");
       }
     });
   }
@@ -624,9 +584,9 @@ export class AppComponent {
   goBlogs () {
     this.storage.getValue ("i18n").then ((lang) => {
       if (lang === 'es') {
-        window.open ("http://preview.cps.com.pe/es/articles", "_blank", "location=yes");
+        window.open ("https://cps.com.pe/es/articles", "_blank", "location=yes");
       } else {
-        window.open ("http://preview.cps.com.pe/articles", "_blank", "location=yes");
+        window.open ("https://cps.com.pe/articles", "_blank", "location=yes");
       }
     });
   }
@@ -634,9 +594,9 @@ export class AppComponent {
   goAbout () {
     this.storage.getValue ("i18n").then ((lang) => {
       if (lang === 'es') {
-        window.open ("http://preview.cps.com.pe/es/whyus", "_blank", "location=yes");
+        window.open ("https://cps.com.pe/es/whyus", "_blank", "location=yes");
       } else {
-        window.open ("http://preview.cps.com.pe/whyus", "_blank", "location=yes");
+        window.open ("https://cps.com.pe/whyus", "_blank", "location=yes");
       }
     });
   }
@@ -644,9 +604,9 @@ export class AppComponent {
   goPartner () {
     this.storage.getValue ("i18n").then ((lang) => {
       if (lang === 'es') {
-        window.open ("http://preview.cps.com.pe/es/partner", "_blank", "location=yes");
+        window.open ("https://cps.com.pe/es/partner", "_blank", "location=yes");
       } else {
-        window.open ("http://preview.cps.com.pe/partner", "_blank", "location=yes");
+        window.open ("https://cps.com.pe/partner", "_blank", "location=yes");
       }
     });
   }

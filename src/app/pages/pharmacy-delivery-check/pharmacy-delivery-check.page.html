@@ -55,6 +55,14 @@
 
               <ion-item>
                 <ion-label>
+                  <b>{{ 'Dirección' | translate }}:</b>
+                  <br>
+                  {{ delivery?.address }}
+                </ion-label>
+              </ion-item>
+
+              <ion-item>
+                <ion-label>
                   <b>{{ 'Tipo de comprobante' | translate }}:</b>
                   <br>
                   <span *ngIf="delivery?.tipo_comprobante === 'factura'">Factura</span>
@@ -70,11 +78,19 @@
                 </ion-label>
               </ion-item>
 
-              <ion-item *ngIf="delivery?.ruc !== ''">
+              <ion-item *ngIf="delivery?.razon_social !== ''">
                 <ion-label>
                   <b>{{ 'Razón social' | translate }}:</b>
                   <br>
                   {{ delivery?.razon_social }}
+                </ion-label>
+              </ion-item>
+
+              <ion-item *ngIf="delivery?.direccion_ruc !== ''">
+                <ion-label>
+                  <b>{{ 'Razón social' | translate }}:</b>
+                  <br>
+                  {{ delivery?.direccion_ruc }}
                 </ion-label>
               </ion-item>
 
@@ -240,11 +256,19 @@
                 </ion-label>
               </ion-item>
 
-              <ion-item *ngIf="delivery?.ruc !== ''">
+              <ion-item *ngIf="delivery?.razon_social !== ''">
                 <ion-label>
                   <b>{{ 'Razón social' | translate }}:</b>
                   <br>
                   {{ delivery?.razon_social }}
+                </ion-label>
+              </ion-item>
+
+              <ion-item *ngIf="delivery?.direccion_ruc !== ''">
+                <ion-label>
+                  <b>{{ 'Razón social' | translate }}:</b>
+                  <br>
+                  {{ delivery?.direccion_ruc }}
                 </ion-label>
               </ion-item>
 

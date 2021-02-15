@@ -1,8 +1,7 @@
 <ion-header>
   <ion-toolbar primary>
     <ion-buttons slot="start">
-      <ion-button block (tap)="closeModal()">
-        <ion-icon class="icon-arrow" name="arrow-back"></ion-icon>
+      <ion-button block (click)="closeModal ()">
         {{ 'Atras' | translate }}
       </ion-button>
     </ion-buttons> 
@@ -11,7 +10,7 @@
   </ion-toolbar>
 
   <ion-toolbar>
-    <ion-searchbar placeholder="Buscar..." (ionInput)="getItems($event)"></ion-searchbar>
+    <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>
   </ion-toolbar>
 </ion-header>
   

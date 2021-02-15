@@ -119,7 +119,31 @@
                   <br>
                   <p class="white-space">{{ medical_escort?.description }}</p>
                 </ion-label>
-              </ion-item> 
+              </ion-item>
+
+              <ion-item *ngIf="medical_escort?.ruc !== ''">
+                <ion-label>
+                  <b>RUC:</b>
+                  <br>
+                  {{ medical_escort?.ruc }}
+                </ion-label>
+              </ion-item>
+
+              <ion-item *ngIf="medical_escort?.razon_social !== ''">
+                <ion-label>
+                  <b>{{ 'Razón social' | translate }}:</b>
+                  <br>
+                  {{ medical_escort?.razon_social }}
+                </ion-label>
+              </ion-item>
+
+              <ion-item *ngIf="medical_escort?.direccion_ruc !== ''">
+                <ion-label>
+                  <b>{{ 'Razón social' | translate }}:</b>
+                  <br>
+                  {{ medical_escort?.direccion_ruc }}
+                </ion-label>
+              </ion-item>
             </ion-list>   
           </ion-card>
           
@@ -294,7 +318,31 @@
                   <br>
                   <p class="white-space">{{ medical_escort?.description }}</p>
                 </ion-label>
-              </ion-item> 
+              </ion-item>
+
+              <ion-item *ngIf="medical_escort?.ruc !== ''">
+                <ion-label>
+                  <b>RUC:</b>
+                  <br>
+                  {{ medical_escort?.ruc }}
+                </ion-label>
+              </ion-item>
+
+              <ion-item *ngIf="medical_escort?.razon_social !== ''">
+                <ion-label>
+                  <b>{{ 'Razón social' | translate }}:</b>
+                  <br>
+                  {{ medical_escort?.razon_social }}
+                </ion-label>
+              </ion-item>
+
+              <ion-item *ngIf="medical_escort?.direccion_ruc !== ''">
+                <ion-label>
+                  <b>{{ 'Razón social' | translate }}:</b>
+                  <br>
+                  {{ medical_escort?.direccion_ruc }}
+                </ion-label>
+              </ion-item>
             </ion-list>  
           </ion-card>
           

@@ -20,6 +20,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CountrySelectPage } from '../../modals/country-select/country-select.page';
+import { FormularioAntiFraudePage } from '../../modals/formulario-anti-fraude/formulario-anti-fraude.page';
 
 @Component({
   selector: 'app-appointment-checkout',
@@ -42,6 +43,7 @@ export class AppointmentCheckoutPage implements OnInit {
     id_con: '',
     hor_con: ''
   };
+  datos_anti_fraude: any;
 
   first_pay: boolean = true;
   nationality: string = "";
@@ -117,9 +119,7 @@ export class AppointmentCheckoutPage implements OnInit {
         });
 
         this.onSelectChange ('peruano');
-
-
-
+        
         this.pago_subscribe = this.events.getObservable ().subscribe (async (token) => {
           const loading = await this.loadingCtrl.create ({
             message: "Procesando informacion de pago..."
@@ -139,7 +139,7 @@ export class AppointmentCheckoutPage implements OnInit {
             doctor: this.final_data.medico_id
           };
 
-          this.api.procesarPago (data).subscribe ((response: any) => {
+          this.api.procesarPago (data, this.datos_anti_fraude).subscribe ((response: any) => {
             if (response.estado === 1 && response.libre === 1 && response.respuesta.outcome.type === 'venta_exitosa') {
               const data_cita: any = {
                 key: '',
@@ -243,18 +243,31 @@ export class AppointmentCheckoutPage implements OnInit {
   }
 
   async openCheckout () {
-    this.loading = await this.loadingCtrl.create({
-      message: "Procesando informacion...",
+    const modal = await this.modalController.create({
+      component: FormularioAntiFraudePage
     });
 
-    this.loading.present ();
-    
-    this.pago.cfgFormulario ("Pago por servicio", parseInt(this.price) * 100); // 300.000
-                                                            // 9.99
-    // Cuando la configuracion termina, llamo al metodo open () para abrir el formulario 
-    this.loading.dismiss ().then (() => {
-      this.pago.open ();
+    modal.onDidDismiss ().then (async (response: any) => {
+      if (response.role === 'ok') {
+        console.log (response.data);
+        this.datos_anti_fraude = response.data;
+
+        this.loading = await this.loadingCtrl.create({
+          message: "Procesando informacion...",
+        });
+
+        this.loading.present ();
+        
+        this.pago.cfgFormulario ("Pago por servicio", parseInt (this.price) * 100); // 300.000
+                                                                // 9.99
+        // Cuando la configuracion termina, llamo al metodo open () para abrir el formulario 
+        this.loading.dismiss ().then (() => {
+          this.pago.open ();
+        });
+      }
     });
+
+    return await modal.present ();
   }
 
   async selectCountry () {
@@ -278,10 +291,19 @@ export class AppointmentCheckoutPage implements OnInit {
       }
     });
 
-    return await modal.present();
+    return await modal.present ();
   }
 
   getFormatDate (fecha: string, hor_con: string) {
     return moment(fecha + ' ' + hor_con).format('LLLL');
+  }
+
+  async get_terminos_url () {
+    let lang = await this.storage.getValue ("i18n");
+    if (lang === 'es') {
+      window.open ("https://cps.com.pe/es/terms", "_blank", "location=yes");
+    } else {
+      window.open ('https://cps.com.pe/terms', "_blank", "location=yes");
+    }
   }
 }

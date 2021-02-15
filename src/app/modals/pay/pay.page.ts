@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ModalController, NavController, LoadingController, AlertController, ActionSheetController } from '@ionic/angular';
+import { ModalController, NavController, ToastController, LoadingController, AlertController, ActionSheetController } from '@ionic/angular';
 // import { Events } from 'ionic-angular';
 import { PagoService } from '../../providers/pago.service';
 
@@ -12,6 +12,8 @@ import { EventsService } from '../../providers/events.service';
 import * as moment from 'moment';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
+import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { PaisesCodsPage } from '../../modals/paises-cods/paises-cods.page';
 
 @Component({
   selector: 'app-pay',
@@ -23,6 +25,10 @@ export class PayPage implements OnInit {
   @Input () servicio: string = '';
   i18n: any;
   pago_subscribe: any;
+  form: FormGroup;
+
+  segment_value: boolean = false;
+  ver_errores: boolean = false;
   constructor(public navCtrl: NavController, 
               private events: EventsService,
               private database: DatabaseService,
@@ -34,12 +40,76 @@ export class PayPage implements OnInit {
               public loadingCtrl: LoadingController,
               public actionSheetCtrl: ActionSheetController,
               public viewCtrl: ModalController,
-              private pago: PagoService) {
+              private pago: PagoService,
+              private toastController: ToastController) {
   }
 
   ngOnInit () {
+    let nombres = '';
+    let apellidos = '';
+    let email = '';
+    let direccion = '';
+    let pais = '';
+    let ciudad = '';
+    let telefono = '';
+    let pais_code = '';
+
+    if (this.auth.user.pagador_nombres !== null && this.auth.user.pagador_nombres !== undefined) {
+      nombres = this.auth.user.pagador_nombres;
+    } else {
+      if (this.auth.user.first_name !== null && this.auth.user.first_name !== undefined) {
+        nombres = this.auth.user.first_name;
+      }
+    }
+
+    if (this.auth.user.pagador_apellidos !== null && this.auth.user.pagador_apellidos !== undefined) {
+      apellidos = this.auth.user.pagador_apellidos;
+    } else {
+      if (this.auth.user.last_name !== null && this.auth.user.last_name !== undefined) {
+        apellidos = this.auth.user.last_name;
+      }
+    }
+
+    if (this.auth.user.pagador_email !== null && this.auth.user.pagador_email !== undefined) {
+      email = this.auth.user.pagador_email;
+    } else {
+      if (this.auth.user.email !== null && this.auth.user.email !== undefined) {
+        email = this.auth.user.email;
+      }
+    }
+
+    if (this.auth.user.pagador_direccion !== null && this.auth.user.pagador_direccion !== undefined) {
+      direccion = this.auth.user.pagador_direccion;
+    }
+
+    if (this.auth.user.pagador_pais !== null && this.auth.user.pagador_pais !== undefined) {
+      pais = this.auth.user.pagador_pais;
+    }
+
+    if (this.auth.user.pagador_ciudad !== null && this.auth.user.pagador_ciudad !== undefined) {
+      ciudad = this.auth.user.pagador_ciudad;
+    }
+
+    if (this.auth.user.pagador_telefono !== null && this.auth.user.pagador_telefono !== undefined) {
+      telefono = this.auth.user.pagador_telefono;
+    }
+
+    if (this.auth.user.pagador_pais_code !== null && this.auth.user.pagador_pais_code !== undefined) {
+      pais_code = this.auth.user.pagador_pais_code;
+    }
+
+    this.form = new FormGroup({
+      nombres: new FormControl (nombres, [Validators.required]),
+      apellidos: new FormControl (apellidos, [Validators.required]),
+      email: new FormControl (email, [Validators.required, Validators.email]),
+      direccion: new FormControl (direccion, [Validators.required]),
+      pais: new FormControl (pais, [Validators.required]),
+      ciudad: new FormControl (ciudad, [Validators.required]),
+      telefono: new FormControl (telefono, [Validators.required]),
+      pais_code: new FormControl (pais_code, [Validators.required]),
+    });
+
     console.log (this.mount);
-    
     this.storage.getValue ('i18n').then (i18n => {
       this.translateService.getTranslation (i18n).subscribe (async (i18n: any) => {
         this.i18n = i18n;
@@ -69,10 +139,10 @@ export class PayPage implements OnInit {
             monto: this.mount,
             correo: this.auth.user.email,
             moneda: 'PEN',
-            des: 'Pago por servicio de delivery - CPS'
+            des: 'Pago por servicio de delivery - CPS',
           };
 
-          this.api.procesarPago2 (data).subscribe (async (response: any) => {
+          this.api.procesarPago2 (data, this.form.value).subscribe (async (response: any) => {
               console.log (response);
 
               if (response.estado === 1) {
@@ -93,7 +163,7 @@ export class PayPage implements OnInit {
                     type: 'venta_error',
                     message: response.user_message
                   };
-
+            
                   this.viewCtrl.dismiss (item, 'response');
                 }  
               } else {
@@ -185,5 +255,98 @@ export class PayPage implements OnInit {
     });
 
     await alert.present();
+  }
+
+  segmentChanged (event: any) {
+    if (this.segment_value) {
+      this.form.controls ['nombres'].setValidators ([]);
+      this.form.controls ['apellidos'].setValidators ([]);
+      this.form.controls ['email'].setValidators ([]);
+      this.form.controls ['direccion'].setValidators ([]);
+      this.form.controls ['pais'].setValidators ([]);
+      this.form.controls ['ciudad'].setValidators ([]);
+      this.form.controls ['pais_code'].setValidators ([]);
+      this.form.controls ['telefono'].setValidators ([]);
+    } else {
+      this.form.controls ['nombres'].setValidators ([Validators.required]);
+      this.form.controls ['apellidos'].setValidators ([Validators.required]);
+      this.form.controls ['email'].setValidators ([Validators.required, Validators.email]);
+      this.form.controls ['direccion'].setValidators ([Validators.required]);
+      this.form.controls ['pais'].setValidators ([Validators.required]);
+      this.form.controls ['ciudad'].setValidators ([Validators.required]);
+      this.form.controls ['pais_code'].setValidators ([Validators.required]);
+      this.form.controls ['telefono'].setValidators ([Validators.required]);
+    }
+
+    this.form.updateValueAndValidity ();
+  }
+
+  valid_button () {
+    let returned: boolean = true;
+
+    if (this.segment_value) {
+      returned = false;
+    } else {
+      returned = this.form.invalid;
+    }
+
+    return returned;
+  }
+
+  async submit () {
+    if (this.segment_value) {
+      this.contraentrega ();
+    } else {
+      if (this.form.valid) {
+        const loading = await this.loadingCtrl.create ({
+          message: this.i18n.procesando_informacion
+        });
+  
+        loading.present ();
+  
+        let request: any = {
+          pagador_nombres: this.form.value.nombres,
+          pagador_apellidos: this.form.value.apellidos,
+          pagador_email: this.form.value.email,
+          pagador_direccion: this.form.value.direccion,
+          pagador_pais: this.form.value.pais,
+          pagador_ciudad: this.form.value.ciudad,
+          pagador_telefono: this.form.value.telefono,
+          pagador_pais_code: this.form.value.pais_code
+        };
+  
+        this.database.update_user (this.auth.user.id, request).then (() => {
+          loading.dismiss ();
+          this.openCulqi ();
+        }, error => {
+          console.log (error);
+          loading.dismiss ();
+          this.openCulqi ();
+        });
+      } else {
+        const toast = await this.toastController.create({
+          message: 'Complete todos los campos',
+          duration: 2000
+        });
+        toast.present ();
+        this.ver_errores = true;
+      }
+      
+    }
+  }
+
+  async select_pais () {
+    const modal = await this.viewCtrl.create({
+      component: PaisesCodsPage
+    });
+
+    modal.onDidDismiss ().then (async (r: any) => {
+      if (r.role === 'ok') {
+        this.form.controls ['pais'].setValue (r.data.name);
+        this.form.controls ['pais_code'].setValue (r.data.code);
+      }
+    });
+
+    modal.present ();
   }
 }

@@ -99,6 +99,7 @@ export class PharmacyDeliveryPage implements OnInit {
       tipo_comprobante: new FormControl ('boleta', [Validators.required]),
       ruc: new FormControl (""),
       razon_social: new FormControl (""),
+      direccion_ruc: new FormControl (""),
       has_orden: new FormControl (false),
       phone_number: new FormControl (phone_number, [Validators.required]),
       terms_conditions: new FormControl (false, Validators.compose([ Validators.required, Validators.pattern('true')]))
@@ -126,6 +127,7 @@ export class PharmacyDeliveryPage implements OnInit {
               this.form.controls ["tipo_comprobante"].setValue (data.tipo_comprobante);
               this.form.controls ["ruc"].setValue (data.ruc);
               this.form.controls ["razon_social"].setValue (data.razon_social);
+              this.form.controls ["direccion_ruc"].setValue (data.direccion_ruc);
 
               this.comprobanteChange (data.tipo_comprobante);
               
@@ -148,6 +150,54 @@ export class PharmacyDeliveryPage implements OnInit {
         }
       });
     });
+  }
+
+  change_event () {
+    setTimeout(() => {
+      if (this.form.value.has_orden === false) {
+        const options = {
+          center: new google.maps.LatLng (this.latitude, this.longitude),
+          zoom: 15,
+          zoomControl: false,
+          disableDefaultUI: true,
+          streetViewControl: false,
+          clickableIcons: false,
+          scaleControl: true,
+          styles: [
+            {
+              "featureType": "poi",
+              "elementType": "labels.text",
+              "stylers": [{
+                "visibility": "off"
+              }]
+            },
+            {
+              "featureType": "poi.business",
+              "stylers": [{
+                "visibility": "off"
+              }]
+            },
+            {
+              "featureType": "road",
+              "elementType": "labels.icon",
+              "stylers": [{
+                "visibility": "off"
+              }]
+            },
+            {
+              "featureType": "transit",
+              "stylers": [{
+                "visibility": "off"
+              }]
+            }
+          ],
+          mapTypeId: 'roadmap',
+        }
+    
+        let map_ref = document.getElementById ('map');
+        this.map = new google.maps.Map (map_ref, options);
+      }
+    }, 1000);
   }
 
   ngOnDestroy () {
@@ -304,6 +354,7 @@ export class PharmacyDeliveryPage implements OnInit {
             tipo_comprobante: value.tipo_comprobante,
             ruc: value.ruc,
             razon_social: value.razon_social,
+            direccion_ruc: value.direccion_ruc,
             user_phone_number: value.phone_number,
             user_fullname: this.auth.user.first_name + " " + this.auth.user.last_name,
             user_email: this.auth.user.email,
@@ -464,12 +515,16 @@ export class PharmacyDeliveryPage implements OnInit {
     if (selectedValue === 'factura') {
       this.form.controls ['ruc'].setValidators (Validators.required);
       this.form.controls ['razon_social'].setValidators (Validators.required);
+      this.form.controls ['direccion_ruc'].setValidators (Validators.required);
     } else { 
       this.form.controls ['ruc'].setValidators ([]);
       this.form.controls ['ruc'].updateValueAndValidity ();
 
       this.form.controls ['razon_social'].setValidators ([]);
       this.form.controls ['razon_social'].updateValueAndValidity ();
+
+      this.form.controls ['direccion_ruc'].setValidators ([]);
+      this.form.controls ['direccion_ruc'].updateValueAndValidity ();
     }
   }
 
@@ -517,7 +572,7 @@ export class PharmacyDeliveryPage implements OnInit {
   }
 
   goMedicoDomicilio () {
-    this.navCtrl.navigateForward ("home-doctor");
+    this.navCtrl.navigateForward (['home-doctor', 'xyz', 'false']);
   }
 
   async checkGPSPermission () {
@@ -619,5 +674,14 @@ export class PharmacyDeliveryPage implements OnInit {
       loading.dismiss ();
       console.log ('Error getting location' + error);
     });
+  }
+
+  async get_terminos_url () {
+    let lang = await this.storage.getValue ("i18n");
+    if (lang === 'es') {
+      window.open ("https://cps.com.pe/es/terms?item=farmacy-delivery", "_blank", "location=yes");
+    } else {
+      window.open ('https://cps.com.pe/terms?item=farmacy-delivery', "_blank", "location=yes");
+    }
   }
 }

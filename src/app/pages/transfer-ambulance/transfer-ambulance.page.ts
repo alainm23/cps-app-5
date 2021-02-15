@@ -91,6 +91,7 @@ export class TransferAmbulancePage implements OnInit {
       tipo_comprobante: new FormControl ('boleta', Validators.required),
       ruc: new FormControl (""),
       razon_social: new FormControl (""),
+      direccion_ruc: new FormControl (""),
       terms_conditions: new FormControl (false, Validators.compose([ Validators.required, Validators.pattern('true')]))
     });
 
@@ -124,6 +125,7 @@ export class TransferAmbulancePage implements OnInit {
             this.form.controls ["tipo_comprobante"].setValue (data.tipo_comprobante);
             this.form.controls ["ruc"].setValue (data.ruc);
             this.form.controls ["razon_social"].setValue (data.razon_social);
+            this.form.controls ["direccion_ruc"].setValue (data.direccion_ruc);
 
             this.comprobanteChange (data.tipo_comprobante);
 
@@ -298,6 +300,7 @@ export class TransferAmbulancePage implements OnInit {
             tipo_comprobante: value.tipo_comprobante,
             ruc: value.ruc,
             razon_social: value.razon_social,
+            direccion_ruc: value.direccion_ruc,
             user_phone_number: value.phone_number,
             user_fullname: this.auth.user.first_name + " " + this.auth.user.last_name,
             user_email: this.auth.user.email,
@@ -380,12 +383,16 @@ export class TransferAmbulancePage implements OnInit {
     if (selectedValue === 'factura') {
       this.form.controls ['ruc'].setValidators (Validators.required);
       this.form.controls ['razon_social'].setValidators (Validators.required);
+      this.form.controls ['direccion_ruc'].setValidators (Validators.required);
     } else {
       this.form.controls ['ruc'].setValidators ([]);
       this.form.controls ['ruc'].updateValueAndValidity ();
 
       this.form.controls ['razon_social'].setValidators ([]);
       this.form.controls ['razon_social'].updateValueAndValidity ();
+
+      this.form.controls ['direccion_ruc'].setValidators ([]);
+      this.form.controls ['direccion_ruc'].updateValueAndValidity ();
     }
   }
 
@@ -396,6 +403,15 @@ export class TransferAmbulancePage implements OnInit {
       this.ambulancia_des = this.i18n.a_tipo_II;
     } else {
       this.ambulancia_des = this.i18n.a_tipo_III;
+    }
+  }
+
+  async get_terminos_url () {
+    let lang = await this.storage.getValue ("i18n");
+    if (lang === 'es') {
+      window.open ("https://cps.com.pe/es/terms?item=transfer-ambulance", "_blank", "location=yes");
+    } else {
+      window.open ('https://cps.com.pe/terms?item=transfer-ambulance', "_blank", "location=yes");
     }
   }
 }

@@ -32,7 +32,7 @@ import { IonicStorageModule } from '@ionic/storage';
 // Traduccion
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 // Camara
 // import { BackgroundGeolocation } from '@ionic-native/background-geolocation/ngx';
@@ -45,10 +45,10 @@ import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
 import { Facebook } from '@ionic-native/facebook/ngx';
 import { AppVersion } from '@ionic-native/app-version/ngx';
 import { CustomFormsModule } from 'ng2-validation'
-import { OneSignal } from '@ionic-native/onesignal/ngx';
+import { OneSignal } from '@ionic-native/onesignal/ngx'; 
 
-export function createTranslateLoader(http: HttpClient) {
-  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+export function createTranslateLoader (http: HttpClient) {
+  return new TranslateHttpLoader (http, './assets/i18n/', '.json');
 }
 
 // Modals
@@ -57,6 +57,7 @@ import { PaisesCodsPageModule } from './modals/paises-cods/paises-cods.module';
 import { PayPageModule } from './modals/pay/pay.module';
 import { CountrySelectPageModule } from './modals/country-select/country-select.module';
 import { CalificacionPageModule } from './modals/calificacion/calificacion.module';
+import { FormularioAntiFraudePageModule } from './modals/formulario-anti-fraude/formulario-anti-fraude.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -72,7 +73,7 @@ import { CalificacionPageModule } from './modals/calificacion/calificacion.modul
     AngularFireAuthModule,
     IonicStorageModule.forRoot (),
     HttpClientModule,
-    TranslateModule.forRoot({
+    TranslateModule.forRoot ({
       loader: {
           provide: TranslateLoader,
           useFactory: (createTranslateLoader),
@@ -84,7 +85,8 @@ import { CalificacionPageModule } from './modals/calificacion/calificacion.modul
     CustomFormsModule,
     PayPageModule,
     CountrySelectPageModule,
-    CalificacionPageModule
+    CalificacionPageModule,
+    FormularioAntiFraudePageModule
   ],
   providers: [
     StatusBar,

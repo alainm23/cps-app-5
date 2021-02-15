@@ -79,7 +79,8 @@ export class RequestResultsPage implements OnInit {
       s_5: new FormControl (false, [Validators.required]),
       s_6: new FormControl (false, [Validators.required]),
       s_7: new FormControl (false, [Validators.required]),
-      s_8: new FormControl (false, [Validators.required])  
+      s_8: new FormControl (false, [Validators.required]),
+      terms_conditions: new FormControl (false, Validators.compose([ Validators.required, Validators.pattern('true')]))
     });
 
     this.storage.getValue ('i18n').then (i18n => {
@@ -288,6 +289,15 @@ export class RequestResultsPage implements OnInit {
       this.form.controls ['correo'].setValidators ([Validators.required, Validators.email]);
     } else {
       this.form.controls ['correo'].setValidators (null); 
+    }
+  }
+
+  async get_terminos_url () {
+    let lang = await this.storage.getValue ("i18n");
+    if (lang === 'es') {
+      window.open ("https://cps.com.pe/es/terms?item=request-result", "_blank", "location=yes");
+    } else {
+      window.open ('https://cps.com.pe/terms?item=request-result', "_blank", "location=yes");
     }
   }
 }

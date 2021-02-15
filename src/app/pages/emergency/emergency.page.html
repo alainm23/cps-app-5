@@ -6,7 +6,7 @@
 
     <ion-title (click)="goHome ()"><img class="logotio" src="assets/imgs/logotio.png"></ion-title>
     <ion-buttons slot="end">
-      <ion-menu-button autoHide="false"></ion-menu-button>
+      <ion-menu-button></ion-menu-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -48,15 +48,15 @@
           
           <ion-grid>
             <ion-row>
-              <ion-col size="4" text-center (click)="chatWhatsapp ()">
+              <ion-col size="4" class="ion-text-center" (click)="chatWhatsapp ()">
                 <img src="../../assets/imgs/wa.png">
               </ion-col>
                         
-              <ion-col size="4" text-center (click)="sendSMS ()">
+              <ion-col size="4" class="ion-text-center" (click)="sendSMS ()">
                 <img src="../../assets/imgs/sms.png">
               </ion-col>
 
-              <ion-col size="4" text-center (click)="chatMessenger ()">
+              <ion-col size="4" class="ion-text-center" (click)="chatMessenger ()">
                 <img src="../../assets/imgs/messenger.png">
               </ion-col>
             </ion-row>

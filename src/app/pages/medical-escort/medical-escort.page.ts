@@ -108,7 +108,8 @@ export class MedicalEscortPage implements OnInit {
       phone_number: new FormControl (phone_number, [Validators.required]),
       tipo_comprobante: new FormControl ('boleta', Validators.required),
       ruc: new FormControl (""),
-      razon_social: new FormControl ("")
+      razon_social: new FormControl (""),
+      direccion_ruc: new FormControl (""),
     });
 
     this.storage.getValue ('i18n').then (i18n => {
@@ -147,6 +148,7 @@ export class MedicalEscortPage implements OnInit {
             this.form.controls ["tipo_comprobante"].setValue (data.tipo_comprobante);
             this.form.controls ["ruc"].setValue (data.ruc);
             this.form.controls ["razon_social"].setValue (data.razon_social);
+            this.form.controls ["direccion_ruc"].setValue (data.direccion_ruc);
 
             this.form.controls ["need_paramedic"].setValue (data.need_paramedic);
             this.form.controls ["number_days"].setValue (data.number_days);
@@ -340,6 +342,7 @@ export class MedicalEscortPage implements OnInit {
             tipo_comprobante: value.tipo_comprobante,
             ruc: value.ruc,
             razon_social: value.razon_social,
+            direccion_ruc: value.direccion_ruc,
             user_phone_number: value.phone_number,
             user_fullname: this.auth.user.first_name + " " + this.auth.user.last_name,
             user_email: this.auth.user.email,
@@ -423,12 +426,25 @@ export class MedicalEscortPage implements OnInit {
     if (selectedValue === 'factura') {
       this.form.controls ['ruc'].setValidators (Validators.required);
       this.form.controls ['razon_social'].setValidators (Validators.required);
+      this.form.controls ['direccion_ruc'].setValidators (Validators.required);
     } else {
       this.form.controls ['ruc'].setValidators ([]);
       this.form.controls ['ruc'].updateValueAndValidity ();
 
       this.form.controls ['razon_social'].setValidators ([]);
       this.form.controls ['razon_social'].updateValueAndValidity ();
+
+      this.form.controls ['direccion_ruc'].setValidators ([]);
+      this.form.controls ['direccion_ruc'].updateValueAndValidity ();
+    }
+  }
+
+  async get_terminos_url () {
+    let lang = await this.storage.getValue ("i18n");
+    if (lang === 'es') {
+      window.open ("https://cps.com.pe/es/terms?item=medical-escort", "_blank", "location=yes");
+    } else {
+      window.open ('https://cps.com.pe/terms?item=medical-escort', "_blank", "location=yes");
     }
   }
 }

@@ -100,6 +100,8 @@ export class HomeDoctorPage implements OnInit {
       date: new FormControl (new Date ().toISOString (), [Validators.required]),
       phone_number: new FormControl (phone_number, [Validators.required]),
       lang: new FormControl ('es', Validators.required),
+      idioma: new FormControl ('es', Validators.required),
+      terms_conditions: new FormControl (false, Validators.compose([ Validators.required, Validators.pattern('true')]))
     });
     
     this.storage.getValue ('i18n').then (async i18n => {
@@ -325,6 +327,7 @@ export class HomeDoctorPage implements OnInit {
           address: value.address,
 
           lang: lang,
+          idioma: value.idioma,
           
           hour: value.hour,
           note: value.note,
@@ -568,5 +571,14 @@ export class HomeDoctorPage implements OnInit {
       loading.dismiss ();
       console.log ('Error getting location' + error);
     });
+  }
+
+  async get_terminos_url () {
+    let lang = await this.storage.getValue ("i18n");
+    if (lang === 'es') {
+      window.open ("https://cps.com.pe/es/terms?item=doctor-home", "_blank", "location=yes");
+    } else {
+      window.open ('https://cps.com.pe/terms?item=doctor-home', "_blank", "location=yes");
+    }
   }
 }

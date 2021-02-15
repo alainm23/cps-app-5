@@ -23,39 +23,31 @@
         
         <form [formGroup]="form">
           <ion-list>
-            <ion-card>
-              <ion-list style="padding: 0px;">
-                <ion-item class="entry" lines="none" style="margin-bottom: 6px;">
-                  <ion-input  type="text" formControlName="name" placeholder="{{ 'Nombre del paciente' | translate }}"></ion-input>
-                </ion-item>
+            <ion-list style="padding: 0px;">
+              <ion-item class="entry" lines="none" style="margin-bottom: 6px;">
+                <ion-input  type="text" formControlName="name" placeholder="{{ 'Nombre del paciente' | translate }}"></ion-input>
+              </ion-item>
 
-                <ion-item class="entry" lines="none" style="margin-bottom: 6px;">
-                  <ion-input type="text" formControlName="phone_number" placeholder="{{ 'Numero de teléfono' | translate }}"></ion-input>
-                </ion-item>
+              <ion-item class="entry" lines="none" style="margin-bottom: 6px;">
+                <ion-input type="text" formControlName="phone_number" placeholder="{{ 'Numero de teléfono' | translate }}"></ion-input>
+              </ion-item>
 
-                <ion-item class="entry-css" (click)="selectCountry()" lines="none" style="margin-bottom: 6px;">
-                  <ion-label *ngIf="nationality === ''">
-                    {{ "Seleccione una nacionalidad" | translate }}
-                  </ion-label>
-                  <ion-label *ngIf="nationality !== ''">
-                    {{ nationality }}
-                  </ion-label>
-                  <ion-icon style="font-size: 16px;" slot="end" color="grey" name="caret-down-outline"></ion-icon>
-                </ion-item>
+              <ion-item (click)="selectCountry ()" class="entry" lines="none" style="margin-bottom: 6px;">
+                <ion-input readonly type="text" formControlName="nationality" placeholder="{{ 'Seleccione una nacionalidad' | translate }}"></ion-input>
+              </ion-item>
 
-                <!-- <div class="padding-left-error entry" *ngIf="form.controls.nationality.errors?.required">
-                  <small class="color-red">{{ '* Campo obligatorio' | translate }}</small>
-                </div> -->
+              <div *ngIf="form.controls.nationality.errors?.required">
+                <small class="color-red">{{ '* Campo obligatorio' | translate }}</small>
+              </div>
 
-                <ion-item class="entry" lines="none" style="margin-bottom: 6px;">
-                  <ion-input type="text" formControlName="email" placeholder="{{ 'Correo electrónico' | translate }}"></ion-input>
-                </ion-item>
+              <ion-item class="entry" lines="none" style="margin-top: 6px;">
+                <ion-input type="text" formControlName="email" placeholder="{{ 'Correo electrónico' | translate }}"></ion-input>
+              </ion-item>
 
-                <ion-item class="entry" lines="none">
-                  <ion-textarea class="text-area" formControlName="message" placeholder="{{ '¿Algún mensaje?' | translate }}"></ion-textarea>
-                </ion-item>
-              </ion-list>
-            </ion-card>
+              <ion-item class="entry" lines="none">
+                <ion-textarea class="text-area" formControlName="message" placeholder="{{ '¿Algún mensaje?' | translate }}"></ion-textarea>
+              </ion-item>
+            </ion-list>
 
             <ion-item class="ion-padding-top ion-text-center" lines="none">
               <ion-label>
@@ -72,7 +64,7 @@
             
             <ion-card *ngIf="check_2">
               <ion-item class="ion-text-wrap card-precio ion-text-center">
-                {{ 'Por ser peruano' | translate }}
+                <p>{{ 'Por ser peruano' | translate }}</p>
               </ion-item>
             </ion-card>
 
@@ -81,7 +73,7 @@
                 <ion-col size="12" size-md="8" offset-md="2" size-lg="6" offset-lg="3" size-xl="6" offset-xl="3">
                   <div class="ion-text-center">
                     <ion-checkbox style="margin-right: 0.5rem;" color="blue" formControlName="terms_conditions"></ion-checkbox>
-                    <span>{{ 'Acepto los' | translate }}&nbsp;<a href="http://www.cps.com.pe/terms"> {{ 'términos & condiciones' | translate }}</a></span>
+                    <span>{{ 'Acepto los' | translate }}&nbsp;<a (click)="get_terminos_url ()"> {{ 'términos & condiciones' | translate }}</a></span>
                   </div>
                 </ion-col>
               </ion-row>

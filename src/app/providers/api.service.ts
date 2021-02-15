@@ -8,10 +8,9 @@ import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular
 })
 export class ApiService {
   API: string;
-  constructor(public http: HttpClient, public loadingCtrl: LoadingController ) {
+  constructor (public http: HttpClient, public loadingCtrl: LoadingController ) {
     this.API = 'https://api.cps.com.pe/api';
   }
-  
 
   getEspecialidades (lang: string) {
     let url = this.API + '/getespecialidades/' + lang;
@@ -110,7 +109,7 @@ export class ApiService {
     return this.http.post (url, data);
   }
 
-  procesarPago (data: any) {
+  procesarPago (data: any, titular: any) {
     let url = this.API + '/procesarpagoapp/';
     url += data.token + "/";
     url += data.monto + "/";
@@ -118,7 +117,15 @@ export class ApiService {
     url += data.moneda + "/";
     url += data.des + "/";
     url += data.consulta + "/";
-    url += data.doctor;
+    url += data.doctor + '/';
+
+    url += titular.nombres + '/';
+    url += titular.apellidos + '/';
+    url += titular.email + '/';
+    url += titular.direccion + '/';
+    url += titular.pais_code + '/';
+    url += titular.ciudad + '/';
+    url += titular.telefono;
 
     console.log ("URL: " + url);
 
@@ -133,14 +140,21 @@ export class ApiService {
     });
   }
 
-  procesarPago2 (data: any) {
+  procesarPago2 (data: any, titular: any) {
     let url = this.API + '/procesarpago2app/';
 
     url += data.token + "/";
     url += data.monto + "/";
     url += data.correo + "/";
     url += data.moneda + "/";
-    url += data.des;
+    url += data.des + '/';
+    url += titular.nombres + '/';
+    url += titular.apellidos + '/';
+    url += titular.email + '/';
+    url += titular.direccion + '/';
+    url += titular.pais_code + '/';
+    url += titular.ciudad + '/';
+    url += titular.telefono;
 
     console.log (url);
 

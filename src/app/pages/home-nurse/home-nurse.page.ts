@@ -101,7 +101,9 @@ export class HomeNursePage implements OnInit {
       tipo_comprobante: new FormControl ('boleta', [Validators.required]),
       ruc: new FormControl (""),
       razon_social: new FormControl (""),
-      s_tipo: new FormControl ("", [Validators.required])
+      direccion_ruc: new FormControl (""),
+      s_tipo: new FormControl ("", [Validators.required]),
+      terms_conditions: new FormControl (false, Validators.compose([ Validators.required, Validators.pattern('true')]))
     });
 
     this.storage.getValue ('i18n').then (i18n => {
@@ -127,6 +129,7 @@ export class HomeNursePage implements OnInit {
             
             this.form.controls ["razon_social"].setValue (data.razon_social);
             this.form.controls ["s_tipo"].setValue (data.s_tipo);
+            this.form.controls ["direccion_ruc"].setValue (data.direccion_ruc);
 
             this.comprobanteChange (data.tipo_comprobante);
 
@@ -324,6 +327,7 @@ export class HomeNursePage implements OnInit {
           note: value.note,
 
           razon_social: value.razon_social,
+          direccion_ruc: value.direccion_ruc,
           s_tipo: value.s_tipo,
 
           latitude: this.latitude,
@@ -432,12 +436,16 @@ export class HomeNursePage implements OnInit {
     if (selectedValue === 'factura') {
       this.form.controls ['ruc'].setValidators (Validators.required);
       this.form.controls ['razon_social'].setValidators (Validators.required);
+      this.form.controls ['direccion_ruc'].setValidators (Validators.required);
     } else {
       this.form.controls ['ruc'].setValidators ([]);
       this.form.controls ['ruc'].updateValueAndValidity ();
 
       this.form.controls ['razon_social'].setValidators ([]);
       this.form.controls ['razon_social'].updateValueAndValidity ();
+
+      this.form.controls ['direccion_ruc'].setValidators ([]);
+      this.form.controls ['direccion_ruc'].updateValueAndValidity ();
     }
   }
 
@@ -586,5 +594,14 @@ export class HomeNursePage implements OnInit {
       loading.dismiss ();
       console.log ('Error getting location' + error);
     });
+  }
+
+  async get_terminos_url () {
+    let lang = await this.storage.getValue ("i18n");
+    if (lang === 'es') {
+      window.open ("https://cps.com.pe/es/terms?item=nurse-home", "_blank", "location=yes");
+    } else {
+      window.open ('https://cps.com.pe/terms?item=nurse-home', "_blank", "location=yes");
+    }
   }
 }

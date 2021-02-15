@@ -9,35 +9,10 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <!-- <ion-grid>
-    <ion-row>
-      <ion-col size="12">
-        <ion-button expand="block" (click)="openCulqi ()">-{{ 'Pago con Tarjeta Crédito' | translate }}</ion-button>
-      </ion-col>
-
-      <ion-col size="12" *ngIf="servicio !== 'resultados'">
-        <ion-button expand="block" (click)="contraentrega ()">{{ 'Pago contra entrega' | translate }}</ion-button>
-      </ion-col>PayPage
-  </ion-grid> -->
-
-  <ion-grid class="ion-no-padding">
-    <ion-row class="ion-align-items-center">
-      <ion-col class="ion-text-end">
-        <p class="p-buscar">{{ 'Pago con Tarjeta Crédito' | translate }}</p>
-      </ion-col>
-      <ion-col class="ion-text-center">
-        <ion-toggle (ionChange)="segmentChanged ($event)" [(ngModel)]="segment_value" mode="ios"></ion-toggle>
-      </ion-col>
-      <ion-col class="ion-text-start">
-        <p class="p-buscar">{{ 'Pago contra entrega' | translate }}</p>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-
+<ion-content>
   <ion-grid>
     <ion-row>
-      <ion-col *ngIf="segment_value === false"  size="12">
+      <ion-col size="12">
         <form [formGroup]="form">
           <ion-item class="ion-text-center">
             <ion-label>
@@ -102,12 +77,6 @@
             </div>
           </ion-list>
         </form>
-      </ion-col>
-
-      <ion-col *ngIf="segment_value === true" size="12">
-        <p class="ion-text-wrap">
-          {{ 'El pago del servicio deberá ser efectuado al momento de recibir el producto o servicio.' | translate }}
-        </p>
       </ion-col>
 
       <ion-col size="12">

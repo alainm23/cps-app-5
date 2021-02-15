@@ -42,7 +42,7 @@
     "LOGIN": "התחברות",
     "Reportar un problema": "דווח על בעיה",
     "SIGN_OFF": "התנתק",
-    "Contactanos": "Contact Us",
+    "Contactanos": "צור קשר",
     
     "_Emergency": "String de la pagina _Emergency",
 
@@ -404,5 +404,15 @@
     "a partir de las 10 A.M.": "מהשעה 10:00.",
     "El pago por el servicio deberá ser entregado el día del recojo.": "יש לשלם עבור השירות ביום האיסוף.",
     "Fecha de envio": "תאריך משלוח",
-    "Le enviaremos sus resultados al correo indicado el dia": "נשלח את התוצאות לדוא״ל המצוין ביום"
+    "Le enviaremos sus resultados al correo indicado el dia": "נשלח את התוצאות לדוא״ל המצוין ביום",
+    "Estado": "מדינה",
+    "Datos del titular de la tarjeta": "פרטי בעל הכרטיס.",
+    "Direccion": "כיוון",
+    "Teléfono": "טֵלֵפוֹן",
+    "* Correo electrónico invalido": "*דוא'ל לא תקין",
+    "Pais": "מדינה",
+    "Ciudad": "עיר",
+    "Proceder": "המשך",
+    "El pago del servicio deberá ser efectuado al momento de recibir el producto o servicio.": "התשלום יתבצע במועד קבלת המוצר או השירות",
+    "Luego de validar_home_doctor": "לאחר אימות הנתונים שלך, אנו מעבדים את בקשתך. במקרה חירום לחץ על הכפתור האדום."
 } 

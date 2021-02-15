@@ -177,6 +177,11 @@
             {{ '* Detalle un mensaje para poder hacer mas rapida su busqueda' | translate }}
           </small>
 
+          <div class="conditions">
+            <ion-checkbox color="blue" formControlName="terms_conditions"></ion-checkbox>
+            {{ 'Acepto los' | translate }} <a (click)="get_terminos_url ()">{{ 'términos & condiciones' | translate }}</a>
+          </div>
+          
           <ion-grid>
             <ion-row>
               <ion-col *ngIf="!is_edit" size="8" offset="2">

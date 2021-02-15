@@ -109,9 +109,12 @@ export class DatabaseService {
   }
 
   // User
-
   addUser (id: string, data: any) {
     return this.afs.collection<any> ("Users").doc (id).set (data);
+  }
+
+  update_user (id: string, data: any) {
+    return this.afs.collection<any> ("Users").doc (id).update (data);
   }
 
   getUser (id: string) {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
  
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 
@@ -17,7 +17,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./appointment-date.page.scss'],
 })
 export class AppointmentDatePage implements OnInit {
-  // @ViewChild(IonContent,  }) content: IonContent;
+  @ViewChild(IonContent, { static: false }) content: IonContent;
 
   date: any;
   daysInThisMonth: any;
@@ -74,8 +74,6 @@ export class AppointmentDatePage implements OnInit {
             this.final_data.nombre_referencia = this.route.snapshot.paramMap.get ('nombre_referencia');
             this.final_data.descripcion = this.route.snapshot.paramMap.get ('descripcion');
 
-            console.log (this.final_data);
-
             this.date = new Date();
             this.monthNames = [this.i18n.enero, this.i18n.febrero, this.i18n.marzo,
                                this.i18n.abril, this.i18n.mayo, this.i18n.junio,
@@ -91,8 +89,6 @@ export class AppointmentDatePage implements OnInit {
               this.api.getCitasEspecialidad (this.final_data.nombre_referencia.toLowerCase ())
               .timeout(60 * 1000)
               .subscribe (data => {
-                console.log (data);
-    
                 this.citas = data;
                 this.enabled_days = [];
     
@@ -116,13 +112,13 @@ export class AppointmentDatePage implements OnInit {
                       text: this.i18n.CANCEL,
                       role: 'cancel',
                       handler: () => {
-                        console.log('Cancel clicked');
+
                       }
                     },
                     {
                       text: this.i18n.OK,
                       handler: () => {
-                        console.log('Buy clicked');
+
                       }
                     }
                   ]
@@ -237,23 +233,50 @@ export class AppointmentDatePage implements OnInit {
                 }
     
                 this.final_data.fecha = year.toString() + "-" + _month + "-" + _day;
-                console.log ("final_data", this.final_data.fecha);
-    
                 for (let cita of this.citas) {
-                  console.log ("cita", cita);
-    
                   if (cita.fec_cit === this.final_data.fecha) {
                     this.final_data.medico_id = cita.med_esp;
                   }
                 } 
                 
-                this.api.getHorariosFecha (this.final_data.medico_id, this.final_data.fecha).subscribe (data => {
+                this.api.getHorariosFecha (this.final_data.medico_id, this.final_data.fecha).subscribe ((data: any []) => {
+                  console.log (data);
+
                   loading.dismiss ();              
                   this.check_1 = true;
-                  this.horas = data;
-    
-                  // let dimensions = this.content.getContentDimensions ();
-                  // this.content.scrollTo (0, dimensions.scrollHeight + 100, 500);
+                  this.horas = data.filter ((hora: any) => {
+                    let returned: boolean = true;
+                    let fecha = moment (hora.fec_cit + ' ' + hora.hor_con);
+                    let moment_now = moment ();
+
+                    if (fecha.isSame (moment_now, 'day')) {
+                      let hh_now = parseInt (moment ().format ('HH'));
+                      let mm_now = parseInt (moment ().format ('mm'));
+                      let ss_now = parseInt (moment ().format ('ss'));
+
+                      let hh = parseInt (hora.hor_con.split (':') [0]);
+                      let mm = parseInt (hora.hor_con.split (':') [1]);
+                      let ss = parseInt (hora.hor_con.split (':') [2]);
+
+                      if (hh_now > hh) {
+                        returned = false;
+                      } else {
+                        if (mm_now > mm) {
+                          returned = false;
+                        } else {
+                          if (ss_now > ss) {
+                            returned = false;
+                          }
+                        }
+                      }
+                    }
+
+                    return returned;
+                  });
+
+                  setTimeout (() => {
+                    this.content.scrollToBottom (210);
+                  }, 500);
                 });
               });
             }

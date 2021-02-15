@@ -52,8 +52,9 @@ export class LoginPage implements OnInit {
     this.loading.present ();
 
     const value = this.form.value;
+    value.email = value.email.trim ().toLowerCase ();
 
-    this.auth.loginEmailPassword (value.email.toLowerCase(), value.password)
+    this.auth.loginEmailPassword (value.email, value.password)
       .then ((user: any) => {
         console.log ("User", user);
 

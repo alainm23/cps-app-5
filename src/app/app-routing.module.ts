@@ -114,6 +114,10 @@ const routes: Routes = [
   {
     path: 'solicitud-rechazada-view',
     loadChildren: () => import('./pages/solicitud-rechazada-view/solicitud-rechazada-view.module').then( m => m.SolicitudRechazadaViewPageModule)
+  },
+  {
+    path: 'formulario-anti-fraude',
+    loadChildren: () => import('./modals/formulario-anti-fraude/formulario-anti-fraude.module').then( m => m.FormularioAntiFraudePageModule)
   }
 ];
 

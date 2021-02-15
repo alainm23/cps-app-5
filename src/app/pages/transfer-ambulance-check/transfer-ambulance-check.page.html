@@ -97,6 +97,30 @@
                   </span>
                 </ion-label>
               </ion-item>
+
+              <ion-item *ngIf="transfer_ambulance?.ruc !== ''">
+                <ion-label>
+                  <b>RUC:</b>
+                  <br>
+                  {{ transfer_ambulance?.ruc }}
+                </ion-label>
+              </ion-item>
+
+              <ion-item *ngIf="transfer_ambulance?.razon_social !== ''">
+                <ion-label>
+                  <b>{{ 'Razón social' | translate }}:</b>
+                  <br>
+                  {{ transfer_ambulance?.razon_social }}
+                </ion-label>
+              </ion-item>
+
+              <ion-item *ngIf="transfer_ambulance?.direccion_ruc !== ''">
+                <ion-label>
+                  <b>{{ 'Razón social' | translate }}:</b>
+                  <br>
+                  {{ transfer_ambulance?.direccion_ruc }}
+                </ion-label>
+              </ion-item>
             </ion-list>   
           </ion-card>
 
@@ -242,6 +266,30 @@
                   <span *ngIf="transfer_ambulance?.tipo_ambulancia === 'ambulancia_3'">
                     {{ 'Ambulancia 3' | translate }}
                   </span>
+                </ion-label>
+              </ion-item>
+
+              <ion-item *ngIf="transfer_ambulance?.ruc !== ''">
+                <ion-label>
+                  <b>RUC:</b>
+                  <br>
+                  {{ transfer_ambulance?.ruc }}
+                </ion-label>
+              </ion-item>
+
+              <ion-item *ngIf="transfer_ambulance?.razon_social !== ''">
+                <ion-label>
+                  <b>{{ 'Razón social' | translate }}:</b>
+                  <br>
+                  {{ transfer_ambulance?.razon_social }}
+                </ion-label>
+              </ion-item>
+
+              <ion-item *ngIf="transfer_ambulance?.direccion_ruc !== ''">
+                <ion-label>
+                  <b>{{ 'Razón social' | translate }}:</b>
+                  <br>
+                  {{ transfer_ambulance?.direccion_ruc }}
                 </ion-label>
               </ion-item>
             </ion-list>   

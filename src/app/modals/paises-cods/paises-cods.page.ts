@@ -1255,7 +1255,7 @@ export class PaisesCodsPage implements OnInit {
     console.log ('ionViewDidLoad PaisesCodsPage');
   }
 
-  closeModal() {
+  closeModal () {
     this.viewCtrl.dismiss (null, 'close');
   }
 

@@ -93,7 +93,7 @@ export class AuthService {
   async signOut () {
     return this.afAuth.auth.signOut ()
       .then (() => {
-        this.facebook.getLoginStatus().then ((res) => {
+        this.facebook.getLoginStatus ().then ((res) => {
           if (res.status === 'connected') {
             this.facebook.logout ();
           }

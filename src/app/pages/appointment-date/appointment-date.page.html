@@ -12,7 +12,7 @@
 </ion-header>
 
 
-<ion-content padding id="scroll-animation-content">
+<ion-content [scrollEvents]="true" padding>
   <ion-item class="ion-padding-top ion-text-center" lines="none">
     <ion-label>
       <h1 class="title-label">{{ final_data.nombre }}</h1>
@@ -57,9 +57,6 @@
               {{ lastDay }}
             </ion-col>
             <ion-col size=1 class="col-1" *ngFor="let day of daysInThisMonth" [id]="'calendar-' + day" (click)="selectDate (day, day)">
-              <!--div class="currentDate" *ngIf="currentDate === day">
-                {{ day }}
-              </div-->
               <div class="enabled-day" *ngIf="is_enable_day (day)">
                 {{ day }}
               </div>

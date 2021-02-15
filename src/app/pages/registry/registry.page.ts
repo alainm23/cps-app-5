@@ -72,6 +72,7 @@ export class RegistryPage implements OnInit {
     await this.loading.present ();
 
     const value = this.form.value;
+    value.email = value.email.trim ().toLowerCase ();
 
     let data: any = {
       id: '',
@@ -87,8 +88,7 @@ export class RegistryPage implements OnInit {
       disabled: false
     }
 
-    this.auth.addUser (value.email, value.password)
-      .then ((response) => {
+    this.auth.addUser (value.email, value.password).then ((response) => {
         data.id = response.user.uid;
       
         this.database.addUser (response.user.uid, data).then ((response) => {

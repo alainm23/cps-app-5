@@ -87,6 +87,30 @@
                 </ion-label>
               </ion-item>
 
+              <ion-item *ngIf="home_injection?.ruc !== ''">
+                <ion-label>
+                  <b>RUC:</b>
+                  <br>
+                  {{ home_injection?.ruc }}
+                </ion-label>
+              </ion-item>
+
+              <ion-item *ngIf="home_injection?.razon_social !== ''">
+                <ion-label>
+                  <b>{{ 'Razón social' | translate }}:</b>
+                  <br>
+                  {{ home_injection?.razon_social }}
+                </ion-label>
+              </ion-item>
+
+              <ion-item *ngIf="home_injection?.direccion_ruc !== ''">
+                <ion-label>
+                  <b>{{ 'Razón social' | translate }}:</b>
+                  <br>
+                  {{ home_injection?.direccion_ruc }}
+                </ion-label>
+              </ion-item>
+
               <ion-item>
                 <ion-label>
                   <b>{{ 'Notas adicionales' | translate }}</b>
@@ -241,6 +265,30 @@
                   <b>{{ 'Notas adicionales' | translate }}</b>
                   <br>
                   <p class="detalle">{{ home_injection?.note }}</p>
+                </ion-label>
+              </ion-item>
+
+              <ion-item *ngIf="home_injection?.ruc !== ''">
+                <ion-label>
+                  <b>RUC:</b>
+                  <br>
+                  {{ home_injection?.ruc }}
+                </ion-label>
+              </ion-item>
+
+              <ion-item *ngIf="home_injection?.razon_social !== ''">
+                <ion-label>
+                  <b>{{ 'Razón social' | translate }}:</b>
+                  <br>
+                  {{ home_injection?.razon_social }}
+                </ion-label>
+              </ion-item>
+
+              <ion-item *ngIf="home_injection?.direccion_ruc !== ''">
+                <ion-label>
+                  <b>{{ 'Razón social' | translate }}:</b>
+                  <br>
+                  {{ home_injection?.direccion_ruc }}
                 </ion-label>
               </ion-item>
             </ion-list>   

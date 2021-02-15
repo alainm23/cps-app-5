@@ -109,7 +109,7 @@ export class MapSelectPage implements OnInit {
     if (this.map === null || this.map === undefined) {
       console.log ('Error del puto GPS');
     } else {
-    } 
+    }
 
     google.maps.event.addListener(this.map, 'idle', () => {
       let location = this.map.getCenter ();
@@ -123,9 +123,8 @@ export class MapSelectPage implements OnInit {
         travelMode: google.maps.TravelMode.WALKING
       };
 
-      this.directionsService.route(request, (result, status) => {
+      this.directionsService.route (request, (result: any, status: any) => {
         if (status == google.maps.DirectionsStatus.OK) {
-          console.log ();
           this._search_text = result.routes [0].legs [0].start_address.replace (', Peru', '').replace (', Cusco', '');
         }
       });
@@ -162,7 +161,7 @@ export class MapSelectPage implements OnInit {
 
     google.maps.event.addListener (autocomplete, 'place_changed', async () => {
       let loading = await this.loadingCtrl.create({
-        message: this.i18n.buscando_ubicacion
+        message: '...'
       });
 
       await loading.present();
@@ -257,41 +256,7 @@ export class MapSelectPage implements OnInit {
     });
     
     await loading.present ();
-
-    // if (this.platform.is ('android')) {
-    //   const config: BackgroundGeolocationConfig = {
-    //     desiredAccuracy: 10,
-    //     stationaryRadius: 20,
-    //     distanceFilter: 30,
-    //     notificationsEnabled: false,
-    //     debug: false, //  enable this hear sounds for background-geolocation life-cycle.
-    //     stopOnTerminate: false, // enable this to clear background location settings when the app terminates
-    //   };
-  
-    //   this.backgroundGeolocation.configure (config)
-    //     .then(() => {
-    //       this.backgroundGeolocation.on (BackgroundGeolocationEvents.location).subscribe ((location: BackgroundGeolocationResponse) => {
-    //         console.log(location);
-  
-    //         loading.dismiss ();
-    //         this.InitMap (false, location.latitude, location.longitude);
-  
-    //         this.backgroundGeolocation.finish (); // FOR IOS ONLY
-    //       });
-    //     });
-  
-    //   this.backgroundGeolocation.start ();
-    //   this.backgroundGeolocation.stop ();
-    // } else if (this.platform.is ('ios')) {
-    //   this.geolocation.getCurrentPosition ().then((resp) => {
-    //     loading.dismiss ();
-    //     this.InitMap (false, resp.coords.latitude, resp.coords.longitude);
-    //   }).catch ((error) => {
-    //     loading.dismiss ();
-    //     console.log ('Error getting location' + error);
-    //   });
-    // }
-
+    
     this.geolocation.getCurrentPosition ().then((resp) => {
       loading.dismiss ();
       this.InitMap (false, resp.coords.latitude, resp.coords.longitude);

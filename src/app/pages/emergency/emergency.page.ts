@@ -7,6 +7,7 @@ import { CallNumber } from '@ionic-native/call-number/ngx';
 import { FormControl, FormGroup, Validators} from "@angular/forms";
 
 import { ApiService } from '../../providers/api.service';
+import { AuthService } from '../../providers/auth.service';
 
 // Translate Service
 import { TranslateService } from '@ngx-translate/core';
@@ -34,14 +35,36 @@ export class EmergencyPage implements OnInit {
               private callNumber: CallNumber,
               public api: ApiService,
               private sharing: SocialSharing,
+              private auth: AuthService
               ) {
   }
 
   ngOnInit () {
+    let fullname = '';
+    let email = '';
+    let telefono = '';
+    
+
+    if (this.auth.user.first_name !== null && this.auth.user.first_name !== undefined) {
+      fullname = this.auth.user.first_name;
+    }
+
+    if (this.auth.user.last_name !== null && this.auth.user.last_name !== undefined) {
+      fullname += ' ' + this.auth.user.last_name;
+    }
+
+    if (this.auth.user.phone_number !== null && this.auth.user.phone_number !== undefined) {
+      telefono = this.auth.user.phone_number;
+    }
+
+    if (this.auth.user.email !== null && this.auth.user.email !== undefined) {
+      email = this.auth.user.email;
+    }
+
     this.form = new FormGroup ({
-      fullname: new FormControl ('', Validators.required),
-      email: new FormControl ('', [Validators.required, Validators.email]),
-      phone_number: new FormControl ('', [Validators.required, 
+      fullname: new FormControl (fullname, Validators.required),
+      email: new FormControl (email, [Validators.required, Validators.email]),
+      phone_number: new FormControl (telefono, [Validators.required, 
                                           Validators.minLength (9), 
                                           Validators.maxLength (9)]),
       message: new FormControl ('', Validators.required)
@@ -152,15 +175,17 @@ export class EmergencyPage implements OnInit {
   chatWhatsapp () {
     this.sharing.shareViaWhatsAppToReceiver ('+51989316622', '')
       .then (() => {
-
+          
       })
-      .catch (async error => {
+      .catch (async (error: any) => {
+        console.log (error);
+
         const alert = await this.alertCtrl.create({
           message: this.i18n.instale_whatsApp_messenger,
           buttons: ['OK']
         });
     
-        await alert.present();
+        await alert.present ();
       });
   }
 
@@ -179,7 +204,7 @@ export class EmergencyPage implements OnInit {
       app = 'com.facebook.orca';
     }
 
-    this.appAvailability.check(app).then (
+    this.appAvailability.check (app).then (
       (yes: boolean) => {
         loading.dismiss ();
         location.href = "https://www.messenger.com/t/clinica.peruanosuiza";

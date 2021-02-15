@@ -26,7 +26,7 @@
                   {{ 'Editar Escolta Medica' | translate }}
                 </h1>
   
-                <p>{{ 'Luego de validar' | translate }}</p>
+                <p class="ion-text-wrap">{{ 'Luego de validar' | translate }}</p>
               </ion-label>
             </ion-item>
 
@@ -199,7 +199,17 @@
 
               <div style="margin-left: 1rem;" class="ion-margin-left" *ngIf="form.controls.razon_social.errors?.required">
                 <small class="color-red">{{ '* Campo obligatorio' | translate }}</small>
-              </div>  
+              </div>
+
+              <ion-item>
+                <ion-label class="header-text" position="stacked">{{ 'Direccion Razon Social' | translate }}:</ion-label>
+                <ion-input type="text" placeholder="{{ 'Direccion de la razón social' | translate }}" formControlName="direccion_ruc">
+                </ion-input>
+              </ion-item>
+  
+              <div style="margin-left: 1rem;" class="ion-margin-left" *ngIf="form.controls.direccion_ruc.errors?.required">
+                <small class="color-red">{{ '* Campo obligatorio' | translate }}</small>
+              </div>
             </div>
 
             <ion-item lines="none"> 
@@ -263,7 +273,7 @@
             <div class="conditions">
                 <ion-checkbox color="blue" formControlName="terms_conditions">
                 </ion-checkbox>
-                {{ 'Acepto los' | translate }} <a href="http://www.cps.com.pe/terms">{{ 'términos & condiciones' | translate }}</a>
+                {{ 'Acepto los' | translate }} <a (click)="get_terminos_url ()">{{ 'términos & condiciones' | translate }}</a>
             </div>
           </ion-list>
 
