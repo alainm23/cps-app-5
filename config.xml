@@ -104,7 +104,7 @@
     <plugin name="cordova-plugin-splashscreen" spec="5.0.2" />
     <plugin name="cordova-plugin-ionic-webview" spec="^4.0.0" />
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
-    <plugin name="cordova-plugin-facebook4" spec="^6.2.0">
+    <plugin name="cordova-plugin-facebook4" spec="5.0.0">
         <variable name="APP_ID" value="783896588646915" />
         <variable name="APP_NAME" value="Clinica Peruano Suiza" />
         <variable name="FACEBOOK_HYBRID_APP_EVENTS" value="false" />
