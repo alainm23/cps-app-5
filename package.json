@@ -49,9 +49,10 @@
     "cordova-plugin-app-version": "^0.1.9",
     "cordova-plugin-appavailability": "^0.4.2",
     "cordova-plugin-camera": "^4.1.0",
+    "cordova-plugin-cocoapod-support": "^1.6.2",
     "cordova-plugin-device": "^2.0.3",
     "cordova-plugin-dialogs": "^2.0.2",
-    "cordova-plugin-facebook4": "^6.2.0",
+    "cordova-plugin-facebook4": "^6.4.0",
     "cordova-plugin-geolocation": "^3.0.0",
     "cordova-plugin-globalization": "^1.11.0",
     "cordova-plugin-googleplus": "^7.0.2",
@@ -144,16 +145,17 @@
       "cordova-plugin-ionic-keyboard": {},
       "cordova-plugin-app-version": {},
       "call-number": {},
-      "cordova-plugin-facebook4": {
-        "APP_ID": "783896588646915",
-        "APP_NAME": "Clinica Peruano Suiza",
-        "FACEBOOK_HYBRID_APP_EVENTS": "false",
-        "FACEBOOK_ANDROID_SDK_VERSION": "5.5.2"
-      },
       "onesignal-cordova-plugin": {},
       "cordova-plugin-sign-in-with-apple": {},
       "cordova-plugin-geolocation": {
         "GPS_REQUIRED": "false"
+      },
+      "cordova-plugin-cocoapod-support": {},
+      "cordova-plugin-facebook4": {
+        "APP_ID": "783896588646915",
+        "APP_NAME": "Clinica Peruano Suiza",
+        "FACEBOOK_HYBRID_APP_EVENTS": "false",
+        "FACEBOOK_ANDROID_SDK_VERSION": "5.13.0"
       }
     },
     "platforms": [

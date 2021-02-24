@@ -97,6 +97,11 @@
         <splash height="1242" src="resources/ios/splash/Default-Landscape-2688h~iphone.png" width="2688" />
         <splash height="1792" src="resources/ios/splash/Default-1792h~iphone.png" width="828" />
         <splash height="828" src="resources/ios/splash/Default-Landscape-1792h~iphone.png" width="1792" />
+        <preference name="pods_ios_min_version" value="9.0" />
+        <preference name="pods_use_frameworks" value="true" />
+        <pod name="FBSDKCoreKit" />
+        <pod name="FBSDKLoginKit" />
+        <pod name="FBSDKShareKit" />
     </platform>
     <plugin name="cordova-plugin-whitelist" spec="1.3.3" />
     <plugin name="cordova-plugin-statusbar" spec="2.4.2" />
@@ -104,12 +109,6 @@
     <plugin name="cordova-plugin-splashscreen" spec="5.0.2" />
     <plugin name="cordova-plugin-ionic-webview" spec="^4.0.0" />
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
-    <plugin name="cordova-plugin-facebook4" spec="5.0.0">
-        <variable name="APP_ID" value="783896588646915" />
-        <variable name="APP_NAME" value="Clinica Peruano Suiza" />
-        <variable name="FACEBOOK_HYBRID_APP_EVENTS" value="false" />
-        <variable name="FACEBOOK_ANDROID_SDK_VERSION" value="5.5.2" />
-    </plugin>
     <edit-config file="*-Info.plist" mode="merge" target="NSLocationWhenInUseUsageDescription">
         <string>So we can get to you as fast as possible</string>
     </edit-config>
