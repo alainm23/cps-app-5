@@ -144,7 +144,7 @@ export class EmergencyPage implements OnInit {
 
     await loading.present ();
     
-    this.callNumber.callNumber("+51989316622", true)
+    this.callNumber.callNumber ('+51989316622', true)
     .then(res => {
       loading.dismiss ();
     })
@@ -173,7 +173,12 @@ export class EmergencyPage implements OnInit {
   }
 
   chatWhatsapp () {
-    this.sharing.shareViaWhatsAppToReceiver ('+51989316622', '')
+    let phone_number: string = '+51989316622';
+    if (this.platform.is ('ios') || this.platform.is ('ipad')) {
+      phone_number = '0&phone=51989316622';
+    }
+
+    this.sharing.shareViaWhatsAppToReceiver (phone_number, '')
       .then (() => {
           
       })
