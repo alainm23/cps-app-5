@@ -203,7 +203,7 @@ export class EmergencyPage implements OnInit {
 
     let app;
 
-    if (this.platform.is ('ios')) {
+    if (this.platform.is ('ios') || this.platform.is ('ipad')) {
       app = 'fb-messenger://';
     } else if (this.platform.is ('android')) {
       app = 'com.facebook.orca';
