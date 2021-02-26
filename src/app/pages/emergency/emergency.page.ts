@@ -201,29 +201,29 @@ export class EmergencyPage implements OnInit {
 
     await loading.present ();
 
-    let app;
+    let app = '';
 
     if (this.platform.is ('ios') || this.platform.is ('ipad')) {
-      app = 'fb-messenger://';
+      location.href = "https://www.messenger.com/t/clinica.peruanosuiza";
     } else if (this.platform.is ('android')) {
       app = 'com.facebook.orca';
+
+      this.appAvailability.check (app).then (
+        (yes: boolean) => {
+          loading.dismiss ();
+          location.href = "https://www.messenger.com/t/clinica.peruanosuiza";
+        },
+        async (no: boolean) => {
+          loading.dismiss ();
+  
+          const alert = await this.alertCtrl.create({
+            message: this.i18n.instale_facebook_messenger,
+            buttons: ['OK']
+          });
+  
+          await alert.present();
+        }
+      );
     }
-
-    this.appAvailability.check (app).then (
-      (yes: boolean) => {
-        loading.dismiss ();
-        location.href = "https://www.messenger.com/t/clinica.peruanosuiza";
-      },
-      async (no: boolean) => {
-        loading.dismiss ();
-
-        const alert = await this.alertCtrl.create({
-          message: this.i18n.instale_facebook_messenger,
-          buttons: ['OK']
-        });
-
-        await alert.present();
-      }
-    );
   }
 }
