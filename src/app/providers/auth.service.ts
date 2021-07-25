@@ -25,6 +25,7 @@ import { async } from '@angular/core/testing';
 
 // Apple
 import { SignInWithApple, AppleSignInResponse, AppleSignInErrorResponse, ASAuthorizationAppleIDRequest } from '@ionic-native/sign-in-with-apple';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -47,7 +48,6 @@ export class AuthService {
   }
 
   is_logged: boolean;
-
   constructor(
               public afAuth: AngularFireAuth,
               private api: ApiService,

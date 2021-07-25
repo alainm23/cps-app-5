@@ -166,6 +166,7 @@ export class SendAmbulancePage implements OnInit {
             this.navCtrl.navigateRoot ('home');
           });
         }, error => {
+          console.log (error);
           loading.dismiss ();
         });
       });
